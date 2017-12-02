@@ -9,6 +9,7 @@ body {
     display: flex;
     flex-direction: column;
     font-family: 'Source Code Pro', monospace;
+    max-height: 100vh;
     min-height: 100vh;
 }
 
@@ -48,6 +49,21 @@ aside {
 
 #sketch-holder {
     background-color: #22313F;
+    flex: 1;
+    margin: 2px;
+}
+
+canvas {
+    display: block;
+}
+
+.aside-holder {
+    display: flex;
+    flex-direction: column;
+    margin-right: 2px;
+}
+
+.aside-holder aside {
     flex: 1;
 }
 
