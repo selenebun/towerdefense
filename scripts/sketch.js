@@ -9,6 +9,8 @@ var tileHeight;
 var cols = 30;
 var rows = 20;
 
+var showGrid = true;
+
 
 // Misc functions
 
@@ -40,9 +42,11 @@ function setup() {
 }
 
 function draw() {
-    //background(34, 49, 63);
+    background(0);
 
-    var t = new Tile();
-    t.color = [255, 255, 255];
-    t.draw(floor(random(cols)), floor(random(rows)));
+    tiles.start.draw(0, floor(rows / 2));
+    for (var i = 1; i < cols - 1; i++) {
+        tiles.path.draw(i, floor(rows / 2));
+    }
+    tiles.end.draw(cols - 1, floor(rows / 2));
 }

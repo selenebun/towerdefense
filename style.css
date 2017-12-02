@@ -4,7 +4,7 @@ html, body {
 }
 
 body {
-    background-color: #22313F;
+    background-color: #000;
     color: #00E640;
     display: flex;
     flex-direction: column;
@@ -49,10 +49,18 @@ aside {
 }
 
 #sketch-holder {
-    background-color: #22313F;
+    background-color: #000;
     flex: 1;
     margin: 2px;
     overflow: hidden;
+}
+
+button {
+    background-color: #22313F;
+    color: #00E640;
+    font-size: 0.9em;
+    height: 30px;
+    text-shadow: 1px 1px 0px #000;
 }
 
 canvas {
