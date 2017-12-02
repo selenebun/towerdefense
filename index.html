@@ -7,6 +7,8 @@
     <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
     <script src="scripts/lib/p5.min.js" defer></script>
+    <script src="scripts/utils.js" defer></script>
+    <script src="scripts/tile.js" defer></script>
     <script src="scripts/sketch.js" defer></script>
   </head>
   <body>
@@ -15,14 +17,20 @@
     </header>
 
     <main>
-      <aside id="menu"></aside>
+      <aside id="menu">
+        <h2>Store</h2>
+      </aside>
 
       <div id="sketch-holder"></div>
 
       <div class="aside-holder">
-        <aside id="info"></aside>
+        <aside id="status">
+          <p id="wave">Wave 5</p>
+          <p id="health">99/100</p>
+          <p id="cash">$150</p>
+        </aside>
 
-        <aside id="tower"></aside>
+        <aside id="info"></aside>
       </div>
     </main>
 

@@ -1,3 +1,29 @@
+var enemies;
+var newEnemies;
+var towers;
+
+var tileWidth;
+var tileHeight;
+
+// TODO get rid of this, dynamically determine from map
+var cols = 30;
+var rows = 20;
+
+
+// Misc functions
+
+function initEntities() {
+    enemies = [];
+    newEnemies = [];
+    towers = [];
+}
+
+function resizeTiles(cols, rows) {
+    tileWidth = width / cols;
+    tileHeight = height / rows;
+}
+
+
 // Main p5 functions
 
 function setup() {
@@ -7,8 +33,16 @@ function setup() {
     var canvas = createCanvas(w, div.offsetHeight);
     canvas.parent('sketch-holder');
     resizeCanvas(w, div.offsetHeight);
+    // Setup tile size
+    resizeTiles(cols, rows);  // TODO get rows and cols from current map
+    // Initialize entities
+    initEntities();
 }
 
 function draw() {
-    background(34, 49, 63);
+    //background(34, 49, 63);
+
+    var t = new Tile();
+    t.color = [255, 255, 255];
+    t.draw(floor(random(cols)), floor(random(rows)));
 }

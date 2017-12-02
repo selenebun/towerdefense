@@ -18,6 +18,7 @@ body {
 
 header, aside, #sketch-holder, footer {
     border: 1px solid #00E640;
+    border-radius: 10px;
     margin: 2px;
 }
 
@@ -51,6 +52,7 @@ aside {
     background-color: #22313F;
     flex: 1;
     margin: 2px;
+    overflow: hidden;
 }
 
 canvas {
@@ -63,7 +65,7 @@ canvas {
     margin-right: 2px;
 }
 
-.aside-holder aside {
+#info {
     flex: 1;
 }
 
