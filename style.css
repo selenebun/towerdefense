@@ -1,0 +1,61 @@
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #22313F;
+    color: #00E640;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Source Code Pro', monospace;
+    min-height: 100vh;
+}
+
+
+/* Green borders, margins, and navy blue background */
+
+header, aside, #sketch-holder, footer {
+    border: 1px solid #00E640;
+    margin: 2px;
+}
+
+header, aside, footer {
+    background-color: #013243;
+}
+
+
+/* Page content */
+
+header {
+    padding: 14px;
+}
+
+header h1 {
+    margin: 0;
+    text-align: center;
+}
+
+main {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+}
+
+aside {
+    padding: 14px;
+}
+
+#sketch-holder {
+    background-color: #22313F;
+    flex: 1;
+}
+
+footer {
+    padding: 14px;
+}
+
+footer #copyright {
+    margin: 0;
+    text-align: right;
+}
