@@ -5,11 +5,13 @@ var towers;
 var tileWidth;
 var tileHeight;
 
-// TODO get rid of this, dynamically determine from map
-var cols = 30;
-var rows = 20;
+var grid;
+var palette;
 
 var showGrid = true;
+
+var cols;
+var rows;
 
 
 // Misc functions
@@ -20,6 +22,16 @@ function initEntities() {
     towers = [];
 }
 
+function loadMap(template) {
+    grid = template.grid;
+    palette = template.palette;
+    var dim = getDimensions(grid);
+    cols = dim.cols;
+    rows = dim.rows;
+    resizeTiles(cols, rows);
+}
+
+// Sets tile width and height based on canvas size and map dimensions
 function resizeTiles(cols, rows) {
     tileWidth = width / cols;
     tileHeight = height / rows;
@@ -34,9 +46,9 @@ function setup() {
     var w = div.offsetWidth;
     var canvas = createCanvas(w, div.offsetHeight);
     canvas.parent('sketch-holder');
-    resizeCanvas(w, div.offsetHeight);
-    // Setup tile size
-    resizeTiles(cols, rows);  // TODO get rows and cols from current map
+    resizeCanvas(w, div.offsetHeight, true);
+    // Resize tiles based on initial cols and rows
+    loadMap(maps[0]);
     // Initialize entities
     initEntities();
 }
@@ -44,9 +56,11 @@ function setup() {
 function draw() {
     background(0);
 
-    tiles.start.draw(0, floor(rows / 2));
-    for (var i = 1; i < cols - 1; i++) {
-        tiles.path.draw(i, floor(rows / 2));
+    // Draw tiles
+    for (var col = 0; col < cols; col++) {
+        for (var row = 0; row < rows; row++) {
+            var tile = palette[grid[row][col]];
+            tile.draw(col, row);
+        }
     }
-    tiles.end.draw(cols - 1, floor(rows / 2));
 }
