@@ -53,6 +53,16 @@ aside {
     flex: 1;
     margin: 2px;
     overflow: hidden;
+    position: relative;
+}
+
+canvas {
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    position: absolute;
+    right: 0;
+    top: 0;
 }
 
 button {

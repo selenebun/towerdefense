@@ -1,3 +1,6 @@
+var divw;
+var divh;
+
 var enemies;
 var newEnemies;
 var towers;
@@ -8,12 +11,10 @@ var paths;
 var spawnpoints;
 var exit;
 
-var minCols = 30;
-var minRows = 20;
-var cols = 40;
-var rows = 25;
-var tw;             // Tile width
-var th;             // Tile height
+var cols;
+var rows;
+var ts = 24;            // tile size
+var zoom = 2;
 
 var paused;
 var maxHealth;
@@ -24,10 +25,29 @@ var wave;
 var gridMode = true;
 var pathMode = false;
 var spawnCount = 1;
+var tHold = 1;          // turning threshold
 var wallChance = 0.1;
 
 
 // Misc functions
+
+function createWave(pattern) {
+    newEnemies = [];
+    for (var i = 0; i < pattern.length; i++) {
+        var t = pattern[i];
+        if (Array.isArray(t)) {
+            if (t.length === 1) {
+                newEnemies.push(t[0]);
+            } else if (t.length > 1) {
+                for (var j = 0; j < t[1]; j++) {
+                    newEnemies.push(t[0]);
+                }
+            }
+        } else {
+            newEnemies.push(t);
+        }
+    }
+}
 
 function generateMap() {
     // Generate empty tiles and walls
@@ -53,11 +73,20 @@ function generateMap() {
         spawnpoints.push(pos);
     }
 
-    generatePaths(grid, exit.x, exit.y);
+    // TODO remove this
+    var pos = getEmpty();
+    towers.push(createTower(pos.x, pos.y, tower.laser));
+    createWave([
+        enemy.basic
+    ]);
+
+    generatePaths(exit.x, exit.y);
 }
 
 // Generates shortest path to target tile from every map tile
-function generatePaths(walkMap, col, row) {
+// Algorithm from https://www.redblobgames.com/pathfinding/tower-defense/
+function generatePaths(col, row) {
+    var walkMap = walkable();
     var frontier = new Queue();
     var target = cts(col, row);
     frontier.enqueue(target);
@@ -98,11 +127,22 @@ function generatePaths(walkMap, col, row) {
 }
 
 // Find an empty tile on the map
-function getEmpty(myMap) {
+function getEmpty() {
+    var walkMap = walkable();
     while (true) {
         var col = floor(random(cols));
         var row = floor(random(rows));
-        if (myMap[col][row] === 0) return {x: col, y: row};
+        if (walkMap[col][row] === 1) continue;
+        if (typeof spawnpoints !== 'undefined') {
+            for (var i = 0; i < spawnpoints.length; i++) {
+                var s = spawnpoints[i];
+                if (s.x === col && s.y === row) continue;
+            }
+        }
+        if (typeof exit !== 'undefined' && exit.x === col && exit.y === row) {
+            continue;
+        }
+        return {x: col, y: row};
     }
 }
 
@@ -115,21 +155,24 @@ function getTower(col, row) {
     return null;
 }
 
-// Generate map indicating walkability of each tile (0 = walkable)
-function walkable() {
-    var walkable = copyMap(grid);
-    for (var i = 0; i < towers.length; i++) {
-        var t = towers[i];
-        walkable[t.pos.x][t.pos.y] = 1;
-    }
-    return walkable;
-}
-
 function initEntities() {
     enemies = [];
     newEnemies = [];
     towers = [];
     newTowers = [];
+}
+
+function isOutsideMap(e) {
+    return isOutsideRect(e.pos.x, e.pos.y, 0, 0, width, height);
+}
+
+function removeDead(entities) {
+    for (var i = entities.length - 1; i >= 0; i--) {
+        var e = entities[i];
+        if (e.alive) continue;
+        entities.splice(i, 1);
+        e.onDeath();
+    }
 }
 
 function resetGame() {
@@ -144,8 +187,9 @@ function resetGame() {
 
 // Sets tile width and height based on canvas size and map dimensions
 function resizeTiles() {
-    tw = width / cols;
-    th = height / rows;
+    cols = floor(divw / ts);
+    rows = floor(divh / ts);
+    resizeCanvas(cols * ts, rows * ts, true);
 }
 
 // Update status display
@@ -155,16 +199,27 @@ function updateStatus() {
     document.getElementById('cash').innerHTML = '$' + cash;
 }
 
+// Generate map indicating walkability of each tile (0 = walkable)
+function walkable() {
+    var walkable = copyMap(grid);
+    for (var i = 0; i < towers.length; i++) {
+        var t = towers[i];
+        walkable[t.pos.x][t.pos.y] = 1;
+    }
+    return walkable;
+}
+
 
 // Main p5 functions
 
 function setup() {
     // Properly size canvas and place inside div
     var div = document.getElementById('sketch-holder');
-    var w = div.offsetWidth;
-    var canvas = createCanvas(w, div.offsetHeight);
+    divw = div.offsetWidth;
+    var canvas = createCanvas(divw, div.offsetHeight);
     canvas.parent('sketch-holder');
-    resizeCanvas(w, div.offsetHeight, true);
+    divh = div.offsetHeight;
+    resizeCanvas(divw, divh, true);
     // Setup proper tile size
     resizeTiles();
     // Initialize
@@ -181,11 +236,11 @@ function draw() {
             if (t === 0 && gridMode) {
                 noFill();
                 stroke(255, 31);
-                rect(col * tw, row * th, tw, th);
+                rect(col * ts, row * ts, ts, ts);
             } else if (t === 1) {
                 fill(1, 50, 67);
                 gridMode ? stroke(255, 31) : stroke(255, 63);
-                rect(col * tw, row * th, tw, th);
+                rect(col * ts, row * ts, ts, ts);
             }
         }
     }
@@ -195,13 +250,45 @@ function draw() {
         var t = spawnpoints[i];
         fill(0, 230, 64);
         stroke(255);
-        rect(t.x * tw, t.y * th, tw, th);
+        rect(t.x * ts, t.y * ts, ts, ts);
+        if (newEnemies.length > 0 && !paused) {
+            var pos = getCenter(t.x, t.y);
+            enemies.push(createEnemy(pos.x, pos.y, newEnemies.pop()));
+        }
     }
 
     // Exit
     fill(207, 0, 15);
     stroke(255);
-    rect(exit.x * tw, exit.y * th, tw, th);
+    rect(exit.x * ts, exit.y * ts, ts, ts);
+
+    // Enemies
+    for (var i = 0; i < enemies.length; i++) {
+        var e = enemies[i];
+        if (!paused) {
+            var t = getTile(e.pos.x, e.pos.y);
+            e.steer(paths[t.x][t.y]);
+            e.update();
+            if (t.x === exit.x && t.y === exit.y) {
+                e.onExit();
+                e.kill();
+            }
+        }
+        if (isOutsideMap(e)) e.kill();
+        e.draw();
+    }
+
+    // Towers
+    for (var i = 0; i < towers.length; i++) {
+        var t = towers[i];
+        if (!paused) {
+            t.update();
+        }
+        t.draw();
+    }
+
+    removeDead(enemies);
+    removeDead(towers);
 }
 
 
@@ -213,33 +300,21 @@ function keyPressed() {
             // Ctrl
             gridMode = !gridMode;
             break;
-        case 37:
-            // Left arrow
-            if (cols !== minCols) {
-                cols--;
+        case 219:
+            // Left bracket
+            if (ts > 16) {
+                ts -= zoom;
                 resizeTiles();
                 resetGame();
             }
             break;
-        case 38:
-            // Up arrow
-            if (rows !== minRows) {
-                rows--;
+        case 221:
+            // Right bracket
+            if (ts < 40) {
+                ts += zoom;
                 resizeTiles();
                 resetGame();
             }
-            break;
-        case 39:
-            // Right arrow
-            cols++;
-            resizeTiles();
-            resetGame();
-            break;
-        case 40:
-            // Down arrow
-            rows++;
-            resizeTiles();
-            resetGame();
             break;
     }
 }

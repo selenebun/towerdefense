@@ -12,7 +12,7 @@ function buildMap(cols, rows, value) {
 
 // Get center of tile at coords
 function getCenter(col, row) {
-    return {x: col*tw + tw/2, y: col*th + th/2};
+    return {x: col*ts + ts/2, y: row*ts + ts/2};
 }
 
 // Copy 2d array
@@ -32,11 +32,6 @@ function cts(col, row) {
     return col + ',' + row;
 }
 
-// Return column and row
-function getCoords(x, y) {
-    return {x: floor(x / tw), y: floor(y / th)};
-}
-
 // Get non-diagonal walkable neighbors in a rectangular array
 function getNeighbors(walkMap, x, y) {
     var neighbors = [];
@@ -53,6 +48,25 @@ function getNeighbors(walkMap, x, y) {
         neighbors.push(cts(x, y + 1));
     }
     return neighbors;
+}
+
+// Return column and row
+function getTile(x, y) {
+    return {x: floor(x / ts), y: floor(y / ts)};
+}
+
+// Return center of current tile (combination of getTile() and getCenter())
+function getTileCenter(x, y) {
+    var c = getTile(x, y);
+    return getCenter(c.x, c.y);
+}
+
+function isBetween(num, min, max) {
+    return num > Math.min(min, max) && num < Math.max(min, max);
+}
+
+function isOutsideRect(x, y, cx, cy, w, h) {
+    return x < cx || y < cy || x > cx + w || y > cy + h;
 }
 
 // Convert obj to vector

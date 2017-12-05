@@ -11,10 +11,12 @@ function createEnemy(x, y, template) {
 }
 
 
-var enemies = {};
+var enemy = {};
 
 
-enemies.basic = {
+enemy.basic = {
     health: 5,
-    name: 'basic'
+    speed: 1,
+    name: 'basic',
+    color: [154, 18, 179]
 };
