@@ -6,7 +6,6 @@
     <title>Tower Defense</title>
     <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
-    <script src="scripts/queue.js" defer></script>
     <script src="scripts/lib/p5.min.js" defer></script>
     <script src="scripts/utils.js" defer></script>
     <script src="scripts/enemy.js" defer></script>
@@ -32,7 +31,7 @@
           <p id="wave">Wave 1</p>
           <p id="health">100/100</p>
           <p id="cash">$150</p>
-          <button id="start" onclick="paused=!paused">Start</button>
+          <button id="start" onclick="paused=!paused;if (paused===false) createWave([[enemy.basic,10]])">Start</button>
           <button id="restart" onclick="resetGame()">Restart</button>
         </aside>
 

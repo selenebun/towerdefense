@@ -1,32 +1,23 @@
 class Enemy {
+    // TODO add armor, cash, damage, health stats
     constructor(x, y) {
+        // Display
+        this.color = [0, 0, 0];
+        this.radius = 0.5;          // radius in tiles
+        // Misc
+        this.alive = true;
+        this.name = 'enemy';
+        this.type = 'enemy';
         // Position
         this.pos = createVector(x, y);
         this.vel = createVector(0, 0);
         // Stats
-        this.health = 1;
-        this.armor = 0;
-        this.damage = 1;
         this.speed = 1;             // 4 is the max
-        this.cash = 1;
-        // Misc
-        this.name = 'enemy';
-        this.alive = true;
-        // Display
-        this.color = [0, 0, 0];
-        this.alpha = 255;
-        this.radius = 0.5;          // radius in tiles
-    }
-
-    // TODO account for armor
-    damage(amount) {
-        this.health -= amount;
-        if (this.health <= 0) this.kill();
     }
 
     draw() {
-        fill(this.color[0], this.color[1], this.color[2], this.alpha);
         stroke(0);
+        fill(this.color);
         ellipse(this.pos.x, this.pos.y, this.radius * ts, this.radius * ts);
     }
 
@@ -34,8 +25,49 @@ class Enemy {
         this.alive = false;
     }
 
+    steer() {
+        var t = gridPos(this.pos.x, this.pos.y);
+        var c = center(t.x, t.y);
+        var dir = pathMap[t.x][t.y];
+        if (atTileCenter(this.pos.x, this.pos.y, c.x, c.y)) {
+            // Center entity on tile
+            if (dir !== null) this.pos = c;
+            // Adjust velocity
+            if (dir === 'left') {
+                this.vel = createVector(-this.speed, 0);
+            }
+            if (dir === 'up') {
+                this.vel = createVector(0, -this.speed);
+            }
+            if (dir === 'right') {
+                this.vel = createVector(this.speed, 0);
+            }
+            if (dir === 'down') {
+                this.vel = createVector(0, this.speed);
+            }
+        }
+    }
+
+    update() {
+        this.vel.limit(4);
+        this.vel.limit(this.speed);
+        this.pos.add(this.vel);
+    }
+}
+
+/*
+class Enemy {
+    onCreate() {}
     onDeath() {}
-    onExit() {}
+
+    onExit() {
+        health -= this.damage;
+    }
+
+    onKilled() {
+        cash += this.cash;
+    }
+
     onTick() {}
 
     steer(dir) {
@@ -61,10 +93,5 @@ class Enemy {
             }
         }
     }
-
-    update() {
-        this.vel.limit(4);
-        this.vel.limit(this.speed);
-        this.pos.add(this.vel);
-    }
 }
+*/

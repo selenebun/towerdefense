@@ -1,5 +1,5 @@
-var divw;
-var divh;
+var divWidth;
+var divHeight;
 
 var enemies;
 var newEnemies;
@@ -7,30 +7,36 @@ var towers;
 var newTowers;
 
 var grid;
-var paths;
+var walkMap;            // map of walkable tiles
+var pathMap;            // map to exit
+var toUpdate = false;   // flag to update paths
 var spawnpoints;
 var exit;
 
 var cols;
 var rows;
 var ts = 24;            // tile size
-var zoom = 2;
+var tileZoom = 2;
 
 var paused;
-var maxHealth;
-var health;
+var selected = 'laser';
+
 var cash;
+var health;
+var maxHealth;
 var wave;
 
-var gridMode = true;
-var pathMode = false;
-var spawnCount = 1;
-var tHold = 1;          // turning threshold
+var spawnCool = 40;     // number of ticks between spawning enemies
+var scd = 0;            // number of ticks until next spawn
+
+var numSpawns = 1;      // number of enemy spawnpoints to generate
 var wallChance = 0.1;
 
 
 // Misc functions
 
+// Create a wave of enemies to spawn
+// TODO consider pausing inside
 function createWave(pattern) {
     newEnemies = [];
     for (var i = 0; i < pattern.length; i++) {
@@ -52,118 +58,344 @@ function createWave(pattern) {
 function generateMap() {
     // Generate empty tiles and walls
     grid = [];
-    for (var col = 0; col < cols; col++) {
-        grid[col] = [];
-        for (var row = 0; row < rows; row++) {
-            grid[col][row] = random() < wallChance ? 1 : 0;
+    for (var x = 0; x < cols; x++) {
+        grid[x] = [];
+        for (var y = 0; y < rows; y++) {
+            grid[x][y] = random() < wallChance ? 1 : 0;
         }
     }
 
     // Generate exit
-    exit = getEmpty(grid);
+    exit = getEmpty();
 
     // Generate enemy spawnpoints
     spawnpoints = [];
-    for (var i = 0; i < spawnCount; i++) {
-        var pos;
-        while (true) {
-            pos = getEmpty(grid);
-            if (pos.x !== exit.x && pos.y !== exit.y) break;
-        }
-        spawnpoints.push(pos);
+    for (var i = 0; i < numSpawns; i++) {
+        spawnpoints.push(getEmpty());
     }
 
-    // TODO remove this
-    var pos = getEmpty();
-    towers.push(createTower(pos.x, pos.y, tower.laser));
-    createWave([
-        enemy.basic
-    ]);
-
-    generatePaths(exit.x, exit.y);
+    // Generate pathfinding map
+    updatePaths();
 }
 
-// Generates shortest path to target tile from every map tile
+// Return an empty grid coordinate
+function getEmpty() {
+    while (true) {
+        var gridPos = randomGridPos();
+        if (isEmpty(gridPos.x, gridPos.y)) return gridPos;
+    }
+}
+
+// Find tower at specific grid coordinate
+function getTower(col, row) {
+    for (var i = 0; i < towers.length; i++) {
+        var t = towers[i];
+        if (t.gridPos.x === col && t.gridPos.y === row) return t;
+    }
+    return null;
+}
+
+// Check if map coordinate is empty
+function isEmpty(col, row) {
+    // Check if not walkable
+    if (!isWalkable(col, row)) return false;
+    // Check if spawnpoint
+    if (typeof spawnpoints !== 'undefined') {
+        for (var i = 0; i < spawnpoints.length; i++) {
+            var s = spawnpoints[i];
+            if (s.x === col && s.y === row) return false;
+        }
+    }
+    // Check if exit
+    if (typeof exit !== 'undefined' && exit.x === col && exit.y === row) {
+        return false;
+    }
+    return true;
+}
+
+// Check if map coordinate is walkable
+function isWalkable(col, row) {
+    // Check if wall
+    if (grid[col][row] === 1) return false;
+    // Check if tower
+    if (getTower(col, row)) return false;
+    return true;
+}
+
+// Check if entity is outside map
+function outsideMap(e) {
+    return outsideRect(e.pos.x, e.pos.y, 0, 0, width, height);
+}
+
+// Return a random grid coordinate
+function randomGridPos() {
+    var col = floor(random(cols));
+    var row = floor(random(rows));
+    return createVector(col, row);
+}
+
+// Remove dead entities
+// TODO onDeath()
+function removeDead(entities) {
+    for (var i = entities.length - 1; i >= 0; i--) {
+        var e = entities[i];
+        if (e.alive) continue;
+        entities.splice(i, 1);
+    }
+}
+
+function resetGame() {
+    // Clear all entities
+    enemies = [];
+    newEnemies = [];
+    towers = [];
+    newTowers = [];
+    // Reset all stats
+    paused = true;
+    health = 100;
+    maxHealth = health;
+    cash = 150;
+    wave = 1;
+    // Reset map
+    generateMap();
+    
+}
+
+// Sets tile width and height based on canvas size and map dimensions
+function resizeTiles() {
+    var div = document.getElementById('sketch-holder');
+    cols = floor(div.offsetWidth / ts);
+    rows = floor(div.offsetHeight / ts);
+    resizeCanvas(cols * ts, rows * ts, true);
+}
+
+// Generates shortest path to exit from every map tile
 // Algorithm from https://www.redblobgames.com/pathfinding/tower-defense/
-function generatePaths(col, row) {
-    var walkMap = walkable();
-    var frontier = new Queue();
-    var target = cts(col, row);
-    frontier.enqueue(target);
+function updatePaths() {
+    walkable();
+    var frontier = [];
+    var target = vts(exit);
+    frontier.push(target);
     var cameFrom = {};
     cameFrom[target] = null;
 
-    // Fill cameFrom for every tile
-    while (!frontier.isEmpty()) {
-        var current = frontier.dequeue();
-        var pos = stc(current);
-        var neighbors = getNeighbors(walkMap, pos.x, pos.y);
+    // Fill cameFrom for every grid coordinate
+    while (frontier.length !== 0) {
+        var current = frontier.shift();
+        var gridPos = stv(current);
+        var neighbors = getNeighbors(gridPos.x, gridPos.y);
 
         for (var i = 0; i < neighbors.length; i++) {
             var next = neighbors[i];
             if (!(next in cameFrom)) {
-                frontier.enqueue(next);
+                frontier.push(next);
                 cameFrom[next] = current;
             }
         }
     }
 
-    // Generate path direction for every tile
-    paths = buildMap(cols, rows, null);
+    // Generate path direction for every grid coordinate
+    pathMap = buildMap(cols, rows, null);
     var keys = Object.keys(cameFrom);
     for (var i = 0; i < keys.length; i++) {
         var curKey = keys[i];
         var curVal = cameFrom[curKey];
-
         if (curKey === null || curVal === null) continue;
+        // Add vectors to determine which direction
         var current = stv(curKey);
         var next = stv(curVal);
         var dir = next.sub(current);
-        if (dir.x < 0) paths[current.x][current.y] = 'left';
-        if (dir.y < 0) paths[current.x][current.y] = 'up';
-        if (dir.x > 0) paths[current.x][current.y] = 'right';
-        if (dir.y > 0) paths[current.x][current.y] = 'down';
+        // Fill tile with direction
+        if (dir.x < 0) pathMap[current.x][current.y] = 'left';
+        if (dir.y < 0) pathMap[current.x][current.y] = 'up';
+        if (dir.x > 0) pathMap[current.x][current.y] = 'right';
+        if (dir.y > 0) pathMap[current.x][current.y] = 'down';
     }
 }
 
-// Find an empty tile on the map
-function getEmpty() {
-    var walkMap = walkable();
-    while (true) {
-        var col = floor(random(cols));
-        var row = floor(random(rows));
-        if (walkMap[col][row] === 1) continue;
-        if (typeof spawnpoints !== 'undefined') {
-            for (var i = 0; i < spawnpoints.length; i++) {
-                var s = spawnpoints[i];
-                if (s.x === col && s.y === row) continue;
-            }
+function updateStatus() {
+    document.getElementById('wave').innerHTML = 'Wave ' + wave;
+    document.getElementById('health').innerHTML = health + '/' + maxHealth;
+    document.getElementById('cash').innerHTML = '$' + cash;
+}
+
+// Update map indicating walkability of each tile (0 = walkable)
+function walkable() {
+    walkMap = [];
+    for (var col = 0; col < cols; col++) {
+        walkMap[col] = [];
+        for (var row = 0; row < rows; row++) {
+            walkMap[col][row] = isWalkable(col, row) ? 0 : 1;
         }
-        if (typeof exit !== 'undefined' && exit.x === col && exit.y === row) {
-            continue;
-        }
-        return {x: col, y: row};
     }
 }
 
-// Find tower at specific column and row
-function getTower(col, row) {
+
+// Main p5 functions
+
+function setup() {
+    var div = document.getElementById('sketch-holder');
+    var canvas = createCanvas(div.offsetWidth, div.offsetHeight);
+    canvas.parent('sketch-holder');
+    // Setup tile size and reset game
+    resizeTiles();
+    resetGame();
+}
+
+function draw() {
+    background(0);
+
+    // Update spawn cooldown
+    if (scd > 0) scd--;
+
+    // Draw empty tiles and walls
+    for (var x = 0; x < cols; x++) {
+        for (var y = 0; y < rows; y++) {
+            var t = grid[x][y];
+            t === 0 ? noFill() : fill(1, 50, 67);
+            stroke(255, 31);
+            rect(x * ts, y * ts, ts, ts);
+        }
+    }
+
+    // Draw and update spawnpoints
+    // TODO improve cooldown system, perhaps change spacing between enemies
+    for (var i = 0; i < spawnpoints.length; i++) {
+        var s = spawnpoints[i];
+        stroke(255);
+        fill(0, 230, 64);
+        rect(s.x * ts, s.y * ts, ts, ts);
+        // Spawning enemies
+        if (newEnemies.length > 0 && scd === 0 && !paused) {
+            var c = center(s.x, s.y);
+            enemies.push(createEnemy(c.x, c.y, newEnemies.pop()));
+            scd = spawnCool;
+        }
+    }
+
+    // Draw exit
+    stroke(255);
+    fill(207, 0, 15);
+    rect(exit.x * ts, exit.y * ts, ts, ts);
+
+    // Enemies
+    // TODO onExit()
+    for (var i = 0; i < enemies.length; i++) {
+        var e = enemies[i];
+        if (!paused) {
+            e.steer();
+            e.update();
+        }
+        // Kill if outside map
+        if (outsideMap(e)) e.kill();
+        // Kill if at center of exit tile
+        var c = center(exit.x, exit.y);
+        if (atTileCenter(e.pos.x, e.pos.y, c.x, c.y)) e.kill();
+        e.draw();
+    }
+
+    // Towers
+    // TODO update() maybe?
     for (var i = 0; i < towers.length; i++) {
         var t = towers[i];
-        if (t.pos.x === col && t.pos.y === row) return t;
+        if (!paused) {
+            t.target(t.visible(enemies.concat(towers)));
+        }
+        if (outsideMap(t)) t.kill();
+        t.draw();
     }
-    return null;
-}
 
-function initEntities() {
-    enemies = [];
-    newEnemies = [];
-    towers = [];
+    removeDead(enemies);
+    removeDead(towers);
+    
+    towers = towers.concat(newTowers);
     newTowers = [];
+
+    if (toUpdate) {
+        updatePaths();
+        toUpdate = false;
+    }
 }
 
-function isOutsideMap(e) {
-    return isOutsideRect(e.pos.x, e.pos.y, 0, 0, width, height);
+
+// User input
+
+function keyPressed() {
+    switch (keyCode) {
+        case 219:
+            // Left bracket
+            if (ts > 16) {
+                ts -= tileZoom;
+                resizeTiles();
+                resetGame();
+            }
+            break;
+        case 221:
+            // Right bracket
+            if (ts < 40) {
+                ts += tileZoom;
+                resizeTiles();
+                resetGame();
+            }
+            break;
+    }
+}
+
+function mousePressed() {
+    if (between(mouseX, 0, width) && between(mouseY, 0, height)) {
+        var t = gridPos(mouseX, mouseY);
+        if (isEmpty(t.x, t.y)) {
+            newTowers.push(createTower(t.x, t.y, tower.laser));
+            toUpdate = true;
+        }
+    }
+}
+
+/*
+var divw;
+var divh;
+
+var enemies;
+var newEnemies;
+var towers;
+var newTowers;
+var selected = 'laser';
+
+var grid;
+var walkMap;
+var paths;
+var spawnpoints;
+var exit;
+
+var cols;
+var rows;
+var ts = 24;            // tile size
+var zoom = 2;
+
+var paused;
+var maxHealth;
+var health;
+var cash;
+var wave;
+
+var gridMode = true;    // MAKE THIS ALWAYS ON NO MATTER WHAT
+var pathMode = false;   // GET RID OF THIS
+var spawnCount = 1;
+var tHold = 1;          // turning threshold, put this in code itself rather than var
+var wallChance = 0.1;
+
+
+// Misc functions
+
+// Create entity at mouse position
+function drawTower() {
+    var t = getTile(mouseX, mouseY);
+    switch (selected) {
+        case 'laser':
+            newTowers.push(createTower(t.x, t.y, tower.laser));
+            break;
+    }
+    generatePaths();
 }
 
 function removeDead(entities) {
@@ -175,56 +407,8 @@ function removeDead(entities) {
     }
 }
 
-function resetGame() {
-    initEntities();
-    generateMap();
-    paused = true;
-    maxHealth = 100;
-    health = maxHealth;
-    cash = 150;
-    wave = 1;
-}
-
-// Sets tile width and height based on canvas size and map dimensions
-function resizeTiles() {
-    cols = floor(divw / ts);
-    rows = floor(divh / ts);
-    resizeCanvas(cols * ts, rows * ts, true);
-}
-
-// Update status display
-function updateStatus() {
-    document.getElementById('wave').innerHTML = 'Wave ' + wave;
-    document.getElementById('health').innerHTML = health + '/' + maxHealth;
-    document.getElementById('cash').innerHTML = '$' + cash;
-}
-
-// Generate map indicating walkability of each tile (0 = walkable)
-function walkable() {
-    var walkable = copyMap(grid);
-    for (var i = 0; i < towers.length; i++) {
-        var t = towers[i];
-        walkable[t.pos.x][t.pos.y] = 1;
-    }
-    return walkable;
-}
-
 
 // Main p5 functions
-
-function setup() {
-    // Properly size canvas and place inside div
-    var div = document.getElementById('sketch-holder');
-    divw = div.offsetWidth;
-    var canvas = createCanvas(divw, div.offsetHeight);
-    canvas.parent('sketch-holder');
-    divh = div.offsetHeight;
-    resizeCanvas(divw, divh, true);
-    // Setup proper tile size
-    resizeTiles();
-    // Initialize
-    resetGame();
-}
 
 function draw() {
     background(0);
@@ -282,6 +466,9 @@ function draw() {
     for (var i = 0; i < towers.length; i++) {
         var t = towers[i];
         if (!paused) {
+            var visible = t.getVisible(enemies);
+            var names = t.toAffect.concat(t.toTarget);
+            t.target(getByName(visible, names));
             t.update();
         }
         t.draw();
@@ -289,213 +476,15 @@ function draw() {
 
     removeDead(enemies);
     removeDead(towers);
+    towers = towers.concat(newTowers);
+    newTowers = [];
 }
 
 
 // User input
 
-function keyPressed() {
-    switch (keyCode) {
-        case 17:
-            // Ctrl
-            gridMode = !gridMode;
-            break;
-        case 219:
-            // Left bracket
-            if (ts > 16) {
-                ts -= zoom;
-                resizeTiles();
-                resetGame();
-            }
-            break;
-        case 221:
-            // Right bracket
-            if (ts < 40) {
-                ts += zoom;
-                resizeTiles();
-                resetGame();
-            }
-            break;
-    }
-}
-
-/*
-// Misc functions
-// Generate map of ideal path to exit tile
-function generatePathMap(walkMap, col, row) {
-    var frontier = new Queue();
-    var pos = coordsToString(col, row);
-    frontier.enqueue(pos);
-    var cameFrom = {};
-    cameFrom[pos] = null;
-    
-    while (!frontier.isEmpty()) {
-        var current = frontier.dequeue();
-        pos = stringToCoords(current);
-        var neighbors = getNeighbors(walkMap, pos.x, pos.y);
-        
-        for (var i = 0; i < neighbors.length; i++) {
-            var next = neighbors[i];
-            if (!(next in cameFrom)) {
-                frontier.enqueue(next);
-                cameFrom[next] = current;
-            }
-        }
-        
-    }
-
-    return cameFrom;
-}
-
-// Generate map of walkability for each tile
-function generateWalkMap() {
-    var walkMap = [];
-    for (var col = 0; col < cols; col++) {
-        walkMap[col] = [];
-        for (var row = 0; row < rows; row++) {
-            walkMap[col][row] = grid[col][row].canWalk;
-        }
-    }
-    return walkMap;
-}
-
-
-// Main p5 functions
-
-function draw() {
-    background(0);
-
-    // Tiles
-    for (var col = 0; col < cols; col++) {
-        for (var row = 0; row < rows; row++) {
-            var tile = grid[col][row];
-            tile.update();
-            tile.draw();
-        }
-    }
-
-    // Enemies
-    for (var i = 0; i < enemies.length; i++) {
-        var e = enemies[i];
-        e.update();
-        e.draw();
-        var t = getCoords(e.pos.x, e.pos.y);
-        var c = coordsToString(t.col, t.row);
-        if (pathMap[c] !== null) {
-            var next = stringToCoords(pathMap[c]);
-            var center = getCenter(next.x, next.y);
-            e.pos = createVector(center.x, center.y);
-        }
-    }
-    
-    updateStatus();
-}
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// TODO generate walk map whenever a tile is changed, only update changed tile to be more efficient
-
-/*
-var enemies;
-var newEnemies;
-var towers;
-
-var tileWidth;
-var tileHeight;
-
-var cols;
-var rows;
-
-var meta;
-var grid;
-var palette;
-
-var cash;
-var health;
-var wave;
-
-var showGrid = true;
-
-
-// Misc functions
-
-function loadMap(template) {
-    meta = template.meta;
-    grid = template.grid;
-    palette = template.palette;
-    var dim = getDimensions(grid);
-    cols = dim.cols;
-    rows = dim.rows;
-    resizeTiles(cols, rows);
-    resetMap();
-}
-
-// Remove all entities and return to starting state
-function resetMap() {
-    initEntities();
-    cash = meta.cash;
-    health = meta.health;
-    wave = 1;
-    updateStatus();
-}
-
-
-
-// Main p5 functions
-
-function setup() {
-    // Properly size canvas and place inside div
-    var div = document.getElementById('sketch-holder');
-    var w = div.offsetWidth;
-    var canvas = createCanvas(w, div.offsetHeight);
-    canvas.parent('sketch-holder');
-    resizeCanvas(w, div.offsetHeight, true);
-    // Resize tiles based on initial cols and rows
-    loadMap(maps[0]);
-    // Initialize entities
-    initEntities();
-    var p = getCenter(2, 2);
-    enemies[0] = new Enemy(p.x, p.y, enemies.basic);
-    enemies[0].vel = createVector(1, 0);
-    enemies[0].color = [127, 38, 99];
-}
-
-function draw() {
-    background(0);
-
-    // Draw tiles
-    for (var col = 0; col < cols; col++) {
-        for (var row = 0; row < rows; row++) {
-            var tile = palette[grid[row][col]];
-            tile.draw(col, row);
-        }
-    }
-
-    // Update and draw enemies
-    for (var i = 0; i < enemies.length; i++) {
-        var e = enemies[i];
-        e.steer();
-        e.update();
-        e.draw();
-    }
-
-    // Update and draw towers
-    for (var i = 0; i < towers.length; i++) {
-        ;
-    }
+function mousePressed() {
+    // TODO do not use any kind of function here, just put switch here directly
+    drawTower();
 }
 */
