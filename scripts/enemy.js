@@ -7,7 +7,6 @@ class Enemy {
         // Misc
         this.alive = true;
         this.name = 'enemy';
-        this.type = 'enemy';
         // Position
         this.pos = createVector(x, y);
         this.vel = createVector(0, 0);

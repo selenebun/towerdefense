@@ -7,8 +7,10 @@ var towers;
 var newTowers;
 
 var grid;
-var walkMap;            // map of walkable tiles
+var distMap;            // map of distances from exit
 var pathMap;            // map to exit
+var visitedMap;         // map of visited tiles
+var walkMap;            // map of walkable tiles
 var toUpdate = false;   // flag to update paths
 var spawnpoints;
 var exit;
@@ -34,6 +36,26 @@ var wallChance = 0.1;
 
 
 // Misc functions
+
+// Check if blocking a tile would invalidate paths to exit
+function checkValid(col, row) {
+    var walkMap = walkable(grid);
+    walkMap[col][row] = 1;
+    var vMap = visited(walkMap);
+
+    // Check spawnpoints
+    for (var i = 0; i < spawnpoints.length; i++) {
+        if (!vMap[vts(spawnpoints[i])]) return false;
+    }
+
+    // Check each enemy
+    for (var i = 0; i < enemies.length; i++) {
+        var e = enemies[i];
+        if (!vMap[vts(gridPos(e.pos.x, e.pos.y))]) return false;
+    }
+
+    return true;
+}
 
 // Create a wave of enemies to spawn
 // TODO consider pausing inside
@@ -98,7 +120,7 @@ function getTower(col, row) {
 // Check if map coordinate is empty
 function isEmpty(col, row) {
     // Check if not walkable
-    if (!isWalkable(col, row)) return false;
+    if (!isWalkable(grid, col, row)) return false;
     // Check if spawnpoint
     if (typeof spawnpoints !== 'undefined') {
         for (var i = 0; i < spawnpoints.length; i++) {
@@ -114,7 +136,7 @@ function isEmpty(col, row) {
 }
 
 // Check if map coordinate is walkable
-function isWalkable(col, row) {
+function isWalkable(grid, col, row) {
     // Check if wall
     if (grid[col][row] === 1) return false;
     // Check if tower
@@ -172,44 +194,55 @@ function resizeTiles() {
 // Generates shortest path to exit from every map tile
 // Algorithm from https://www.redblobgames.com/pathfinding/tower-defense/
 function updatePaths() {
-    walkable();
+    walkMap = walkable(grid);
     var frontier = [];
     var target = vts(exit);
     frontier.push(target);
     var cameFrom = {};
     cameFrom[target] = null;
+    var distance = {};
+    distance[target] = 0;
 
     // Fill cameFrom for every grid coordinate
     while (frontier.length !== 0) {
         var current = frontier.shift();
         var gridPos = stv(current);
-        var neighbors = getNeighbors(gridPos.x, gridPos.y);
+        var neighbors = getNeighbors(walkMap, gridPos.x, gridPos.y);
 
         for (var i = 0; i < neighbors.length; i++) {
             var next = neighbors[i];
             if (!(next in cameFrom)) {
                 frontier.push(next);
                 cameFrom[next] = current;
+                distance[next] = 1 + distance[current];
             }
         }
     }
 
-    // Generate path direction for every grid coordinate
+    // Generate usable maps
+    distMap = buildMap(cols, rows, null);
     pathMap = buildMap(cols, rows, null);
     var keys = Object.keys(cameFrom);
     for (var i = 0; i < keys.length; i++) {
         var curKey = keys[i];
         var curVal = cameFrom[curKey];
-        if (curKey === null || curVal === null) continue;
-        // Add vectors to determine which direction
+        if (curKey === null) continue;
         var current = stv(curKey);
-        var next = stv(curVal);
-        var dir = next.sub(current);
-        // Fill tile with direction
-        if (dir.x < 0) pathMap[current.x][current.y] = 'left';
-        if (dir.y < 0) pathMap[current.x][current.y] = 'up';
-        if (dir.x > 0) pathMap[current.x][current.y] = 'right';
-        if (dir.y > 0) pathMap[current.x][current.y] = 'down';
+
+        // Distance map
+        distMap[current.x][current.y] = distance[curKey];
+
+        // Generate path direction for every grid coordinate
+        if (curVal !== null) {
+            // Subtract vectors to determine which direction
+            var next = stv(curVal);
+            var dir = next.sub(current);
+            // Fill tile with direction
+            if (dir.x < 0) pathMap[current.x][current.y] = 'left';
+            if (dir.y < 0) pathMap[current.x][current.y] = 'up';
+            if (dir.x > 0) pathMap[current.x][current.y] = 'right';
+            if (dir.y > 0) pathMap[current.x][current.y] = 'down';
+        }
     }
 }
 
@@ -219,15 +252,42 @@ function updateStatus() {
     document.getElementById('cash').innerHTML = '$' + cash;
 }
 
+// Return status of whether a path can be visited
+function visited(walkMap) {
+    var frontier = [];
+    var target = vts(exit);
+    frontier.push(target);
+    var visited = {};
+    visited[target] = true;
+
+    // Fill visited for every grid coordinate
+    while (frontier.length !== 0) {
+        var current = frontier.shift();
+        var gridPos = stv(current);
+        var neighbors = getNeighbors(walkMap, gridPos.x, gridPos.y);
+
+        for (var i = 0; i < neighbors.length; i++) {
+            var next = neighbors[i];
+            if (!(next in visited)) {
+                frontier.push(next);
+                visited[next] = true;
+            }
+        }
+    }
+
+    return visited;
+}
+
 // Update map indicating walkability of each tile (0 = walkable)
-function walkable() {
-    walkMap = [];
+function walkable(grid) {
+    var walkMap = [];
     for (var col = 0; col < cols; col++) {
         walkMap[col] = [];
         for (var row = 0; row < rows; row++) {
-            walkMap[col][row] = isWalkable(col, row) ? 0 : 1;
+            walkMap[col][row] = isWalkable(grid, col, row) ? 0 : 1;
         }
     }
+    return walkMap;
 }
 
 
@@ -295,11 +355,14 @@ function draw() {
     }
 
     // Towers
-    // TODO update() maybe?
     for (var i = 0; i < towers.length; i++) {
         var t = towers[i];
         if (!paused) {
-            t.target(t.visible(enemies.concat(towers)));
+            if (t.canFire()) {
+                t.onTarget(t.visible(enemies));
+                t.resetCooldown();
+            }
+            t.update();
         }
         if (outsideMap(t)) t.kill();
         t.draw();
@@ -322,6 +385,14 @@ function draw() {
 
 function keyPressed() {
     switch (keyCode) {
+        case 49:
+            // 1
+            selected = 'laser';
+            break;
+        case 50:
+            // 2
+            selected = 'sniper';
+            break;
         case 219:
             // Left bracket
             if (ts > 16) {
@@ -344,8 +415,8 @@ function keyPressed() {
 function mousePressed() {
     if (between(mouseX, 0, width) && between(mouseY, 0, height)) {
         var t = gridPos(mouseX, mouseY);
-        if (isEmpty(t.x, t.y)) {
-            newTowers.push(createTower(t.x, t.y, tower.laser));
+        if (isEmpty(t.x, t.y) && checkValid(t.x, t.y)) {
+            newTowers.push(createTower(t.x, t.y, tower[selected]));
             toUpdate = true;
         }
     }

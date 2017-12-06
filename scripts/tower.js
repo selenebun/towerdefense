@@ -1,21 +1,23 @@
 class Tower {
     constructor(col, row) {
         // Display
-        this.barrel = [0, 0, 0];
-        this.color = [0, 0, 0];
-        this.hasBarrel = false;
+        this.barrel = [0, 0, 0];    // barrel color
+        this.border = [0, 0, 0];    // border color
+        this.color = [0, 0, 0];     // turret base color
+        this.hasBarrel = true;
+        this.hasBase = true;
         this.length = 0.7;          // barrel length in tiles
-        this.width = 0.4;           // barrel width in tiles
         this.radius = 1;            // radius in tiles
+        this.width = 0.3;           // barrel width in tiles
         // Misc
         this.alive = true;
         this.name = 'tower';
-        this.type = 'tower';
         // Position
         this.angle = 0;
         this.gridPos = createVector(col, row);
         this.pos = createVector(col*ts + ts/2, row*ts + ts/2);
         // Stats
+        this.cd = 0;                // current cooldown left
         this.cooldown = 10;
         this.damage = 1;
         this.range = 5;
@@ -25,9 +27,12 @@ class Tower {
         this.angle = atan2(y - this.pos.y, x - this.pos.x);
     }
 
+    canFire() {
+        return this.cd === 0;
+    }
+
     draw() {
         // Draw barrel
-        stroke(0);
         if (this.hasBarrel) {
             push();
             translate(this.pos.x, this.pos.y);
@@ -35,31 +40,42 @@ class Tower {
             this.drawBarrel();
             pop();
         }
-        // Draw turret
-        fill(this.color);
-        ellipse(this.pos.x, this.pos.y, this.radius * ts, this.radius * ts);
+        // Draw turret base
+        if (this.hasBase) this.drawBase();
     }
 
     drawBarrel() {
+        stroke(this.border);
         fill(this.barrel);
         rect(0, -this.width * ts / 2, this.length * ts, this.width * ts);
+    }
+
+    drawBase() {
+        stroke(this.border);
+        fill(this.color);
+        ellipse(this.pos.x, this.pos.y, this.radius * ts, this.radius * ts);
     }
 
     kill() {
         this.alive = false;
     }
 
-    nearest(entities) {
-        var lowestDist = 10000;
-        var e = entities[0];
-        for (var i = 0; i < entities.length; i++) {
-            var dist = this.pos.dist(entities[i].pos);
-            if (dist < lowestDist) {
-                lowestDist = dist;
-                e = entities[i];
-            }
-        }
-        return e;
+    onAim(e) {}
+
+    onTarget(entities) {
+        var e = this.target(entities);
+        if (typeof e === 'undefined') return;
+        this.onAim(e);
+    }
+
+    resetCooldown() {
+        this.cd = this.cooldown;
+    }
+
+    target() {}
+
+    update() {
+        if (this.cd > 0) this.cd--;
     }
 
     upgrade(template) {

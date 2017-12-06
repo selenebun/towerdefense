@@ -50,7 +50,7 @@ function getByType(entities, type) {
 }
 
 // Return non-diagonal walkable neighbors
-function getNeighbors(col, row) {
+function getNeighbors(walkMap, col, row) {
     var neighbors = [];
     if (col !== 0 && walkMap[col - 1][row] === 0) {
         neighbors.push(cts(col - 1, row));
