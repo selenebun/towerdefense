@@ -33,9 +33,10 @@ header {
     padding: 14px;
 }
 
-header h1 {
+h1, h2, h3, h4, h5, h6 {
     margin: 0;
     text-align: center;
+    text-shadow: 1px 1px 0 #000;
 }
 
 main {
@@ -81,6 +82,7 @@ canvas {
     display: flex;
     flex-direction: column;
     margin-right: 2px;
+    min-width: 180px;
 }
 
 #info {

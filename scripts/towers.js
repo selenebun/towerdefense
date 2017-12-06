@@ -48,8 +48,8 @@ var tower = {};
 
 tower.laser = {
     // Display
-    barrel: [103, 128, 159],
     color: [25, 181, 254],
+    secondary: [103, 128, 159],
     // Misc
     name: 'laser',
     // Stats
@@ -65,10 +65,10 @@ tower.laser = {
 
 tower.sniper = {
     // Display
-    barrel: [207, 0, 15],
-    color: [103, 128, 159],
+    color: [207, 0, 15],
     length: 0.5,
     radius: 0.6,
+    secondary: [103, 128, 159],
     width: 1.1,
     // Misc
     name: 'sniper',
@@ -90,36 +90,21 @@ tower.sniper = {
     },
     drawBarrel: function() {
         stroke(this.border);
-        fill(this.barrel);
+        fill(this.color);
         var back = -this.length * ts / 3;
         var front = back + this.length * ts;
         var side = this.width * ts / 2;
         triangle(back, -side, back, side, front, 0);
     },
+    drawBase: function() {
+        stroke(this.border);
+        fill(this.secondary);
+        ellipse(this.pos.x, this.pos.y, this.radius * ts, this.radius * ts);
+    },
     onAim: function(e) {
         this.aim(e.pos.x, e.pos.y);
-        stroke(this.barrel);
+        stroke(this.color);
         line(this.pos.x, this.pos.y, e.pos.x, e.pos.y);
     },
     target: getFurthest
 };
-
-/*
-var tower = {};
-
-
-tower.laser = {
-    toAffect: ['basic'],
-    toTarget: ['basic'],
-    name: 'laser',
-    color: [25, 181, 254],
-    barrel: [103, 128, 159],
-    showBarrel: true,
-    onTarget: function(e) {
-        this.aim(e.pos.x, e.pos.y);
-        stroke(this.color);
-        var t = getCenter(this.pos.x, this.pos.y);
-        line(t.x, t.y, e.pos.x, e.pos.y);
-    }
-};
-*/

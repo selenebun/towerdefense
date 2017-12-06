@@ -191,6 +191,17 @@ function resizeTiles() {
     resizeCanvas(cols * ts, rows * ts, true);
 }
 
+// Display tower information
+function updateInfo(t) {
+    var name = document.getElementById('name');
+    name.innerHTML = '<span style="color:rgb(' + t.color[0] + ',' +
+    t.color[1] + ',' + t.color[2] + ')">' + t.name.capitalize() +
+    ' Tower' + '</span>';
+    document.getElementById('damage').innerHTML = 'Damage: ' + t.damage;
+    document.getElementById('range').innerHTML = 'Range: ' + t.range;
+    document.getElementById('speed').innerHTML = 'Speed: ' + t.cooldown;
+}
+
 // Generates shortest path to exit from every map tile
 // Algorithm from https://www.redblobgames.com/pathfinding/tower-defense/
 function updatePaths() {
@@ -246,6 +257,7 @@ function updatePaths() {
     }
 }
 
+// Update display with wave, health, and cash
 function updateStatus() {
     document.getElementById('wave').innerHTML = 'Wave ' + wave;
     document.getElementById('health').innerHTML = health + '/' + maxHealth;
@@ -413,149 +425,17 @@ function keyPressed() {
 }
 
 function mousePressed() {
-    if (between(mouseX, 0, width) && between(mouseY, 0, height)) {
-        var t = gridPos(mouseX, mouseY);
-        if (isEmpty(t.x, t.y) && checkValid(t.x, t.y)) {
-            newTowers.push(createTower(t.x, t.y, tower[selected]));
+    if (mouseInMap()) {
+        var p = gridPos(mouseX, mouseY);
+        // Update tower info
+        var t = getTower(p.x, p.y);
+        if (t) {
+            updateInfo(t);
+        } else if (isEmpty(p.x, p.y) && checkValid(p.x, p.y)) {
+            var n = createTower(p.x, p.y, tower[selected]);
+            updateInfo(n);
+            newTowers.push(n);
             toUpdate = true;
         }
     }
 }
-
-/*
-var divw;
-var divh;
-
-var enemies;
-var newEnemies;
-var towers;
-var newTowers;
-var selected = 'laser';
-
-var grid;
-var walkMap;
-var paths;
-var spawnpoints;
-var exit;
-
-var cols;
-var rows;
-var ts = 24;            // tile size
-var zoom = 2;
-
-var paused;
-var maxHealth;
-var health;
-var cash;
-var wave;
-
-var gridMode = true;    // MAKE THIS ALWAYS ON NO MATTER WHAT
-var pathMode = false;   // GET RID OF THIS
-var spawnCount = 1;
-var tHold = 1;          // turning threshold, put this in code itself rather than var
-var wallChance = 0.1;
-
-
-// Misc functions
-
-// Create entity at mouse position
-function drawTower() {
-    var t = getTile(mouseX, mouseY);
-    switch (selected) {
-        case 'laser':
-            newTowers.push(createTower(t.x, t.y, tower.laser));
-            break;
-    }
-    generatePaths();
-}
-
-function removeDead(entities) {
-    for (var i = entities.length - 1; i >= 0; i--) {
-        var e = entities[i];
-        if (e.alive) continue;
-        entities.splice(i, 1);
-        e.onDeath();
-    }
-}
-
-
-// Main p5 functions
-
-function draw() {
-    background(0);
-
-    // Empty tiles and walls
-    for (var col = 0; col < cols; col++) {
-        for (var row = 0; row < rows; row++) {
-            var t = grid[col][row];
-            if (t === 0 && gridMode) {
-                noFill();
-                stroke(255, 31);
-                rect(col * ts, row * ts, ts, ts);
-            } else if (t === 1) {
-                fill(1, 50, 67);
-                gridMode ? stroke(255, 31) : stroke(255, 63);
-                rect(col * ts, row * ts, ts, ts);
-            }
-        }
-    }
-
-    // Spawnpoints
-    for (var i = 0; i < spawnpoints.length; i++) {
-        var t = spawnpoints[i];
-        fill(0, 230, 64);
-        stroke(255);
-        rect(t.x * ts, t.y * ts, ts, ts);
-        if (newEnemies.length > 0 && !paused) {
-            var pos = getCenter(t.x, t.y);
-            enemies.push(createEnemy(pos.x, pos.y, newEnemies.pop()));
-        }
-    }
-
-    // Exit
-    fill(207, 0, 15);
-    stroke(255);
-    rect(exit.x * ts, exit.y * ts, ts, ts);
-
-    // Enemies
-    for (var i = 0; i < enemies.length; i++) {
-        var e = enemies[i];
-        if (!paused) {
-            var t = getTile(e.pos.x, e.pos.y);
-            e.steer(paths[t.x][t.y]);
-            e.update();
-            if (t.x === exit.x && t.y === exit.y) {
-                e.onExit();
-                e.kill();
-            }
-        }
-        if (isOutsideMap(e)) e.kill();
-        e.draw();
-    }
-
-    // Towers
-    for (var i = 0; i < towers.length; i++) {
-        var t = towers[i];
-        if (!paused) {
-            var visible = t.getVisible(enemies);
-            var names = t.toAffect.concat(t.toTarget);
-            t.target(getByName(visible, names));
-            t.update();
-        }
-        t.draw();
-    }
-
-    removeDead(enemies);
-    removeDead(towers);
-    towers = towers.concat(newTowers);
-    newTowers = [];
-}
-
-
-// User input
-
-function mousePressed() {
-    // TODO do not use any kind of function here, just put switch here directly
-    drawTower();
-}
-*/

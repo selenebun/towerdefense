@@ -1,13 +1,13 @@
 class Tower {
     constructor(col, row) {
         // Display
-        this.barrel = [0, 0, 0];    // barrel color
         this.border = [0, 0, 0];    // border color
-        this.color = [0, 0, 0];     // turret base color
+        this.color = [0, 0, 0];     // main color
         this.hasBarrel = true;
         this.hasBase = true;
         this.length = 0.7;          // barrel length in tiles
         this.radius = 1;            // radius in tiles
+        this.secondary = [0, 0, 0]; // secondary color
         this.width = 0.3;           // barrel width in tiles
         // Misc
         this.alive = true;
@@ -46,7 +46,7 @@ class Tower {
 
     drawBarrel() {
         stroke(this.border);
-        fill(this.barrel);
+        fill(this.secondary);
         rect(0, -this.width * ts / 2, this.length * ts, this.width * ts);
     }
 
@@ -100,52 +100,3 @@ class Tower {
         return visible;
     }
 }
-
-/*
-class Tower {
-    attack(e) {}
-
-    kill() {
-        this.alive = false;
-    }
-
-    getNearest(enemies) {
-        var lowestDist = 10000;
-        var e = enemies[0];
-        for (var i = 0; i < enemies.length; i++) {
-            var t = getCenter(this.pos.x, this.pos.y);
-            var dist = enemies[i].pos.dist(createVector(t.x, t.y));
-            if (dist < lowestDist) {
-                lowestDist = dist;
-                e = enemies[i];
-            }
-        }
-        return e;
-    }
-
-    onCreate() {
-        this.cd = this.cooldown;
-    }
-
-    onDeath() {}
-    onFire() {}
-    onKill(e) {}
-    onPlace() {}
-    onSell() {}
-    onTarget(e) {}
-    onTick() {}
-    onUpgrade() {}
-
-    target(enemies) {
-        if (this.cooldown > 0) return;
-        var possible = getByName(enemies, this.toTarget);
-        if (possible.length === 0) return;
-        this.cd = this.cooldown;
-        this.onTarget(this.getNearest(possible));
-    }
-
-    update() {
-        if (this.cd > 0) this.cd--;
-    }
-}
-*/

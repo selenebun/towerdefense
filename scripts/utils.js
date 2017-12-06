@@ -1,3 +1,8 @@
+String.prototype.capitalize = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+}
+
+
 function atTileCenter(x, y, cx, cy) {
     return between(x, cx - 1, cx + 1) && between(y, cy - 1, cy + 1);
 }
@@ -40,15 +45,6 @@ function getByName(entities, names) {
     return results;
 }
 
-function getByType(entities, type) {
-    var results = [];
-    for (var i = 0; i < entities.length; i++) {
-        var e = entities[i];
-        if (e.type === type) results.push(e);
-    }
-    return results;
-}
-
 // Return non-diagonal walkable neighbors
 function getNeighbors(walkMap, col, row) {
     var neighbors = [];
@@ -76,6 +72,10 @@ function insideCircle(x, y, cx, cy, r) {
     return sq(x - cx) + sq(y - cy) < sq(r);
 }
 
+function mouseInMap() {
+    return between(mouseX, 0, width) && between(mouseY, 0, height);
+}
+
 function outsideRect(x, y, cx, cy, w, h) {
     return x < cx || y < cy || x > cx + w || y > cy + h;
 }
@@ -90,36 +90,3 @@ function stv(str) {
 function vts(v) {
     return v.x + ',' + v.y;
 }
-
-/*
-// Get array of entities that have a name in the array of names
-function getByName(entities, names) {
-    var results = [];
-    if (typeof names === 'string') names = [names];
-    for (var i = 0; i < entities.length; i++) {
-        var e = entities[i];
-        for (var j = 0; j < names.length; j++) {
-            if (e.name === names[j]) results.push(e);
-        }
-    }
-    return results;
-}
-
-// Copy 2d array
-function copyMap(myMap) {
-    var copy = [];
-    for (var col = 0; col < myMap.length; col++) {
-        copy[col] = [];
-        for (var row = 0; row < myMap[0].length; row++) {
-            copy[col][row] = myMap[col][row];
-        }
-    }
-    return copy;
-}
-
-// Return center of current tile (combination of getTile() and getCenter())
-function getTileCenter(x, y) {
-    var c = getTile(x, y);
-    return getCenter(c.x, c.y);
-}
-*/
