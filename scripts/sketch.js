@@ -32,6 +32,7 @@ var spawnCool = 40;         // number of ticks between spawning enemies
 var scd = 0;                // number of ticks until next spawn
 var toCooldown = false;     // flag to reset cooldown
 
+var minExitDist = 10;       // minimum distance between spawnpoints and exit
 var numSpawns = 1;          // number of enemy spawnpoints to generate
 var wallChance = 0.1;
 
@@ -94,7 +95,12 @@ function generateMap() {
     // Generate enemy spawnpoints
     spawnpoints = [];
     for (var i = 0; i < numSpawns; i++) {
-        spawnpoints.push(getEmpty());
+        var s;
+        while (true) {
+            s = getEmpty();
+            if (s.dist(exit) >= minExitDist) break;
+        }
+        spawnpoints.push(s);
     }
 
     // Generate pathfinding map
