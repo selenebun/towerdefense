@@ -205,7 +205,7 @@ function updateInfo(t) {
     ' Tower' + '</span>';
     document.getElementById('damage').innerHTML = 'Damage: ' + t.damage;
     document.getElementById('range').innerHTML = 'Range: ' + t.range;
-    document.getElementById('speed').innerHTML = 'Speed: ' + t.cooldown;
+    document.getElementById('speed').innerHTML = 'Cooldown: ' + t.cooldown;
 }
 
 // Generates shortest path to exit from every map tile
@@ -340,7 +340,6 @@ function draw() {
     }
 
     // Draw and update spawnpoints
-    // TODO improve cooldown system, perhaps change spacing between enemies
     for (var i = 0; i < spawnpoints.length; i++) {
         var s = spawnpoints[i];
         stroke(255);
@@ -360,7 +359,6 @@ function draw() {
     rect(exit.x * ts, exit.y * ts, ts, ts);
 
     // Enemies
-    // TODO onExit()
     for (var i = 0; i < enemies.length; i++) {
         var e = enemies[i];
         if (!paused) {
@@ -450,9 +448,12 @@ function mousePressed() {
             updateInfo(t);
         } else if (isEmpty(p.x, p.y) && checkValid(p.x, p.y)) {
             var n = createTower(p.x, p.y, tower[selected]);
-            updateInfo(n);
-            newTowers.push(n);
-            toUpdate = true;
+            if (cash >= n.cost) {
+                cash -= n.cost;
+                updateInfo(n);
+                newTowers.push(n);
+                toUpdate = true;
+            }
         }
     }
 }

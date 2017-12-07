@@ -19,6 +19,7 @@ class Tower {
         // Stats
         this.cd = 0;                // current cooldown left
         this.cooldown = 10;
+        this.cost = 0;
         this.damage = 1;
         this.range = 5;
         this.target = 'furthest';   // targeting function
@@ -26,6 +27,10 @@ class Tower {
 
     aim(x, y) {
         this.angle = atan2(y - this.pos.y, x - this.pos.x);
+    }
+
+    attack(e) {
+        e.dealDamage(this.damage);
     }
 
     canFire() {
@@ -61,7 +66,13 @@ class Tower {
         this.alive = false;
     }
 
-    onAim(e) {}
+    onAim(e) {
+        this.attack(e);
+        // Draw line to target
+        this.aim(e.pos.x, e.pos.y);
+        stroke(this.color);
+        line(this.pos.x, this.pos.y, e.pos.x, e.pos.y);
+    }
 
     onTarget(entities) {
         var e = target[this.target](entities);

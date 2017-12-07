@@ -54,12 +54,8 @@ tower.laser = {
     name: 'laser',
     // Stats
     cooldown: 0,
-    // Methods
-    onAim: function(e) {
-        this.aim(e.pos.x, e.pos.y);
-        stroke(this.color);
-        line(this.pos.x, this.pos.y, e.pos.x, e.pos.y);
-    }
+    cost: 100,
+    damage: 0.02
 };
 
 tower.sniper = {
@@ -72,7 +68,9 @@ tower.sniper = {
     // Misc
     name: 'sniper',
     // Stats
-    cooldown: 0,
+    cooldown: 120,
+    cost: 400,
+    damage: 4,
     range: 15,
     // Methods
     draw() {
@@ -99,10 +97,5 @@ tower.sniper = {
         stroke(this.border);
         fill(this.secondary);
         ellipse(this.pos.x, this.pos.y, this.radius * ts, this.radius * ts);
-    },
-    onAim: function(e) {
-        this.aim(e.pos.x, e.pos.y);
-        stroke(this.color);
-        line(this.pos.x, this.pos.y, e.pos.x, e.pos.y);
     }
 };
