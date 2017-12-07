@@ -7,17 +7,17 @@ var towers;
 var newTowers;
 
 var grid;
-var distMap;            // map of distances from exit
-var pathMap;            // map to exit
-var visitedMap;         // map of visited tiles
-var walkMap;            // map of walkable tiles
-var toUpdate = false;   // flag to update paths
+var distMap;                // map of distances from exit
+var pathMap;                // map to exit
+var visitedMap;             // map of visited tiles
+var walkMap;                // map of walkable tiles
+var toUpdate = false;       // flag to update paths
 var spawnpoints;
 var exit;
 
 var cols;
 var rows;
-var ts = 24;            // tile size
+var ts = 24;                // tile size
 var tileZoom = 2;
 
 var paused;
@@ -28,10 +28,11 @@ var health;
 var maxHealth;
 var wave;
 
-var spawnCool = 40;     // number of ticks between spawning enemies
-var scd = 0;            // number of ticks until next spawn
+var spawnCool = 40;         // number of ticks between spawning enemies
+var scd = 0;                // number of ticks until next spawn
+var toCooldown = false;     // flag to reset cooldown
 
-var numSpawns = 1;      // number of enemy spawnpoints to generate
+var numSpawns = 1;          // number of enemy spawnpoints to generate
 var wallChance = 0.1;
 
 
@@ -180,7 +181,6 @@ function resetGame() {
     wave = 1;
     // Reset map
     generateMap();
-    
 }
 
 // Sets tile width and height based on canvas size and map dimensions
@@ -317,6 +317,9 @@ function setup() {
 function draw() {
     background(0);
 
+    // Update game status display
+    updateStatus();
+
     // Update spawn cooldown
     if (scd > 0) scd--;
 
@@ -341,7 +344,7 @@ function draw() {
         if (newEnemies.length > 0 && scd === 0 && !paused) {
             var c = center(s.x, s.y);
             enemies.push(createEnemy(c.x, c.y, newEnemies.pop()));
-            scd = spawnCool;
+            toCooldown = true;
         }
     }
 
@@ -360,9 +363,12 @@ function draw() {
         }
         // Kill if outside map
         if (outsideMap(e)) e.kill();
-        // Kill if at center of exit tile
+        // If at center of exit tile, kill and reduce player health
         var c = center(exit.x, exit.y);
-        if (atTileCenter(e.pos.x, e.pos.y, c.x, c.y)) e.kill();
+        if (atTileCenter(e.pos.x, e.pos.y, c.x, c.y)) {
+            e.onExit();
+            e.kill();
+        }
         e.draw();
     }
 
@@ -385,6 +391,11 @@ function draw() {
     
     towers = towers.concat(newTowers);
     newTowers = [];
+
+    if (toCooldown) {
+        scd = spawnCool;
+        toCooldown = false;
+    }
 
     if (toUpdate) {
         updatePaths();

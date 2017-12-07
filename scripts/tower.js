@@ -21,6 +21,7 @@ class Tower {
         this.cooldown = 10;
         this.damage = 1;
         this.range = 5;
+        this.target = 'furthest';   // targeting function
     }
 
     aim(x, y) {
@@ -63,7 +64,7 @@ class Tower {
     onAim(e) {}
 
     onTarget(entities) {
-        var e = this.target(entities);
+        var e = target[this.target](entities);
         if (typeof e === 'undefined') return;
         this.onAim(e);
     }
@@ -71,8 +72,6 @@ class Tower {
     resetCooldown() {
         this.cd = this.cooldown;
     }
-
-    target() {}
 
     update() {
         if (this.cd > 0) this.cd--;

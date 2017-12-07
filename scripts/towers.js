@@ -5,10 +5,11 @@ function createTower(x, y, template) {
 }
 
 
-// Target selection
+// Targeting systems
+var target = {};
 
 // Furthest through map (closest to exit)
-function getFurthest(entities) {
+target.furthest = function(entities) {
     var lowestDist = 10000;
     var chosen = entities[0];
     for (var i = 0; i < entities.length; i++) {
@@ -21,10 +22,10 @@ function getFurthest(entities) {
         }
     }
     return chosen;
-}
+};
 
 // Nearest to tower
-function getNearest(entities) {
+target.nearest = function(entities) {
     var lowestDist = 10000;
     var chosen = entities[0];
     for (var i = 0; i < entities.length; i++) {
@@ -36,14 +37,13 @@ function getNearest(entities) {
         }
     }
     return chosen;
-}
+};
 
-// Strongest enemy
-function getStrongest(entities) {}
+// Most health + armor
+target.strongest = function(entities) {};
 
 
 // Tower templates
-
 var tower = {};
 
 tower.laser = {
@@ -59,8 +59,7 @@ tower.laser = {
         this.aim(e.pos.x, e.pos.y);
         stroke(this.color);
         line(this.pos.x, this.pos.y, e.pos.x, e.pos.y);
-    },
-    target: getFurthest
+    }
 };
 
 tower.sniper = {
@@ -105,6 +104,5 @@ tower.sniper = {
         this.aim(e.pos.x, e.pos.y);
         stroke(this.color);
         line(this.pos.x, this.pos.y, e.pos.x, e.pos.y);
-    },
-    target: getFurthest
+    }
 };

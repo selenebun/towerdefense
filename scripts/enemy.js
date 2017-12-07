@@ -11,6 +11,7 @@ class Enemy {
         this.pos = createVector(x, y);
         this.vel = createVector(0, 0);
         // Stats
+        this.damage = 1;
         this.speed = 1;             // 4 is the max
     }
 
@@ -22,6 +23,10 @@ class Enemy {
 
     kill() {
         this.alive = false;
+    }
+
+    onExit() {
+        health -= this.damage;
     }
 
     steer() {
