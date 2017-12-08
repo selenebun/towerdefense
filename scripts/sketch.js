@@ -21,6 +21,7 @@ var tileZoom = 2;
 
 var paused;
 
+var range = true;
 var sellConst = 0.8;
 var toPlace = false;
 var towerType;
@@ -491,7 +492,7 @@ function draw() {
     }
 
     // Draw range of tower being placed
-    if (mouseInMap() && toPlace && typeof towerType !== 'undefined') {
+    if (mouseInMap() && toPlace && typeof towerType !== 'undefined' && range) {
         var p = gridPos(mouseX, mouseY);
         var c = center(p.x, p.y);
         var t = createTower(0, 0, tower[towerType]);
@@ -529,6 +530,10 @@ function draw() {
 
 function keyPressed() {
     switch (keyCode) {
+        case 18:
+            // Alt
+            range = !range;
+            break;
         case 27:
             // Escape
             toPlace = false;
