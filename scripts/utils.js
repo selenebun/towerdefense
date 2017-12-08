@@ -45,19 +45,19 @@ function getByName(entities, names) {
     return results;
 }
 
-// Return non-diagonal walkable neighbors
-function getNeighbors(walkMap, col, row) {
+// Return non-diagonal neighbors with a certain value
+function getNeighbors(walkMap, col, row, value) {
     var neighbors = [];
-    if (col !== 0 && walkMap[col - 1][row] === 0) {
+    if (col !== 0 && walkMap[col - 1][row] === value) {
         neighbors.push(cts(col - 1, row));
     }
-    if (row !== 0 && walkMap[col][row - 1] === 0) {
+    if (row !== 0 && walkMap[col][row - 1] === value) {
         neighbors.push(cts(col, row - 1));
     }
-    if (col !== cols - 1 && walkMap[col + 1][row] === 0) {
+    if (col !== cols - 1 && walkMap[col + 1][row] === value) {
         neighbors.push(cts(col + 1, row));
     }
-    if (row !== rows - 1 && walkMap[col][row + 1] === 0) {
+    if (row !== rows - 1 && walkMap[col][row + 1] === value) {
         neighbors.push(cts(col, row + 1));
     }
     return neighbors;

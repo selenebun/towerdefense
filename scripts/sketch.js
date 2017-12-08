@@ -9,7 +9,6 @@ var newTowers;
 var grid;
 var distMap;                // map of distances from exit
 var pathMap;                // map to exit
-var visitedMap;             // map of visited tiles
 var walkMap;                // map of walkable tiles
 var toUpdate = false;       // flag to update paths
 var spawnpoints;
@@ -71,21 +70,11 @@ function checkValid(col, row) {
 }
 
 // Create a wave of enemies to spawn
-// TODO consider pausing inside
 function createWave(pattern) {
     for (var i = 0; i < pattern.length; i++) {
         var t = pattern[i];
-        if (Array.isArray(t)) {
-            if (t.length === 1) {
-                newEnemies.push(t[0]);
-            } else if (t.length > 1) {
-                for (var j = 0; j < t[1]; j++) {
-                    newEnemies.push(t[0]);
-                }
-            }
-        } else {
-            newEnemies.push(t);
-        }
+        var count = t.pop();
+        addEnemies(t, count);
     }
 }
 
@@ -98,17 +87,24 @@ function generateMap() {
             grid[x][y] = random() < wallChance ? 1 : 0;
         }
     }
+    walkMap = walkable(grid);
 
-    // Generate exit
+    // Generate exit and remove walls that are adjacent to it
     exit = getEmpty();
+    var neighbors = getNeighbors(walkMap, exit.x, exit.y, 1);
+    for (var i = 0; i < neighbors.length; i++) {
+        var n = stv(neighbors[i]);
+        grid[n.x][n.y] = 0;
+    }
 
     // Generate enemy spawnpoints
     spawnpoints = [];
+    var vMap = visited(walkMap);
     for (var i = 0; i < numSpawns; i++) {
         var s;
         while (true) {
             s = getEmpty();
-            if (s.dist(exit) >= minExitDist) break;
+            if (s.dist(exit) >= minExitDist && vMap[vts(s)]) break;
         }
         spawnpoints.push(s);
     }
@@ -259,7 +255,7 @@ function updatePaths() {
     while (frontier.length !== 0) {
         var current = frontier.shift();
         var gridPos = stv(current);
-        var neighbors = getNeighbors(walkMap, gridPos.x, gridPos.y);
+        var neighbors = getNeighbors(walkMap, gridPos.x, gridPos.y, 0);
 
         for (var i = 0; i < neighbors.length; i++) {
             var next = neighbors[i];
@@ -317,7 +313,7 @@ function visited(walkMap) {
     while (frontier.length !== 0) {
         var current = frontier.shift();
         var gridPos = stv(current);
-        var neighbors = getNeighbors(walkMap, gridPos.x, gridPos.y);
+        var neighbors = getNeighbors(walkMap, gridPos.x, gridPos.y, 0);
 
         for (var i = 0; i < neighbors.length; i++) {
             var next = neighbors[i];
