@@ -69,7 +69,7 @@ tower.sniper = {
     name: 'sniper',
     // Stats
     cooldown: 120,
-    cost: 400,
+    cost: 325,
     damage: 100,
     range: 15,
     // Methods
