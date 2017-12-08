@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <meta name="author" content="xithiox">
     <title>Tower Defense</title>
-    <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
     <script src="scripts/lib/p5.min.js" defer></script>
     <script src="scripts/utils.js" defer></script>
@@ -22,8 +21,8 @@
     <main>
       <aside id="store">
         <h2>Store</h2>
-        <p><button class="laser" onclick="buy('laser')">Laser Tower</button></p>
-        <p><button class="sniper" onclick="buy('sniper')">Sniper Tower</button></p>
+        <p><button class="laser" onclick="buy('laser')">Laser Tower (1)</button></p>
+        <p><button class="sniper" onclick="buy('sniper')">Sniper Tower (2)</button></p>
       </aside>
 
       <div id="sketch-holder"></div>
@@ -36,9 +35,6 @@
           <p>
             <button onclick="pause()">Start</button>
             <button onclick="resetGame()">Restart</button>
-          </p>
-          <p>
-            <button onclick="nextWave()">Next Wave</button>
           </p>
         </aside>
 
