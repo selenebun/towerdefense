@@ -1,6 +1,7 @@
 class Tower {
     constructor(col, row) {
         // Display
+        this.baseOnTop = true;      // render base over barrel
         this.border = [0, 0, 0];    // border color
         this.color = [0, 0, 0];     // main color
         this.hasBarrel = true;
@@ -8,6 +9,7 @@ class Tower {
         this.length = 0.7;          // barrel length in tiles
         this.radius = 1;            // radius in tiles
         this.secondary = [0, 0, 0]; // secondary color
+        this.weight = 2;            // laser stroke weight
         this.width = 0.3;           // barrel width in tiles
         // Misc
         this.alive = true;
@@ -38,6 +40,8 @@ class Tower {
     }
 
     draw() {
+        // Draw turret base
+        if (this.hasBase && !this.baseOnTop) this.drawBase();
         // Draw barrel
         if (this.hasBarrel) {
             push();
@@ -47,7 +51,7 @@ class Tower {
             pop();
         }
         // Draw turret base
-        if (this.hasBase) this.drawBase();
+        if (this.hasBase && this.baseOnTop) this.drawBase();
     }
 
     drawBarrel() {
@@ -71,9 +75,13 @@ class Tower {
         // Draw line to target
         this.aim(e.pos.x, e.pos.y);
         stroke(this.color);
-        strokeWeight(2);
+        strokeWeight(this.weight);
         line(this.pos.x, this.pos.y, e.pos.x, e.pos.y);
         strokeWeight(1);
+    }
+
+    onCreate() {
+        this.totalCost = this.cost;
     }
 
     onTarget(entities) {

@@ -1,6 +1,7 @@
 function createTower(x, y, template) {
     var t = new Tower(x, y);
     t.upgrade(template);
+    t.onCreate();
     return t;
 }
 
@@ -39,8 +40,20 @@ target.nearest = function(entities) {
     return chosen;
 };
 
-// Most health + armor
-target.strongest = function(entities) {};
+// Most effective health (including armor)
+target.strongest = function(entities) {
+    var mostStrength = 0;
+    var chosen = entities[0];
+    for (var i = 0; i < entities.length; i++) {
+        var e = entities[i];
+        var strength = e.health / (1 - e.armor);
+        if (strength > mostStrength) {
+            mostStrength = strength;
+            chosen = e;
+        }
+    }
+    return chosen;
+};
 
 
 // Tower templates
@@ -60,10 +73,12 @@ tower.laser = {
 
 tower.sniper = {
     // Display
+    baseOnTop: false,
     color: [207, 0, 15],
     length: 0.5,
     radius: 0.6,
     secondary: [103, 128, 159],
+    weight: 3,
     width: 1.1,
     // Misc
     name: 'sniper',
@@ -72,19 +87,8 @@ tower.sniper = {
     cost: 325,
     damage: 100,
     range: 15,
+    target: 'strongest',
     // Methods
-    draw() {
-        // Draw turret base
-        if (this.hasBase) this.drawBase();
-        // Draw barrel
-        if (this.hasBarrel) {
-            push();
-            translate(this.pos.x, this.pos.y);
-            rotate(this.angle);
-            this.drawBarrel();
-            pop();
-        }
-    },
     drawBarrel: function() {
         stroke(this.border);
         fill(this.color);

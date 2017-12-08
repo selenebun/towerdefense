@@ -194,7 +194,7 @@ function resetGame() {
     health = 100;
     maxHealth = health;
     cash = 150;
-    wave = 1;
+    wave = 0;
     // Reset all flags
     scd = 0;
     toCooldown = false;
@@ -279,7 +279,7 @@ function updatePaths() {
 
 // Update display with wave, health, and cash
 function updateStatus() {
-    document.getElementById('wave').innerHTML = 'Wave ' + wave;
+    document.getElementById('wave').innerHTML = 'Wave ' + (wave + 1);
     document.getElementById('health').innerHTML = health + '/' + maxHealth;
     document.getElementById('cash').innerHTML = '$' + cash;
 }

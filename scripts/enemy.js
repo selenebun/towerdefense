@@ -33,6 +33,10 @@ class Enemy {
         this.alive = false;
     }
 
+    onCreate() {
+        this.maxHealth = health;
+    }
+
     onExit() {
         health -= this.damage;
     }
