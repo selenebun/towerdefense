@@ -4,6 +4,7 @@ class Tower {
         this.baseOnTop = true;      // render base over barrel
         this.border = [0, 0, 0];    // border color
         this.color = [0, 0, 0];     // main color
+        this.drawLine = true;       // draw line to enemy on attack
         this.hasBarrel = true;
         this.hasBase = true;
         this.length = 0.7;          // barrel length in tiles
@@ -76,6 +77,7 @@ class Tower {
         this.resetCooldown();
         this.attack(e);
         // Draw line to target
+        if (!this.drawLine) return;
         stroke(this.color);
         strokeWeight(this.weight);
         line(this.pos.x, this.pos.y, e.pos.x, e.pos.y);

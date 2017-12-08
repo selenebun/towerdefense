@@ -149,17 +149,6 @@ function getTower(col, row) {
 
 // Set spawn cooldown and generate enemies
 function getWave() {
-    /*
-    createWave([
-        [enemy.basic, 100],
-        [enemy.fast, 10],
-        [enemy.basic, 50],
-        [enemy.tank, 5],
-        [enemy.basic, 25],
-        [enemy.fast, 25],
-        [enemy.tank, 25]
-    ]);
-    */
     var waves = [
         [[enemy.basic, 100]],
         [[enemy.basic, 50]],
