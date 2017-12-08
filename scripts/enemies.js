@@ -18,3 +18,21 @@ enemy.basic = {
     color: [154, 18, 179],
     name: 'basic'
 };
+
+enemy.fast = {
+    color: [61, 251, 255],
+    name: 'fast',
+    cash: 8,
+    damage: 5,
+    health: 3,
+    speed: 2
+};
+
+enemy.tank = {
+    color: [150, 40, 27],
+    name: 'tank',
+    armor: 0.2,
+    cash: 20,
+    damage: 15,
+    health: 10
+};

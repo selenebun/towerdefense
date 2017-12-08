@@ -31,8 +31,10 @@
           <p id="wave">Wave 1</p>
           <p id="health">100/100</p>
           <p id="cash">$150</p>
-          <button id="start" onclick="paused=!paused;if (paused===false) createWave([[enemy.basic,10]])">Start</button>
-          <button id="restart" onclick="resetGame()">Restart</button>
+          <p>
+            <button id="start" onclick="paused=!paused;if (paused===false) createWave([[enemy.basic,200],[enemy.fast,20],[enemy.basic,100][enemy.tank,5],[enemy.basic,50],[enemy.fast,50],[enemy.tank,50]])">Start</button>
+            <button id="restart" onclick="resetGame()">Restart</button>
+          </p>
         </aside>
 
         <aside id="info">

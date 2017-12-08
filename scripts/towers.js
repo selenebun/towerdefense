@@ -54,7 +54,7 @@ tower.laser = {
     name: 'laser',
     // Stats
     cooldown: 0,
-    cost: 100,
+    cost: 75,
     damage: 0.02
 };
 
@@ -70,7 +70,7 @@ tower.sniper = {
     // Stats
     cooldown: 120,
     cost: 400,
-    damage: 4,
+    damage: 100,
     range: 15,
     // Methods
     draw() {

@@ -32,12 +32,23 @@ var spawnCool = 40;         // number of ticks between spawning enemies
 var scd = 0;                // number of ticks until next spawn
 var toCooldown = false;     // flag to reset cooldown
 
-var minExitDist = 10;       // minimum distance between spawnpoints and exit
-var numSpawns = 1;          // number of enemy spawnpoints to generate
+var minExitDist = 15;       // minimum distance between spawnpoints and exit
+// TODO vary this number based on difficulty setting
+var numSpawns = 2;          // number of enemy spawnpoints to generate
 var wallChance = 0.1;
 
 
 // Misc functions
+
+// Spawn a group of enemies, alternating if multiple types
+function addEnemies(enemies, count) {
+    if (!Array.isArray(enemies)) enemies = [enemies];
+    for (var i = 0; i < count; i++) {
+        for (var j = 0; j < enemies.length; j++) {
+            newEnemies.push(enemies[j]);
+        }
+    }
+}
 
 // Check if blocking a tile would invalidate paths to exit
 function checkValid(col, row) {
@@ -62,7 +73,6 @@ function checkValid(col, row) {
 // Create a wave of enemies to spawn
 // TODO consider pausing inside
 function createWave(pattern) {
-    newEnemies = [];
     for (var i = 0; i < pattern.length; i++) {
         var t = pattern[i];
         if (Array.isArray(t)) {
@@ -185,6 +195,10 @@ function resetGame() {
     maxHealth = health;
     cash = 150;
     wave = 1;
+    // Reset all flags
+    scd = 0;
+    toCooldown = false;
+    toUpdate = false;
     // Reset map
     generateMap();
 }
@@ -348,7 +362,7 @@ function draw() {
         // Spawning enemies
         if (newEnemies.length > 0 && scd === 0 && !paused) {
             var c = center(s.x, s.y);
-            enemies.push(createEnemy(c.x, c.y, newEnemies.pop()));
+            enemies.push(createEnemy(c.x, c.y, newEnemies.shift()));
             toCooldown = true;
         }
     }
@@ -395,6 +409,8 @@ function draw() {
     
     towers = towers.concat(newTowers);
     newTowers = [];
+
+    if (health <= 0) resetGame();
 
     if (toCooldown) {
         scd = spawnCool;
