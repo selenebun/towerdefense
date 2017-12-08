@@ -21,7 +21,8 @@ var tileZoom = 2;
 
 var paused;
 
-var range = true;
+var doLine = true;          // render tower line on attack
+var doRange = true;         // render tower range
 var selected;
 var sellConst = 0.8;
 var toPlace = false;
@@ -37,7 +38,7 @@ var scd = 0;                // number of ticks until next spawn
 var toCooldown = false;     // flag to reset cooldown
 
 var minExitDist = 15;       // minimum distance between spawnpoints and exit
-var numSpawns;          // number of enemy spawnpoints to generate
+var numSpawns;              // number of enemy spawnpoints to generate
 var wallChance = 0.1;
 
 
@@ -292,7 +293,7 @@ function sell(t) {
 
 // Visualize range of tower
 function showRange(t, cx, cy) {
-    if (!range) return;
+    if (!doRange) return;
     stroke(255);
     fill(t.color[0], t.color[1], t.color[2], 63);
     ellipse(cx, cy, t.range * ts, t.range * ts);
@@ -537,7 +538,7 @@ function keyPressed() {
     switch (keyCode) {
         case 18:
             // Alt
-            range = !range;
+            doRange = !doRange;
             break;
         case 27:
             // Escape
@@ -555,6 +556,10 @@ function keyPressed() {
         case 50:
             // 2
             buy('sniper');
+            break;
+        case 76:
+            // L
+            doLine = !doLine;
             break;
         case 82:
             // R
