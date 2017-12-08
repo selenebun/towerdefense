@@ -22,6 +22,7 @@ var tileZoom = 2;
 var paused;
 
 var range = true;
+var selected;
 var sellConst = 0.8;
 var toPlace = false;
 var towerType;
@@ -36,7 +37,6 @@ var scd = 0;                // number of ticks until next spawn
 var toCooldown = false;     // flag to reset cooldown
 
 var minExitDist = 15;       // minimum distance between spawnpoints and exit
-// TODO vary this number based on difficulty setting
 var numSpawns;          // number of enemy spawnpoints to generate
 var wallChance = 0.1;
 
@@ -82,12 +82,7 @@ function checkValid(col, row) {
 
 // Clear tower information
 function clearInfo() {
-    document.getElementById('name').innerHTML = '';
-    document.getElementById('cost').innerHTML = '';
-    document.getElementById('sellPrice').innerHTML = '';
-    document.getElementById('damage').innerHTML = '';
-    document.getElementById('range').innerHTML = '';
-    document.getElementById('cooldown').innerHTML = '';
+    document.getElementById('info-div').style.display = 'none';
 }
 
 // Create a wave of enemies to spawn
@@ -298,6 +293,22 @@ function resizeTiles() {
     resizeCanvas(cols * ts, rows * ts, true);
 }
 
+// Sell a tower
+function sell(t) {
+    selected = null;
+    clearInfo();
+    cash += t.sellPrice();
+    t.kill();
+}
+
+// Visualize range of tower
+function showRange(t, cx, cy) {
+    if (!range) return;
+    stroke(255);
+    fill(t.color[0], t.color[1], t.color[2], 63);
+    ellipse(cx, cy, t.range * ts, t.range * ts);
+}
+
 // Display tower information
 function updateInfo(t) {
     var name = document.getElementById('name');
@@ -305,10 +316,12 @@ function updateInfo(t) {
     t.color[1] + ',' + t.color[2] + ')">' + t.name.capitalize() +
     ' Tower' + '</span>';
     document.getElementById('cost').innerHTML = 'Cost: $' + t.cost;
-    document.getElementById('sellPrice').innerHTML = 'Sell price: $' + t.sell();
+    document.getElementById('sellPrice').innerHTML = 'Sell price: $' +
+    t.sellPrice();
     document.getElementById('damage').innerHTML = 'Damage: ' + t.damage;
     document.getElementById('range').innerHTML = 'Range: ' + t.range;
     document.getElementById('cooldown').innerHTML = 'Cooldown: ' + t.cooldown;
+    document.getElementById('info-div').style.display = 'block';
 }
 
 // Generates shortest path to exit from every map tile
@@ -489,10 +502,7 @@ function draw() {
     for (var i = 0; i < towers.length; i++) {
         var t = towers[i];
         if (!paused) {
-            if (t.canFire()) {
-                t.onTarget(t.visible(enemies));
-                t.resetCooldown();
-            }
+            t.onTarget(enemies);
             t.update();
         }
         if (outsideMap(t)) t.kill();
@@ -500,13 +510,11 @@ function draw() {
     }
 
     // Draw range of tower being placed
-    if (mouseInMap() && toPlace && typeof towerType !== 'undefined' && range) {
+    if (mouseInMap() && toPlace && typeof towerType !== 'undefined') {
         var p = gridPos(mouseX, mouseY);
         var c = center(p.x, p.y);
         var t = createTower(0, 0, tower[towerType]);
-        stroke(255);
-        fill(t.color[0], t.color[1], t.color[2], 63);
-        ellipse(c.x, c.y, t.range * ts, t.range * ts);
+        showRange(t, c.x, c.y);
     }
 
     removeDead(enemies);
@@ -579,18 +587,21 @@ function mousePressed() {
         var p = gridPos(mouseX, mouseY);
         var t = getTower(p.x, p.y);
         if (t) {
-            updateInfo(t);
+            selected = t;
             toPlace = false;
+            updateInfo(selected);
         } else if (isEmpty(p.x, p.y) && checkValid(p.x, p.y) && toPlace) {
             var n = createTower(p.x, p.y, tower[towerType]);
             if (cash >= n.cost) {
                 cash -= n.cost;
-                updateInfo(n);
-                newTowers.push(n);
+                selected = n;
                 toPlace = false;
                 toUpdate = true;
+                updateInfo(selected);
+                newTowers.push(n);
             }
         } else {
+            selected = null;
             clearInfo();
         }
     }

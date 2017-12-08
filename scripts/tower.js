@@ -71,9 +71,11 @@ class Tower {
     }
 
     onAim(e) {
+        this.aim(e.pos.x, e.pos.y);
+        if (!this.canFire()) return;
+        this.resetCooldown();
         this.attack(e);
         // Draw line to target
-        this.aim(e.pos.x, e.pos.y);
         stroke(this.color);
         strokeWeight(this.weight);
         line(this.pos.x, this.pos.y, e.pos.x, e.pos.y);
@@ -85,7 +87,7 @@ class Tower {
     }
 
     onTarget(entities) {
-        var e = target[this.target](entities);
+        var e = target[this.target](this.visible(entities));
         if (typeof e === 'undefined') return;
         this.onAim(e);
     }
@@ -95,7 +97,7 @@ class Tower {
     }
 
     // Sell price
-    sell() {
+    sellPrice() {
         return this.totalCost * sellConst;
     }
 

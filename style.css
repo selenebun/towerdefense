@@ -105,12 +105,13 @@ canvas {
     flex: 1;
 }
 
-#info p {
-    font-size: 0.9em;
+#info-div {
+    display: none;
+    margin: 0;
 }
 
-#info button {
-    display: none;
+#info p {
+    font-size: 0.9em;
 }
 
 footer {
