@@ -20,7 +20,10 @@ var ts = 24;                // tile size
 var tileZoom = 2;
 
 var paused;
-var selected = 'laser';
+
+var sellConst = 0.8;
+var toPlace = false;
+var towerType;
 
 var cash;
 var health;
@@ -49,6 +52,13 @@ function addEnemies(enemies, count) {
     }
 }
 
+// Buy a tower
+function buy(t) {
+    towerType = t;
+    toPlace = true;
+    updateInfo(createTower(0, 0, tower[towerType]));
+}
+
 // Check if blocking a tile would invalidate paths to exit
 function checkValid(col, row) {
     var walkMap = walkable(grid);
@@ -67,6 +77,16 @@ function checkValid(col, row) {
     }
 
     return true;
+}
+
+// Clear tower information
+function clearInfo() {
+    document.getElementById('name').innerHTML = '';
+    document.getElementById('cost').innerHTML = '';
+    document.getElementById('sellPrice').innerHTML = '';
+    document.getElementById('damage').innerHTML = '';
+    document.getElementById('range').innerHTML = '';
+    document.getElementById('cooldown').innerHTML = '';
 }
 
 // Create a wave of enemies to spawn
@@ -253,6 +273,7 @@ function resetGame() {
     // Reset all flags
     scd = 0;
     toCooldown = false;
+    toPlace = false;
     toUpdate = false;
     // Reset map
     generateMap();
@@ -274,9 +295,11 @@ function updateInfo(t) {
     name.innerHTML = '<span style="color:rgb(' + t.color[0] + ',' +
     t.color[1] + ',' + t.color[2] + ')">' + t.name.capitalize() +
     ' Tower' + '</span>';
+    document.getElementById('cost').innerHTML = 'Cost: $' + t.cost;
+    document.getElementById('sellPrice').innerHTML = 'Sell price: $' + t.sell();
     document.getElementById('damage').innerHTML = 'Damage: ' + t.damage;
     document.getElementById('range').innerHTML = 'Range: ' + t.range;
-    document.getElementById('speed').innerHTML = 'Cooldown: ' + t.cooldown;
+    document.getElementById('cooldown').innerHTML = 'Cooldown: ' + t.cooldown;
 }
 
 // Generates shortest path to exit from every map tile
@@ -467,6 +490,16 @@ function draw() {
         t.draw();
     }
 
+    // Draw range of tower being placed
+    if (mouseInMap() && toPlace && typeof towerType !== 'undefined') {
+        var p = gridPos(mouseX, mouseY);
+        var c = center(p.x, p.y);
+        var t = createTower(0, 0, tower[towerType]);
+        stroke(255);
+        fill(t.color[0], t.color[1], t.color[2], 63);
+        ellipse(c.x, c.y, t.range * ts, t.range * ts);
+    }
+
     removeDead(enemies);
     removeDead(towers);
     
@@ -496,13 +529,18 @@ function draw() {
 
 function keyPressed() {
     switch (keyCode) {
+        case 27:
+            // Escape
+            toPlace = false;
+            clearInfo();
+            break;
         case 49:
             // 1
-            selected = 'laser';
+            buy('laser');
             break;
         case 50:
             // 2
-            selected = 'sniper';
+            buy('sniper');
             break;
         case 219:
             // Left bracket
@@ -526,18 +564,21 @@ function keyPressed() {
 function mousePressed() {
     if (mouseInMap()) {
         var p = gridPos(mouseX, mouseY);
-        // Update tower info
         var t = getTower(p.x, p.y);
         if (t) {
             updateInfo(t);
-        } else if (isEmpty(p.x, p.y) && checkValid(p.x, p.y)) {
-            var n = createTower(p.x, p.y, tower[selected]);
+            toPlace = false;
+        } else if (isEmpty(p.x, p.y) && checkValid(p.x, p.y) && toPlace) {
+            var n = createTower(p.x, p.y, tower[towerType]);
             if (cash >= n.cost) {
                 cash -= n.cost;
                 updateInfo(n);
                 newTowers.push(n);
+                toPlace = false;
                 toUpdate = true;
             }
+        } else {
+            clearInfo();
         }
     }
 }

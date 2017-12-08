@@ -20,8 +20,10 @@
     </header>
 
     <main>
-      <aside id="menu">
+      <aside id="store">
         <h2>Store</h2>
+        <p><button class="laser" onclick="buy('laser')">Laser Tower</button></p>
+        <p><button class="sniper" onclick="buy('sniper')">Sniper Tower</button></p>
       </aside>
 
       <div id="sketch-holder"></div>
@@ -42,9 +44,11 @@
 
         <aside id="info">
           <h3 id="name"></h3>
+          <p id="cost"></p>
+          <p id="sellPrice"></p>
           <p id="damage"></p>
           <p id="range"></p>
-          <p id="speed"></p>
+          <p id="cooldown"></p>
         </aside>
       </div>
     </main>

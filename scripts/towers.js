@@ -66,9 +66,8 @@ tower.laser = {
     // Misc
     name: 'laser',
     // Stats
-    cooldown: 0,
     cost: 75,
-    damage: 0.02
+    damage: 0.02,
 };
 
 tower.sniper = {

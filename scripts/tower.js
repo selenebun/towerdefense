@@ -20,7 +20,7 @@ class Tower {
         this.pos = createVector(col*ts + ts/2, row*ts + ts/2);
         // Stats
         this.cd = 0;                // current cooldown left
-        this.cooldown = 10;
+        this.cooldown = 0;
         this.cost = 0;
         this.damage = 1;
         this.range = 5;
@@ -92,6 +92,11 @@ class Tower {
 
     resetCooldown() {
         this.cd = this.cooldown;
+    }
+
+    // Sell price
+    sell() {
+        return this.totalCost * sellConst;
     }
 
     update() {

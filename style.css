@@ -49,6 +49,11 @@ aside {
     padding: 14px;
 }
 
+#store button {
+    min-width: 100%;
+    text-align: center;
+}
+
 #sketch-holder {
     background-color: #000;
     flex: 1;
@@ -89,6 +94,14 @@ canvas {
     flex: 1;
 }
 
+#info p {
+    font-size: 0.9em;
+}
+
+#info button {
+    display: none;
+}
+
 footer {
     padding: 14px;
 }
@@ -96,4 +109,21 @@ footer {
 footer #copyright {
     margin: 0;
     text-align: right;
+}
+
+
+/* Tower types */
+
+.laser, .sniper {
+    color: #000;
+    font-weight: bold;
+    text-shadow: none;
+}
+
+.laser {
+    background-color: rgb(25, 181, 254);
+}
+
+.sniper {
+    background-color: rgb(207, 0, 15);
 }
