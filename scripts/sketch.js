@@ -27,24 +27,6 @@ var health;
 var maxHealth;
 var wave;
 
-var waves = [
-    [[enemy.basic, 100]],
-    [[enemy.basic, 50]],
-    [[enemy.fast, 20]],
-    [
-        [enemy.basic, enemy.tank, 10],
-    ],
-    [[enemy.basic, 100]],
-    [
-        [enemy.fast, 25],
-        [enemy.tank, 50]
-    ]
-];
-var waves = [
-    [[enemy.basic, 10]]
-];
-var cooldowns = [40, 20, 20, 40, 10, 20];
-
 var spawnCool = 40;         // number of ticks between spawning enemies
 var scd = 0;                // number of ticks until next spawn
 var toCooldown = false;     // flag to reset cooldown
