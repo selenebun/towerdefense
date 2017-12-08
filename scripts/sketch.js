@@ -555,6 +555,10 @@ function keyPressed() {
             toPlace = false;
             clearInfo();
             break;
+        case 32:
+            // Space
+            pause();
+            break;
         case 49:
             // 1
             buy('laser');
@@ -562,6 +566,14 @@ function keyPressed() {
         case 50:
             // 2
             buy('sniper');
+            break;
+        case 82:
+            // R
+            resetGame();
+            break;
+        case 83:
+            // S
+            if (selected) sell(selected);
             break;
         case 219:
             // Left bracket
