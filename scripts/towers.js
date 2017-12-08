@@ -87,7 +87,6 @@ tower.sniper = {
     cost: 325,
     damage: 100,
     range: 15,
-    target: 'strongest',
     // Methods
     drawBarrel: function() {
         stroke(this.border);

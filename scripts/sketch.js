@@ -27,6 +27,24 @@ var health;
 var maxHealth;
 var wave;
 
+var waves = [
+    [[enemy.basic, 100]],
+    [[enemy.basic, 50]],
+    [[enemy.fast, 20]],
+    [
+        [enemy.basic, enemy.tank, 10],
+    ],
+    [[enemy.basic, 100]],
+    [
+        [enemy.fast, 25],
+        [enemy.tank, 50]
+    ]
+];
+var waves = [
+    [[enemy.basic, 10]]
+];
+var cooldowns = [40, 20, 20, 40, 10, 20];
+
 var spawnCool = 40;         // number of ticks between spawning enemies
 var scd = 0;                // number of ticks until next spawn
 var toCooldown = false;     // flag to reset cooldown
@@ -71,6 +89,7 @@ function checkValid(col, row) {
 
 // Create a wave of enemies to spawn
 function createWave(pattern) {
+    if (typeof pattern === 'undefined') pattern = [];
     for (var i = 0; i < pattern.length; i++) {
         var t = pattern[i];
         var count = t.pop();
@@ -97,7 +116,7 @@ function generateMap() {
         grid[n.x][n.y] = 0;
     }
 
-    // Generate enemy spawnpoints
+    // Generate enemy spawnpoints and ensure exit is reachable
     spawnpoints = [];
     var vMap = visited(walkMap);
     for (var i = 0; i < numSpawns; i++) {
@@ -130,6 +149,53 @@ function getTower(col, row) {
     return null;
 }
 
+// Set spawn cooldown and generate enemies
+function getWave() {
+    /*
+    createWave([
+        [enemy.basic, 100],
+        [enemy.fast, 10],
+        [enemy.basic, 50],
+        [enemy.tank, 5],
+        [enemy.basic, 25],
+        [enemy.fast, 25],
+        [enemy.tank, 25]
+    ]);
+    */
+    var waves = [
+        [[enemy.basic, 100]],
+        [[enemy.basic, 50]],
+        [[enemy.fast, 20]],
+        [
+            [enemy.basic, enemy.tank, 10],
+        ],
+        [[enemy.basic, 100]],
+        [
+            [enemy.fast, 25],
+            [enemy.tank, 50]
+        ]
+    ];
+    var cooldowns = [40, 20, 20, 40, 10, 20];
+    // Set spawn cooldown and enemies
+    if (wave < waves.length) {
+        spawnCool = cooldowns[wave];
+        return waves[wave];
+    } else {
+        spawnCool = Math.min(floor(random(0, 3) * 10), 1);
+        switch (floor(random(3))) {
+            case 0:
+                return [[enemy.basic, 100]];
+                break;
+            case 1:
+                return [[enemy.fast, 100]];
+                break;
+            case 2:
+                return [[enemy.tank, 25]];
+                break;
+        }
+    }
+}
+
 // Check if map coordinate is empty
 function isEmpty(col, row) {
     // Check if not walkable
@@ -159,15 +225,7 @@ function isWalkable(grid, col, row) {
 
 // Trigger next wave
 function nextWave() {
-    createWave([
-        [enemy.basic, 100],
-        [enemy.fast, 10],
-        [enemy.basic, 50],
-        [enemy.tank, 5],
-        [enemy.basic, 25],
-        [enemy.fast, 25],
-        [enemy.tank, 25]
-    ]);
+    createWave(getWave());
     wave++;
 }
 
@@ -434,6 +492,11 @@ function draw() {
     newTowers = [];
 
     if (health <= 0) resetGame();
+
+    if (enemies.length === 0 && newEnemies.length === 0) {
+        paused = true;
+        nextWave();
+    }
 
     if (toCooldown) {
         scd = spawnCool;
