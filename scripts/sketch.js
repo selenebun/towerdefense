@@ -163,7 +163,7 @@ function getWave() {
         spawnCool = cooldowns[wave];
         return waves[wave];
     } else {
-        spawnCool = Math.min(floor(random(0, 3) * 10), 1);
+        spawnCool = Math.max(floor(random(0, 3) * 10), 1);
         switch (floor(random(3))) {
             case 0:
                 return [[enemy.basic, 100]];
