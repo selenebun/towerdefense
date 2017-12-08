@@ -71,7 +71,9 @@ class Tower {
         // Draw line to target
         this.aim(e.pos.x, e.pos.y);
         stroke(this.color);
+        strokeWeight(2);
         line(this.pos.x, this.pos.y, e.pos.x, e.pos.y);
+        strokeWeight(1);
     }
 
     onTarget(entities) {
