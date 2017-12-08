@@ -353,16 +353,22 @@ function draw() {
         }
     }
 
-    // Draw and update spawnpoints
+    // Draw spawnpoints
     for (var i = 0; i < spawnpoints.length; i++) {
         var s = spawnpoints[i];
         stroke(255);
         fill(0, 230, 64);
         rect(s.x * ts, s.y * ts, ts, ts);
-        // Spawning enemies
-        if (newEnemies.length > 0 && scd === 0 && !paused) {
+    }
+
+    // Spawn enemies
+    if (newEnemies.length > 0 && scd === 0 && !paused) {
+        // Spawn same enemy for each spawnpoint
+        var t = newEnemies.shift();
+        for (var i = 0; i < spawnpoints.length; i++) {
+            var s = spawnpoints[i];
             var c = center(s.x, s.y);
-            enemies.push(createEnemy(c.x, c.y, newEnemies.shift()));
+            enemies.push(createEnemy(c.x, c.y, t));
             toCooldown = true;
         }
     }
