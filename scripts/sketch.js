@@ -161,9 +161,28 @@ function isWalkable(grid, col, row) {
     return true;
 }
 
+// Trigger next wave
+function nextWave() {
+    createWave([
+        [enemy.basic, 100],
+        [enemy.fast, 10],
+        [enemy.basic, 50],
+        [enemy.tank, 5],
+        [enemy.basic, 25],
+        [enemy.fast, 25],
+        [enemy.tank, 25]
+    ]);
+    wave++;
+}
+
 // Check if entity is outside map
 function outsideMap(e) {
     return outsideRect(e.pos.x, e.pos.y, 0, 0, width, height);
+}
+
+// Toggle pause state
+function pause() {
+    paused = !paused;
 }
 
 // Return a random grid coordinate
@@ -201,6 +220,8 @@ function resetGame() {
     toUpdate = false;
     // Reset map
     generateMap();
+    // Start game
+    nextWave();
 }
 
 // Sets tile width and height based on canvas size and map dimensions
@@ -279,7 +300,7 @@ function updatePaths() {
 
 // Update display with wave, health, and cash
 function updateStatus() {
-    document.getElementById('wave').innerHTML = 'Wave ' + (wave + 1);
+    document.getElementById('wave').innerHTML = 'Wave ' + wave;
     document.getElementById('health').innerHTML = health + '/' + maxHealth;
     document.getElementById('cash').innerHTML = '$' + cash;
 }
@@ -369,8 +390,8 @@ function draw() {
             var s = spawnpoints[i];
             var c = center(s.x, s.y);
             enemies.push(createEnemy(c.x, c.y, t));
-            toCooldown = true;
         }
+        toCooldown = true;
     }
 
     // Draw exit
