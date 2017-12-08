@@ -55,8 +55,11 @@ aside {
 }
 
 #store button {
+    color: #000;
+    font-weight: bold;
     min-width: 100%;
     text-align: center;
+    text-shadow: none;
 }
 
 #sketch-holder {
@@ -76,12 +79,15 @@ canvas {
     top: 0;
 }
 
-button {
+button, select {
     background-color: #22313F;
     color: #00E640;
     font-size: 0.9em;
-    height: 30px;
     text-shadow: 1px 1px 0px #000;
+}
+
+button {
+    height: 30px;
 }
 
 canvas {
@@ -118,12 +124,6 @@ footer #copyright {
 
 
 /* Tower types */
-
-.laser, .sniper {
-    color: #000;
-    font-weight: bold;
-    text-shadow: none;
-}
 
 .laser {
     background-color: rgb(25, 181, 254);

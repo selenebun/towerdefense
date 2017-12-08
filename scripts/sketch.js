@@ -37,7 +37,7 @@ var toCooldown = false;     // flag to reset cooldown
 
 var minExitDist = 15;       // minimum distance between spawnpoints and exit
 // TODO vary this number based on difficulty setting
-var numSpawns = 2;          // number of enemy spawnpoints to generate
+var numSpawns;          // number of enemy spawnpoints to generate
 var wallChance = 0.1;
 
 
@@ -271,6 +271,14 @@ function resetGame() {
     maxHealth = health;
     cash = 150;
     wave = 0;
+    // Misc settings
+    var d = document.getElementById('difficulty').value;
+    numSpawns = {
+        easy: 1,
+        normal: 2,
+        hard: 3,
+        insane: 4
+    }[d];
     // Reset all flags
     scd = 0;
     toCooldown = false;
