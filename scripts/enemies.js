@@ -16,17 +16,12 @@ var enemy = {};
 
 enemy.weak = {
     // Display
-    color: [170, 70, 48],
+    color: [144, 198, 149],
     // Misc
     name: 'weak'
 };
 
-enemy.strong = {
-    // Display
-    color: [119, 49, 33],
-    // Misc
-    name: 'strong'
-};
+enemy.strong = {};
 
 /*
 enemy.basic = {
