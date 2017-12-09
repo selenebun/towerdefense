@@ -35,16 +35,27 @@ var wave;
 var spawnCooldowns = [
     40,
     20,
+    20,
     40,
     20,
-    20
+    10
 ];
 var waves = [
     [[enemy.weak, 50]],
-    [[enemy.weak, 50]],
-    [[enemy.strong, 20]],
-    [[enemy.weak, 50]],
-    [[enemy.strong, 50]]
+    [[enemy.weak, 25]],
+    [
+        [enemy.weak, 15],
+        [enemy.strong, 10]
+    ],
+    [[enemy.fast, 25]]
+    [
+        [enemy.strong, 50],
+        [enemy.fast, 25]
+    ],
+    [
+        [enemy.strong, 100],
+        [enemy.fast, 50]
+    ]
 ];
 
 var resistance = 0.3;       // percent of damage blocked with resistance
@@ -171,7 +182,10 @@ function getWave() {
         return waves[wave];
     } else {
         spawnCool = 10;
-        return [[enemy.strong, 100]]
+        return [
+            [enemy.strong, 100],
+            [enemy.fast, 100]
+        ];
     }
 }
 /*
