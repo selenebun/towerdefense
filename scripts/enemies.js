@@ -21,7 +21,16 @@ enemy.weak = {
     name: 'weak'
 };
 
-enemy.strong = {};
+enemy.strong = {
+    // Display
+    color: [1, 152, 117],
+    // Misc
+    name: 'strong',
+    // Stats
+    cash: 2,
+    damage: 2,
+    health: 75
+};
 
 /*
 enemy.basic = {

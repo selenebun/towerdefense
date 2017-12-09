@@ -32,6 +32,21 @@ var health;
 var maxHealth;
 var wave;
 
+var spawnCooldowns = [
+    40,
+    20,
+    40,
+    20,
+    20
+];
+var waves = [
+    [[enemy.weak, 50]],
+    [[enemy.weak, 50]],
+    [[enemy.strong, 20]],
+    [[enemy.weak, 50]],
+    [[enemy.strong, 50]]
+];
+
 var resistance = 0.3;       // percent of damage blocked with resistance
 
 var spawnCool = 40;         // number of ticks between spawning enemies
@@ -151,8 +166,13 @@ function getTower(col, row) {
 
 // Set spawn cooldown and generate enemies
 function getWave() {
-    spawnCool = 40;
-    return [[enemy.weak, 100]];
+    if (wave < waves.length) {
+        spawnCool = spawnCooldowns[wave];
+        return waves[wave];
+    } else {
+        spawnCool = 10;
+        return [[enemy.strong, 100]]
+    }
 }
 /*
 // Set spawn cooldown and generate enemies

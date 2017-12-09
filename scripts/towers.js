@@ -90,6 +90,7 @@ tower.sniper = {
     // Display
     baseOnTop: false,
     color: [207, 0, 15],
+    follow: false,
     length: 0.5,
     radius: 0.6,
     secondary: [103, 128, 159],

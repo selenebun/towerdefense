@@ -5,6 +5,7 @@ class Tower {
         this.border = [0, 0, 0];    // border color
         this.color = [0, 0, 0];     // main color
         this.drawLine = true;       // draw line to enemy on attack
+        this.follow = true;         // follow target even when not firing
         this.hasBarrel = true;
         this.hasBase = true;
         this.length = 0.7;          // barrel length in tiles
@@ -75,7 +76,7 @@ class Tower {
     }
 
     onAim(e) {
-        this.aim(e.pos.x, e.pos.y);
+        if (this.canFire() || this.follow) this.aim(e.pos.x, e.pos.y);
         if (!this.canFire()) return;
         this.resetCooldown();
         this.attack(e);
