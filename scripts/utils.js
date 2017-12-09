@@ -80,6 +80,14 @@ function outsideRect(x, y, cx, cy, w, h) {
     return x < cx || y < cy || x > cx + w || y > cy + h;
 }
 
+function rangeText(min, max) {
+    if (min === max) {
+        return String(min);
+    } else {
+        return String(min) + '-' + String(max);
+    }
+}
+
 // Convert string to vector
 function stv(str) {
     var arr = str.split(',');

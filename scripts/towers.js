@@ -59,6 +59,19 @@ target.strongest = function(entities) {
 // Tower templates
 var tower = {};
 
+tower.gun = {
+    // Display
+    color: [248, 148, 6],
+    secondary: [103, 128, 159],
+    // Misc
+    name: 'gun',
+    // Stats
+    cooldownMax: 20,
+    cooldownMin: 10,
+    cost: 25,
+    range: 5
+};
+
 tower.laser = {
     // Display
     color: [25, 181, 254],
@@ -67,8 +80,10 @@ tower.laser = {
     // Misc
     name: 'laser',
     // Stats
+    cooldoonMax: 1,
     cost: 75,
-    damage: 0.02,
+    damageMax: 2,
+    type: 'energy'
 };
 
 tower.sniper = {
@@ -83,9 +98,11 @@ tower.sniper = {
     // Misc
     name: 'sniper',
     // Stats
-    cooldown: 120,
-    cost: 325,
-    damage: 100,
+    cooldownMax: 140,
+    cooldownMin: 100,
+    cost: 200,
+    damageMax: 100,
+    damageMin: 100,
     range: 15,
     target: 'furthest',
     // Methods

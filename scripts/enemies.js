@@ -14,6 +14,21 @@ function createEnemy(x, y, template) {
 
 var enemy = {};
 
+enemy.weak = {
+    // Display
+    color: [170, 70, 48],
+    // Misc
+    name: 'weak'
+};
+
+enemy.strong = {
+    // Display
+    color: [119, 49, 33],
+    // Misc
+    name: 'strong'
+};
+
+/*
 enemy.basic = {
     // Display
     color: [154, 18, 179],
@@ -44,3 +59,4 @@ enemy.tank = {
     damage: 15,
     health: 10
 };
+*/

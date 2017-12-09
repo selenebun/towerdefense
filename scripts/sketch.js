@@ -19,10 +19,9 @@ var rows;
 var ts = 24;                // tile size
 var tileZoom = 2;
 
-var paused;
-
 var doLine = true;          // render tower line on attack
 var doRange = true;         // render tower range
+var paused;
 var selected;
 var sellConst = 0.8;
 var toPlace = false;
@@ -32,6 +31,8 @@ var cash;
 var health;
 var maxHealth;
 var wave;
+
+var resistance = 0.3;       // percent of damage blocked with resistance
 
 var spawnCool = 40;         // number of ticks between spawning enemies
 var scd = 0;                // number of ticks until next spawn
@@ -150,14 +151,20 @@ function getTower(col, row) {
 
 // Set spawn cooldown and generate enemies
 function getWave() {
+    spawnCool = 40;
+    return [[enemy.weak, 100]];
+}
+/*
+// Set spawn cooldown and generate enemies
+function getWave() {
     var waves = [
-        [[enemy.basic, 100]],
-        [[enemy.basic, 50]],
+        [[enemy.weak, 100]],
+        [[enemy.weak, 50]],
         [[enemy.fast, 20]],
         [
-            [enemy.basic, enemy.tank, 10],
+            [enemy.weak, enemy.tank, 10],
         ],
-        [[enemy.basic, 100]],
+        [[enemy.weak, 100]],
         [
             [enemy.fast, 25],
             [enemy.tank, 50]
@@ -183,6 +190,7 @@ function getWave() {
         }
     }
 }
+*/
 
 // Check if map coordinate is empty
 function isEmpty(col, row) {
@@ -250,14 +258,19 @@ function resetGame() {
     newEnemies = [];
     towers = [];
     newTowers = [];
+    // Get difficulty
+    var d = document.getElementById('difficulty').value;
     // Reset all stats
-    paused = true;
     health = 100;
     maxHealth = health;
-    cash = 150;
+    cash = {
+        easy: 40,
+        normal: 55,
+        hard: 65,
+        insane: 65
+    }[d];
     wave = 0;
     // Misc settings
-    var d = document.getElementById('difficulty').value;
     numSpawns = {
         easy: 1,
         normal: 2,
@@ -265,6 +278,7 @@ function resetGame() {
         insane: 4
     }[d];
     // Reset all flags
+    paused = true;
     scd = 0;
     toCooldown = false;
     toPlace = false;
@@ -308,9 +322,11 @@ function updateInfo(t) {
     document.getElementById('cost').innerHTML = 'Cost: $' + t.cost;
     document.getElementById('sellPrice').innerHTML = 'Sell price: $' +
     t.sellPrice();
-    document.getElementById('damage').innerHTML = 'Damage: ' + t.damage;
+    document.getElementById('damage').innerHTML = 'Damage: ' +
+    rangeText(t.damageMin, t.damageMax);
     document.getElementById('range').innerHTML = 'Range: ' + t.range;
-    document.getElementById('cooldown').innerHTML = 'Cooldown: ' + t.cooldown;
+    document.getElementById('cooldown').innerHTML = 'Cooldown: ' +
+    rangeText(t.cooldownMin, t.cooldownMax);
     document.getElementById('info-div').style.display = 'block';
 }
 
@@ -551,10 +567,14 @@ function keyPressed() {
             break;
         case 49:
             // 1
-            buy('laser');
+            buy('gun');
             break;
         case 50:
             // 2
+            buy('laser');
+            break;
+        case 51:
+            // 3
             buy('sniper');
             break;
         case 76:

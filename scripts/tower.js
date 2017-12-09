@@ -15,17 +15,19 @@ class Tower {
         // Misc
         this.alive = true;
         this.name = 'tower';
+        this.target = 'furthest';   // targeting function
         // Position
         this.angle = 0;
         this.gridPos = createVector(col, row);
         this.pos = createVector(col*ts + ts/2, row*ts + ts/2);
         // Stats
-        this.cd = 0;                // current cooldown left
-        this.cooldown = 0;
+        this.cooldownMax = 0;
+        this.cooldownMin = 0;
         this.cost = 0;
-        this.damage = 1;
+        this.damageMax = 25;
+        this.damageMin = 1;
         this.range = 5;
-        this.target = 'furthest';   // targeting function
+        this.type = 'physical';     // damage type
     }
 
     aim(x, y) {
@@ -33,7 +35,8 @@ class Tower {
     }
 
     attack(e) {
-        e.dealDamage(this.damage);
+        var damage = round(random(this.damageMin, this.damageMax));
+        e.dealDamage(damage, this.type);
     }
 
     canFire() {
@@ -85,6 +88,7 @@ class Tower {
     }
 
     onCreate() {
+        this.cd = 0;                // current cooldown left
         this.totalCost = this.cost;
     }
 
@@ -95,7 +99,8 @@ class Tower {
     }
 
     resetCooldown() {
-        this.cd = this.cooldown;
+        var cooldown = round(random(this.cooldownMin, this.cooldownMax));
+        this.cd = cooldown;
     }
 
     // Sell price

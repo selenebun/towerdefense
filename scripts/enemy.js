@@ -10,16 +10,25 @@ class Enemy {
         this.pos = createVector(x, y);
         this.vel = createVector(0, 0);
         // Stats
-        this.armor = 0;             // 1 is the max
-        this.cash = 5;
+        this.cash = 1;
         this.damage = 1;
-        this.health = 1;
+        this.health = 35;
+        this.immune = [];           // no damage from these damage types
+        this.resistant = [];        // reduced damage from these damage types
         this.speed = 1;             // 4 is the max
     }
 
-    // Subtract amount * (1 - armor) from health and kill if health <= 0
-    dealDamage(amt) {
-        if (this.health > 0) this.health -= amt * (1 - this.armor);
+    // Subtract amount and kill if health <= 0
+    dealDamage(amt, type) {
+        var mult;
+        if (this.immune.includes(type)) {
+            mult = 0;
+        } else if (this.resistant.includes(type)) {
+            mult = 1 - resistance;
+        } else {
+            mult = 1;
+        }
+        if (this.health > 0) this.health -= amt * mult;
         if (this.health <= 0) this.onKilled();
     }
 
