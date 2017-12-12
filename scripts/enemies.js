@@ -16,7 +16,7 @@ var enemy = {};
 
 enemy.weak = {
     // Display
-    color: [144, 198, 149],
+    color: [127, 64, 10],
     // Misc
     name: 'weak'
 };
