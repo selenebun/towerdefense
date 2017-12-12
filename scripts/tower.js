@@ -124,14 +124,6 @@ class Tower {
 
     // Returns array of visible entities out of passed array
     visible(entities) {
-        var visible = [];
-        for (var i = 0; i < entities.length; i++) {
-            var e = entities[i];
-            var c = this.pos;
-            if (insideCircle(e.pos.x, e.pos.y, c.x, c.y, this.range * ts)) {
-                visible.push(e);
-            }
-        }
-        return visible;
+        return getInRange(this.pos.x, this.pos.y, this.range, entities);
     }
 }

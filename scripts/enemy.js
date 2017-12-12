@@ -33,9 +33,17 @@ class Enemy {
     }
 
     draw() {
+        push();
+        translate(this.pos.x, this.pos.y);
+        rotate(this.vel.heading());
+        this.drawEnemy();
+        pop();
+    }
+
+    drawEnemy() {
         stroke(0);
         fill(this.color);
-        ellipse(this.pos.x, this.pos.y, this.radius * ts, this.radius * ts);
+        ellipse(0, 0, this.radius * ts, this.radius * ts);
     }
 
     kill() {
