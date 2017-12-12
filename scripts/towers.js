@@ -66,8 +66,8 @@ tower.gun = {
     // Misc
     name: 'gun',
     // Stats
-    cooldownMax: 20,
-    cooldownMin: 10,
+    cooldownMax: 18,
+    cooldownMin: 8,
     cost: 25,
     range: 5
 };
