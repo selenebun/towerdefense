@@ -98,7 +98,7 @@ canvas {
     display: flex;
     flex-direction: column;
     margin-right: 2px;
-    min-width: 180px;
+    min-width: 185px;
 }
 
 #info {

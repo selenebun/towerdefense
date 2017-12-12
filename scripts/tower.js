@@ -25,7 +25,7 @@ class Tower {
         this.cooldownMax = 0;
         this.cooldownMin = 0;
         this.cost = 0;
-        this.damageMax = 25;
+        this.damageMax = 20;
         this.damageMin = 1;
         this.range = 5;
         this.type = 'physical';     // damage type
