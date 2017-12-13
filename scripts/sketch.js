@@ -47,7 +47,7 @@ var waves = [
         [enemy.weak, 15],
         [enemy.strong, 10]
     ],
-    [[enemy.fast, 25]]
+    [[enemy.fast, 25]],
     [
         [enemy.strong, 50],
         [enemy.fast, 25]
@@ -421,7 +421,7 @@ function updatePaths() {
 
 // Update display with wave, health, and cash
 function updateStatus() {
-    document.getElementById('wave').innerHTML = 'Wave ' + wave;
+    document.getElementById('wave').innerHTML = 'Wave ' + wave + '/' + waves.length;
     document.getElementById('health').innerHTML = health + '/' + maxHealth;
     document.getElementById('cash').innerHTML = '$' + cash;
 }
