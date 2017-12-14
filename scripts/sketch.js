@@ -30,7 +30,8 @@ var spawnCool;          // number of ticks between spawning enemies
 var selected;
 var towerType;
 
-var godMode = true;     // make player immortal for test purposes
+// TODO add more functionality to god mode
+var godMode = false;    // make player immortal for test purposes
 var paused;             // whether to update or not
 var scd;                // number of ticks to next spawn cycle
 var toCooldown;         // flag to reset spawning cooldown
@@ -193,7 +194,6 @@ function getWalkMap() {
 // Set spawn cooldown and generate enemies
 // TODO better random wave generation
 function getWave() {
-    console.log(wave);
     /*
     if (wave < presetWaves.length) {
         spawnCool = presetCools[wave];
@@ -567,6 +567,10 @@ function draw() {
 // TODO add back all old keys
 function keyPressed() {
     switch (keyCode) {
+        case 17:
+            // Ctrl
+            godMode = !godMode;
+            break;
         case 32:
             // Space
             pause();
