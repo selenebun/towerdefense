@@ -16,20 +16,19 @@ var enemy = {};
 
 enemy.weak = {
     // Display
-    color: [127, 64, 10],
+    color: [145, 180, 150],
     // Misc
     name: 'weak'
 };
 
 enemy.strong = {
     // Display
-    color: [1, 152, 117],
+    color: [30, 130, 76],
     radius: 0.6,
     // Misc
     name: 'strong',
     // Stats
     cash: 2,
-    damage: 2,
     health: 75
 };
 
@@ -40,7 +39,31 @@ enemy.fast = {
     name: 'fast',
     // Stats
     cash: 4,
-    damage: 5,
     health: 75,
-    speed: 2
+    speed: 2,
+    drawEnemy: function() {
+        stroke(0);
+		fill(this.color);
+        var back = -0.6 * ts / 3;
+        var front = back + 0.6 * ts;
+        var side = 0.9 * ts / 2;
+		quad(back, -side, 0, 0, back, side, front, 0);
+    }
 };
+
+enemy.taunt = {
+    // Display
+    color: [145, 61, 136],
+    radius: 0.7,
+    // Misc
+    name: 'taunt',
+    // Stats
+    cash: 8,
+    health: 375,
+    drawEnemy: function() {
+        stroke(0);
+        fill(this.color);
+        var edge = this.radius * ts / 2;
+        rect(-edge, -edge, this.radius * ts, this.radius * ts);
+    }
+}

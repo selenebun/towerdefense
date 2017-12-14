@@ -11,6 +11,8 @@
     <script src="scripts/enemies.js" defer></script>
     <script src="scripts/tower.js" defer></script>
     <script src="scripts/towers.js" defer></script>
+    <script src="scripts/map.js" defer></script>
+    <script src="scripts/maps.js" defer></script>
     <script src="scripts/sketch.js" defer></script>
   </head>
   <body>
@@ -40,10 +42,17 @@
           <p>
             Mode:
             <select id="difficulty">
-              <option value="easy">Easy</option>
-              <option value="normal" selected>Normal</option>
-              <option value="hard">Hard</option>
-              <option value="insane">Insane</option>
+              <option value="0">Easy</option>
+              <option value="1" selected>Normal</option>
+              <option value="2">Hard</option>
+              <option value="3">Insane</option>
+            </select>
+          </p>
+          <p>
+            Map:
+            <select id="map">
+              <option value="random" selected>Random</option>
+              <option value="zigzag">Zigzag</option>
             </select>
           </p>
         </aside>
@@ -54,6 +63,7 @@
             <p id="cost"></p>
             <p id="sellPrice"></p>
             <p id="damage"></p>
+            <p id="type"></p>
             <p id="range"></p>
             <p id="cooldown"></p>
             <p><button onclick="if (selected) sell(selected)">Sell</button></p>

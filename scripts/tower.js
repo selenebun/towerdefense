@@ -13,14 +13,17 @@ class Tower {
         this.secondary = [0, 0, 0]; // secondary color
         this.weight = 2;            // laser stroke weight
         this.width = 0.3;           // barrel width in tiles
+
         // Misc
         this.alive = true;
         this.name = 'tower';
         this.target = 'furthest';   // targeting function
+
         // Position
         this.angle = 0;
         this.gridPos = createVector(col, row);
         this.pos = createVector(col*ts + ts/2, row*ts + ts/2);
+        
         // Stats
         this.cooldownMax = 0;
         this.cooldownMin = 0;
@@ -31,15 +34,18 @@ class Tower {
         this.type = 'physical';     // damage type
     }
 
+    // Adjust angle to point towards pixel position
     aim(x, y) {
         this.angle = atan2(y - this.pos.y, x - this.pos.x);
     }
 
+    // Deal damage to enemy
     attack(e) {
         var damage = round(random(this.damageMin, this.damageMax));
         e.dealDamage(damage, this.type);
     }
 
+    // Check if cooldown is completed
     canFire() {
         return this.cd === 0;
     }
@@ -59,12 +65,14 @@ class Tower {
         if (this.hasBase && this.baseOnTop) this.drawBase();
     }
 
+    // Draw barrel of tower (moveable part)
     drawBarrel() {
         stroke(this.border);
         fill(this.secondary);
         rect(0, -this.width * ts / 2, this.length * ts, this.width * ts);
     }
 
+    // Draw base of tower (stationary part)
     drawBase() {
         stroke(this.border);
         fill(this.color);
@@ -75,6 +83,7 @@ class Tower {
         this.alive = false;
     }
 
+    // Functionality once entity has been targeted
     onAim(e) {
         if (this.canFire() || this.follow) this.aim(e.pos.x, e.pos.y);
         if (!this.canFire()) return;
@@ -94,7 +103,10 @@ class Tower {
     }
 
     onTarget(entities) {
-        var e = target[this.target](this.visible(entities));
+        entities = this.visible(entities);
+        var t = getTaunting(entities);
+        if (t.length > 0) entities = t;
+        var e = target[this.target](entities);
         if (typeof e === 'undefined') return;
         this.onAim(e);
     }
@@ -113,6 +125,7 @@ class Tower {
         if (this.cd > 0) this.cd--;
     }
 
+    // Use template to set attributes
     upgrade(template) {
         template = typeof template === 'undefined' ? {} : template;
         var keys = Object.keys(template);
