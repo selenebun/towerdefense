@@ -70,7 +70,7 @@ tower.gun = {
     cooldownMax: 18,
     cooldownMin: 8,
     cost: 25,
-    range: 5
+    range: 3
 };
 
 tower.laser = {
@@ -85,6 +85,7 @@ tower.laser = {
     cooldoonMax: 1,
     cost: 75,
     damageMax: 2,
+    range: 3,
     type: 'energy'
 };
 
@@ -107,7 +108,7 @@ tower.sniper = {
     cost: 200,
     damageMax: 100,
     damageMin: 100,
-    range: 15,
+    range: 9,
     target: 'furthest',
     // Methods
     drawBarrel: function() {

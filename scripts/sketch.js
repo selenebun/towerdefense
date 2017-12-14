@@ -216,10 +216,10 @@ function getWave() {
                 ['fast', 50]
             ],
             [
-                ['strong', 200]
+                ['strong', 100]
             ],
             [
-                ['fast', 200]
+                ['fast', 100]
             ],
             [
                 ['taunt', 'strong', 'strong', 'strong', 'strong', 100],
@@ -227,10 +227,9 @@ function getWave() {
             ],
             [
                 ['taunt', 'strong', 'strong', 100],
+                ['fast', 25],
+                ['taunt', 'strong', 'strong', 100],
                 ['fast', 50]
-            ],
-            [
-                ['taunt', 'fast', 'fast', 'fast', 'fast', 100]
             ]
         ]);
     //}
@@ -428,6 +427,7 @@ function resizeTiles() {
 // Sell a tower
 function sell(t) {
     selected = null;
+    toPathfind = true;
     clearInfo();
     cash += t.sellPrice();
     t.kill();
@@ -444,7 +444,7 @@ function setPlace(t) {
 function showRange(t, cx, cy) {
     stroke(255);
     fill(t.color[0], t.color[1], t.color[2], 63);
-    ellipse(cx, cy, t.range * ts, t.range * ts);
+    ellipse(cx, cy, (t.range + 0.5) * ts * 2, (t.range + 0.5) * ts * 2);
 }
 
 // Display tower information
