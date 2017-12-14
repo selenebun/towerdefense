@@ -11,7 +11,6 @@
     <script src="scripts/enemies.js" defer></script>
     <script src="scripts/tower.js" defer></script>
     <script src="scripts/towers.js" defer></script>
-    <script src="scripts/map.js" defer></script>
     <script src="scripts/maps.js" defer></script>
     <script src="scripts/sketch.js" defer></script>
   </head>
@@ -23,9 +22,9 @@
     <main>
       <aside id="store">
         <h2>Store</h2>
-        <p><button class="gun" onclick="buy('gun')">Gun Tower (1)</button></p>
-        <p><button class="laser" onclick="buy('laser')">Laser Tower (2)</button></p>
-        <p><button class="sniper" onclick="buy('sniper')">Sniper Tower (3)</button></p>
+        <p><button class="gun" onclick="setPlace('gun')">Gun Tower (1)</button></p>
+        <p><button class="laser" onclick="setPlace('laser')">Laser Tower (2)</button></p>
+        <p><button class="sniper" onclick="setPlace('sniper')">Sniper Tower (3)</button></p>
       </aside>
 
       <div id="sketch-holder"></div>

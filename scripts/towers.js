@@ -16,7 +16,7 @@ target.furthest = function(entities) {
     for (var i = 0; i < entities.length; i++) {
         var e = entities[i];
         var t = gridPos(e.pos.x, e.pos.y);
-        var dist = distMap[t.x][t.y];
+        var dist = dists[t.x][t.y];
         if (dist < lowestDist) {
             lowestDist = dist;
             chosen = e;
@@ -65,6 +65,7 @@ tower.gun = {
     secondary: [103, 128, 159],
     // Misc
     name: 'gun',
+    title: 'Gun Tower',
     // Stats
     cooldownMax: 18,
     cooldownMin: 8,
@@ -79,6 +80,7 @@ tower.laser = {
     weight: 1,
     // Misc
     name: 'laser',
+    title: 'Laser Tower',
     // Stats
     cooldoonMax: 1,
     cost: 75,
@@ -98,6 +100,7 @@ tower.sniper = {
     width: 1.1,
     // Misc
     name: 'sniper',
+    title: 'Sniper Tower',
     // Stats
     cooldownMax: 140,
     cooldownMin: 100,

@@ -45,6 +45,32 @@ function cts(col, row) {
     return col + ',' + row;
 }
 
+// Returns an array of entities with a certain name
+function getByName(entities, names) {
+    var results = [];
+    if (typeof names === 'string') names = [names];
+    for (var i = 0; i < entities.length; i++) {
+        var e = entities[i];
+        for (var j = 0; j < names.length; j++) {
+            if (e.name === names[j]) results.push(e);
+        }
+    }
+    return results;
+}
+
+// Get entities within a range (radius in tiles)
+// TODO have minimum and maximum range
+function getInRange(cx, cy, radius, entities) {
+    var results = [];
+    for (var i = 0; i < entities.length; i++) {
+        var e = entities[i];
+        if (insideCircle(e.pos.x, e.pos.y, cx, cy, radius * ts)) {
+            results.push(e);
+        }
+    }
+    return results;
+}
+
 // Get all taunting enemies
 function getTaunting(entities) {
     var results = [];
@@ -58,6 +84,14 @@ function getTaunting(entities) {
 // Return grid coordinate
 function gridPos(x, y) {
     return createVector(floor(x / ts), floor(y / ts));
+}
+
+function insideCircle(x, y, cx, cy, r) {
+    return sq(x - cx) + sq(y - cy) < sq(r);
+}
+
+function mouseInMap() {
+    return between(mouseX, 0, width) && between(mouseY, 0, height);
 }
 
 // Return orthogonal neighbors of a certain value
@@ -87,6 +121,15 @@ function randint() {
     return floor(random(...arguments));
 }
 
+// Displays a range of numbers
+function rangeText(min, max) {
+    if (min === max) {
+        return String(min);
+    } else {
+        return String(min) + '-' + String(max);
+    }
+}
+
 // Convert string to vector
 function stv(str) {
     var arr = str.split(',');
@@ -106,45 +149,3 @@ function textRange(min, max) {
 function vts(v) {
     return v.x + ',' + v.y;
 }
-
-/*
-function atTileCenter(x, y, cx, cy) {
-    return between(x, cx - 1, cx + 1) && between(y, cy - 1, cy + 1);
-}
-
-function between(num, min, max) {
-    return num > Math.min(min, max) && num < Math.max(min, max);
-}
-
-function getByName(entities, names) {
-    var results = [];
-    if (typeof names === 'string') names = [names];
-    for (var i = 0; i < entities.length; i++) {
-        var e = entities[i];
-        for (var j = 0; j < names.length; j++) {
-            if (e.name === names[j]) results.push(e);
-        }
-    }
-    return results;
-}
-
-// Get entities within a range (radius in tiles)
-function getInRange(cx, cy, radius, entities) {
-    var results = [];
-    for (var i = 0; i < entities.length; i++) {
-        var e = entities[i];
-        if (insideCircle(e.pos.x, e.pos.y, cx, cy, radius * ts)) {
-            results.push(e);
-        }
-    }
-    return results;
-}
-
-function insideCircle(x, y, cx, cy, r) {
-    return sq(x - cx) + sq(y - cy) < sq(r);
-}
-
-function mouseInMap() {
-    return between(mouseX, 0, width) && between(mouseY, 0, height);
-}
-*/

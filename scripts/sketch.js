@@ -102,9 +102,19 @@ function addEnemies(enemies, count) {
     }
 }
 
+// Check if all conditions for placing a tower are true
+function canPlace() {
+    return mouseInMap() && toPlace && typeof towerType !== 'undefined';
+}
+
 // Check if spawn cooldown is done and enemies are available to spawn
 function canSpawn() {
     return newEnemies.length > 0 && scd === 0;
+}
+
+// Clear tower information
+function clearInfo() {
+    document.getElementById('info-div').style.display = 'none';
 }
 
 // Add enemies to spawn
@@ -415,6 +425,45 @@ function resizeTiles() {
     resizeCanvas(cols * ts, rows * ts, true);
 }
 
+// Sell a tower
+function sell(t) {
+    selected = null;
+    clearInfo();
+    cash += t.sellPrice();
+    t.kill();
+}
+
+// Set a tower to place
+function setPlace(t) {
+    towerType = t;
+    toPlace = true;
+    updateInfo(createTower(0, 0, tower[towerType]));
+}
+
+// Visualize range of tower
+function showRange(t, cx, cy) {
+    stroke(255);
+    fill(t.color[0], t.color[1], t.color[2], 63);
+    ellipse(cx, cy, t.range * ts, t.range * ts);
+}
+
+// Display tower information
+// TODO display average DPS and average cooldown time in seconds
+function updateInfo(t) {
+    var name = document.getElementById('name');
+    name.innerHTML = '<span style="color:rgb(' + t.color + ')">' + t.title +
+    '</span>';
+    document.getElementById('cost').innerHTML = 'Cost: $' + t.cost;
+    document.getElementById('sellPrice').innerHTML = 'Sell price: $' +
+    t.sellPrice();
+    document.getElementById('damage').innerHTML = 'Damage: ' +
+    rangeText(t.damageMin, t.damageMax);
+    document.getElementById('range').innerHTML = 'Range: ' + t.range;
+    document.getElementById('cooldown').innerHTML = 'Cooldown: ' +
+    rangeText(t.cooldownMin, t.cooldownMax);
+    document.getElementById('info-div').style.display = 'block';
+}
+
 // Update game status display with wave, health, and cash
 function updateStatus() {
     waveText = 'Wave ' + wave + (maxWave === -1 ? '' : '/' + maxWave);
@@ -444,7 +493,6 @@ function setup() {
 }
 
 // TODO change color of tower-only tiles (maybe to grey?)
-// TODO placing towers
 function draw() {
     background(0);
 
@@ -531,6 +579,12 @@ function draw() {
     }
 
     // Draw range of tower being placed
+    if (canPlace()) {
+        var p = gridPos(mouseX, mouseY);
+        var c = center(p.x, p.y);
+        var t = createTower(0, 0, tower[towerType]);
+        showRange(t, c.x, c.y);
+    }
 
     removeDead(enemies);
     removeDead(projectiles);
@@ -538,6 +592,8 @@ function draw() {
 
     projectiles = projectiles.concat(newProjectiles);
     towers = towers.concat(newTowers);
+    newProjectiles = [];
+    newTowers = [];
 
     // If player is dead, reset game
     if (health <= 0) resetGame();
@@ -564,20 +620,40 @@ function draw() {
 
 // User input
 
-// TODO add back all old keys
 function keyPressed() {
     switch (keyCode) {
         case 17:
             // Ctrl
             godMode = !godMode;
             break;
+        case 27:
+            // Esc
+            toPlace = false;
+            clearInfo();
+            break;
         case 32:
             // Space
             pause();
             break;
+        case 49:
+            // 1
+            setPlace('gun');
+            break;
+        case 50:
+            // 2
+            setPlace('laser');
+            break;
+        case 51:
+            // 3
+            setPlace('sniper');
+            break;
         case 82:
             // R
             resetGame();
+            break;
+        case 83:
+            // S
+            if (selected) sell(selected);
             break;
         case 219:
             // Left bracket
@@ -595,6 +671,35 @@ function keyPressed() {
                 resetGame();
             }
             break;
+    }
+}
+
+// TODO clean up and move to subroutines
+// TODO only update path if tower on walkable tile
+// TODO only allow placing on the correct tile types
+function mousePressed() {
+    if (mouseInMap()) {
+        var p = gridPos(mouseX, mouseY);
+        var t = getTower(p.x, p.y);
+        if (t) {
+            selected = t;
+            toPlace = false;
+            updateInfo(selected);
+        } else if (empty(p.x, p.y) && placeable(p.x, p.y) && toPlace) {
+            var n = createTower(p.x, p.y, tower[towerType]);
+            // Buy tower if enough money
+            if (godMode || cash >= n.cost) {
+                if (!godMode) cash -= n.cost;
+                selected = n;
+                toPlace = false;
+                toPathfind = true;
+                updateInfo(selected);
+                newTowers.push(n);
+            }
+        }
+    } else {
+        selected = null;
+        clearInfo();
     }
 }
 
