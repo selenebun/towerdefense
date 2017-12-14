@@ -203,12 +203,12 @@ function getWalkMap() {
 
 // Set spawn cooldown and generate enemies
 // TODO better random wave generation
+// TODO fix wave bug (only first branch of if statement causes it)
 function getWave() {
-    /*
     if (wave < presetWaves.length) {
         spawnCool = presetCools[wave];
         return presetWaves[wave];
-    } else {*/
+    } else {
         spawnCool = randint(5, 21);
         return random([
             [
@@ -232,7 +232,7 @@ function getWave() {
                 ['fast', 50]
             ]
         ]);
-    //}
+    }
 }
 
 // TODO generate map, pathfinding if not present
