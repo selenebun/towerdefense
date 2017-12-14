@@ -72,6 +72,12 @@ class Enemy {
         }
     }
 
+    // Return speed in pixels per tick
+    // Adjusted to not be affected by zoom level
+    pxSpeed() {
+        return this.speed / 24 * ts;
+    }
+
     // Change direction based on pathfinding map
     steer() {
         var t = gridPos(this.pos.x, this.pos.y);
@@ -79,19 +85,18 @@ class Enemy {
         var dir = paths[t.x][t.y];
         if (atTileCenter(this.pos.x, this.pos.y, t.x, t.y)) {
             if (dir === null) return;
-            // Center entity on tile to avoid accumulating error
-            this.pos = center(t.x, t.y);
             // Adjust velocity
-            if (dir === 'left') this.vel = createVector(-this.speed, 0);
-            if (dir === 'up') this.vel = createVector(0, -this.speed);
-            if (dir === 'right') this.vel = createVector(this.speed, 0);
-            if (dir === 'down') this.vel = createVector(0, this.speed);
+            var speed = this.pxSpeed();
+            if (dir === 'left') this.vel = createVector(-speed, 0);
+            if (dir === 'up') this.vel = createVector(0, -speed);
+            if (dir === 'right') this.vel = createVector(speed, 0);
+            if (dir === 'down') this.vel = createVector(0, speed);
         }
     }
 
     update() {
-        this.vel.limit(4);
-        this.vel.limit(this.speed);
+        this.vel.limit(96 / ts);
+        this.vel.limit(this.pxSpeed());
         this.pos.add(this.vel);
     }
 }
