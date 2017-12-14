@@ -306,11 +306,11 @@ function randomMap() {
     var numSpawns = parseInt(document.getElementById('difficulty').value) + 1;
     for (var i = 0; i < numSpawns; i++) {
         var s;
-        while (true) {
+        // Try to place spawnpoint
+        for (var j = 0; j < 100; j++) {
             s = getEmpty();
-            if (s.dist(exit) >= minDist && visitMap[vts(s)]) {
-                break;
-            }
+            while (!visitMap[vts(s)]) s = getEmpty();
+            if (s.dist(exit) >= minDist) break;
         }
         spawnpoints.push(s);
     }
