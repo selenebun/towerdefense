@@ -38,6 +38,7 @@ function copyArray(arr) {
             newArr[x][y] = arr[x][y];
         }
     }
+    return newArr;
 }
 
 // Convert grid coordinates to string

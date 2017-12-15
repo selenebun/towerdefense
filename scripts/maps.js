@@ -1,23 +1,6 @@
-function createMap(template) {
-    var m = new Map();
-    // Fill in all keys
-    template = typeof template === 'undefined' ? {} : template;
-    var keys = Object.keys(template);
-    for (var i = 0; i < keys.length; i++) {
-        var key = keys[i];
-        m[key] = template[key];
-    }
-    m.onCreate();
-    return m;
-}
-
-
 var maps = {};
 
-maps.random = {
-    // Misc
-    name: 'random'
-};
+maps.random = {};
 
 maps.zigzag = {
     // Grids
@@ -46,5 +29,6 @@ maps.zigzag = {
     exit: createVector(17, 17),
     spawnpoints: [createVector(1, 1)],
     // Misc
-    name: 'zigzag'
+    cols: 19,
+    rows: 19
 };

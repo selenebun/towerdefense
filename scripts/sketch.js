@@ -102,9 +102,25 @@ function addEnemies(enemies, count) {
     }
 }
 
+// Buy and place a tower if player has enough money
+function buy(t) {
+    if (godMode || cash >= t.cost) {
+        if (!godMode) cash -= t.cost;
+        selected = t;
+        toPlace = false;
+        toPathfind = true;
+        updateInfo(t);
+        newTowers.push(t);
+    }
+}
+
 // Check if all conditions for placing a tower are true
-function canPlace() {
-    return mouseInMap() && toPlace && typeof towerType !== 'undefined';
+function canPlace(col, row) {
+    if (!toPlace) return false;
+    if (grid[col][row] === 3) return true;
+    if (grid[col][row] === 1 || grid[col][row] === 2) return false;
+    if (!empty(col, row) || !placeable(col, row)) return false;
+    return true;
 }
 
 // Check if spawn cooldown is done and enemies are available to spawn
@@ -125,6 +141,11 @@ function createWave(pattern) {
         var count = group.pop();
         addEnemies(group, count);
     }
+}
+
+// Check if all conditions for showing a range are true
+function doRange() {
+    return mouseInMap() && toPlace && typeof towerType !== 'undefined';
 }
 
 // Check if tile is empty
@@ -235,12 +256,33 @@ function getWave() {
     }
 }
 
-// TODO generate map, pathfinding if not present
-// TODO copy grid with copyArray()
+// Load map from template, fill in missing sections
+// Always have an exit and spawnpoints if you do not have a premade grid
 function loadMap(name) {
+    var m = maps[name];
+
+    // Misc
     resizeTiles();
-    randomMap();
-    maxWave = -1;
+    if ('cols' in m) cols = m.cols;
+    if ('rows' in m) rows = m.rows;
+    resizeCanvas(cols * ts, rows * ts, true);
+    maxWave = 'waves' in m ? m.waves : -1;
+
+    // Important tiles
+    exit = 'exit' in m ? m.exit : createVector(0, 0);
+    spawnpoints = 'spawnpoints' in m ? m.spawnpoints : [createVector(0, 0)];
+
+    // Grids
+    if ('grid' in m) {
+        grid = copyArray(m.grid);
+    } else {
+        randomMap();
+    }
+    if ('grid' in m && 'paths' in m) {
+        paths = copyArray(m.paths);
+    } else {
+        recalculate();
+    }
 }
 
 // Increment wave counter
@@ -314,9 +356,6 @@ function randomMap() {
         }
         spawnpoints.push(s);
     }
-
-    // Generate maps
-    recalculate();
 }
 
 // Random grid coordinate
@@ -402,7 +441,7 @@ function resetGame() {
     // Get difficulty
     var d = parseInt(document.getElementById('difficulty').value);
     // Reset all stats
-    health = 30;
+    health = 20;
     maxHealth = health;
     cash = [40, 55, 65, 65][d];
     wave = 0;
@@ -448,7 +487,7 @@ function showRange(t, cx, cy) {
 }
 
 // Display tower information
-// TODO display average DPS and average cooldown time in seconds
+// TODO maybe display average DPS
 function updateInfo(t) {
     var name = document.getElementById('name');
     name.innerHTML = '<span style="color:rgb(' + t.color + ')">' + t.title +
@@ -474,7 +513,6 @@ function updateStatus() {
 // Return whether tile is walkable
 function walkable(col, row) {
     // Check if wall or tower-only tile
-    if (typeof grid[col] === 'undefined') console.log(grid);
     if (grid[col][row] === 1 || grid[col][row] === 3) return false;
     // Check if tower
     if (getTower(col, row)) return false;
@@ -578,11 +616,25 @@ function draw() {
     }
 
     // Draw range of tower being placed
-    if (canPlace()) {
+    if (doRange()) {
         var p = gridPos(mouseX, mouseY);
         var c = center(p.x, p.y);
         var t = createTower(0, 0, tower[towerType]);
         showRange(t, c.x, c.y);
+
+        // Indicate whether tower can be placed
+        push();
+        translate(c.x, c.y);
+        rotate(PI / 4);
+        stroke(255);
+        if (canPlace(p.x, p.y)) {
+            // Draw a green check mark
+            fill(0, 230, 64);
+        } else {
+            // Draw a red X
+            fill(207, 0, 15);
+        }
+        pop();
     }
 
     removeDead(enemies);
@@ -677,6 +729,21 @@ function keyPressed() {
 // TODO only update path if tower on walkable tile
 // TODO only allow placing on the correct tile types
 function mousePressed() {
+    if (!mouseInMap()) return;
+    var p = gridPos(mouseX, mouseY);
+    var t = getTower(p.x, p.y);
+    
+    if (t) {
+        // Clicked on tower
+        selected = t;
+        toPlace = false;
+        updateInfo(selected);
+    } else if (canPlace(p.x, p.y)) {
+        buy(createTower(p.x, p.y, tower[towerType]));
+    }
+}
+/*
+function mousePressed() {
     if (mouseInMap()) {
         var p = gridPos(mouseX, mouseY);
         var t = getTower(p.x, p.y);
@@ -701,6 +768,7 @@ function mousePressed() {
         clearInfo();
     }
 }
+*/
 
 /*
 var tileZoom = 2;
