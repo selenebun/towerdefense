@@ -10,8 +10,10 @@ var rows;
 var tileZoom = 2;
 var ts = 24;            // tile size
 
+var display;            // display tiles
 var dists;              // distance to exit
 var grid;               // tile type (0 = empty, 1 = wall, 2 = path, 3 = tower)
+var palette;            // what to display for each display tile
 var paths;              // direction to reach exit
 var visitMap;           // whether exit can be reached
 var walkMap;            // walkability map
@@ -148,6 +150,21 @@ function doRange() {
     return mouseInMap() && toPlace && typeof towerType !== 'undefined';
 }
 
+// Draw a display tile
+function drawTile(col, row) {
+    push();
+    translate(col * ts, row * ts);
+    var g = palette[display[col][row]];
+    if (typeof g === 'function') {
+        g();
+    } else {
+        stroke(255, 31);
+        fill(g);
+        rect(0, 0, ts, ts);
+    }
+    pop();
+}
+
 // Check if tile is empty
 function empty(col, row) {
     // Check if not walkable
@@ -275,6 +292,22 @@ function loadMap(name) {
     // Grids
     if ('grid' in m) {
         grid = copyArray(m.grid);
+        // Display tiles
+        display = 'display' in m ? m.display : copyArray(grid);
+        palette = 'palette' in m ? m.palette : [
+            function() {
+                stroke(255, 31);
+                noFill();
+                rect(0, 0, ts, ts);
+            },
+            [1, 50, 67],
+            function() {
+                stroke(255, 31);
+                noFill();
+                rect(0, 0, ts, ts);
+            },
+            [1, 50, 67]
+        ];
     } else {
         randomMap();
     }
@@ -333,6 +366,17 @@ function randomMap() {
         }
     }
     walkMap = getWalkMap();
+
+    // Copy to display grid
+    display = copyArray(grid);
+    palette = [
+        function() {
+            stroke(255, 31);
+            noFill();
+            rect(0, 0, ts, ts);
+        },
+        [1, 50, 67]
+    ];
 
     // Generate exit and remove walls that are adjacent
     exit = getEmpty();
@@ -543,13 +587,7 @@ function draw() {
     // Draw basic tiles
     for (var x = 0; x < cols; x++) {
         for (var y = 0; y < rows; y++) {
-            stroke(255, 31);
-            var t = grid[x][y];
-            if (t === 0) noFill();          // empty
-            if (t === 1) fill(1, 50, 67);   // wall
-            if (t === 2) noFill();          // enemy-only
-            if (t === 3) fill(1, 50, 67);   // tower-only
-            rect(x * ts, y * ts, ts, ts);
+            drawTile(x, y);
         }
     }
 
