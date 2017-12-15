@@ -11,3 +11,4 @@ Simple tower defense game in p5.js that can be played
 * R to reset game
 * S to sell selected tower
 * X to export map string (copies to clipboard)
+* Z to return to default zoom level (will reset map!)

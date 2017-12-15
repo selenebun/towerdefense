@@ -9,6 +9,7 @@ var cols;
 var rows;
 var tileZoom = 2;
 var ts = 24;            // tile size
+var zoomDefault = ts;
 
 var display;            // display tiles
 var dists;              // distance to exit
@@ -295,49 +296,53 @@ function getWave() {
     }
 }
 
-// Load map from template, fill in missing sections
+// Load map from template
 // Always have an exit and spawnpoints if you do not have a premade grid
-function loadMap(name) {
+function loadMap() {
+    var name = document.getElementById('map').value;
+    if (name === 'random') {
+        maxWave = -1;
+        resizeMax();
+        randomMap();
+        recalculate();
+        return;
+    }
+    
     var m = maps[name];
 
-    // Misc
-    resizeMax();
-    if ('cols' in m) cols = m.cols;
-    if ('rows' in m) rows = m.rows;
-    resizeCanvas(cols * ts, rows * ts, true);
-    maxWave = 'waves' in m ? m.waves : -1;
-
-    // Important tiles
-    exit = 'exit' in m ? m.exit : createVector(0, 0);
-    spawnpoints = 'spawnpoints' in m ? m.spawnpoints : [createVector(0, 0)];
-
     // Grids
-    if ('grid' in m) {
-        grid = copyArray(m.grid);
-        // Display tiles
-        display = 'display' in m ? m.display : copyArray(grid);
-        palette = 'palette' in m ? m.palette : [
-            function() {
-                stroke(255, 31);
-                noFill();
-                rect(0, 0, ts, ts);
-            },
-            [1, 50, 67],
-            function() {
-                stroke(255, 31);
-                noFill();
-                rect(0, 0, ts, ts);
-            },
-            [1, 50, 67]
-        ];
-    } else {
-        randomMap();
+    grid = m.grid;
+    paths = m.paths;
+    // Important tiles
+    exit = createVector(m.exit[0], m.exit[1]);
+    spawnpoints = [];
+    for (var i = 0; i < m.spawnpoints.length; i++) {
+        var s = m.spawnpoints[i];
+        spawnpoints.push(createVector(s[0], s[1]));
     }
-    if ('grid' in m && 'paths' in m) {
-        paths = copyArray(m.paths);
-    } else {
-        recalculate();
-    }
+    // Misc
+    cols = m.cols;
+    rows = m.rows;
+    maxWave = m.waves;
+
+    // Display tiles
+    display = copyArray(grid);
+    palette = [
+        function() {
+            stroke(255, 31);
+            noFill();
+            rect(0, 0, ts, ts);
+        },
+        [1, 50, 67],
+        function() {
+            stroke(255, 31);
+            noFill();
+            rect(0, 0, ts, ts);
+        },
+        [1, 50, 67]
+    ];
+
+    resizeFit();
 }
 
 // Increment wave counter
@@ -495,7 +500,7 @@ function removeDead(entities) {
 
 // TODO vary health based on difficulty
 function resetGame() {
-    loadMap(document.getElementById('map').value);
+    loadMap();
     // Clear all entities
     enemies = [];
     projectiles = [];
@@ -792,6 +797,12 @@ function keyPressed() {
         case 88:
             // X
             copyToClipboard(exportMap());
+            break;
+        case 90:
+            // Z
+            ts = zoomDefault;
+            resizeMax();
+            resetGame();
             break;
         case 219:
             // Left bracket
