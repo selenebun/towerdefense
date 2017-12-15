@@ -131,6 +131,10 @@ footer #copyright {
     background-color: rgb(25, 181, 254);
 }
 
+.slow {
+    background-color: rgb(68, 108, 179);
+}
+
 .sniper {
     background-color: rgb(207, 0, 15);
 }

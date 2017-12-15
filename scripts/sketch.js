@@ -697,6 +697,10 @@ function keyPressed() {
             break;
         case 51:
             // 3
+            setPlace('slow');
+            break;
+        case 52:
+            // 4
             setPlace('sniper');
             break;
         case 82:

@@ -44,7 +44,7 @@ enemy.fast = {
     speed: 2,
     drawEnemy: function() {
         stroke(0);
-		fill(this.color);
+		fill(this.getColor());
         var back = -0.6 * ts / 3;
         var front = back + 0.6 * ts;
         var side = 0.9 * ts / 2;
@@ -63,7 +63,7 @@ enemy.taunt = {
     health: 375,
     drawEnemy: function() {
         stroke(0);
-        fill(this.color);
+        fill(this.getColor());
         var edge = this.radius * ts / 2;
         rect(-edge, -edge, this.radius * ts, this.radius * ts);
     }

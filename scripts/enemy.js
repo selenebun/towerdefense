@@ -6,6 +6,7 @@ class Enemy {
 
         // Misc
         this.alive = true;
+        this.effects = [];           // status effects
         this.name = 'enemy';
 
         // Position
@@ -20,6 +21,15 @@ class Enemy {
         this.resistant = [];        // reduced damage from these damage types
         this.speed = 1;             // 4 is the max
         this.taunt = false;         // force towers to target
+    }
+
+    // Apply new status effect
+    // Only one of each is allowed at a time
+    applyEffect(name, duration) {
+        if (getByName(this.effects, name).length > 0) return;
+        var e = createEffect(duration, effects[name]);
+        e.onStart(this);
+        this.effects.push(e);
     }
 
     draw() {
@@ -48,8 +58,14 @@ class Enemy {
     // Draw enemy after translation and rotation
     drawEnemy() {
         stroke(0);
-        fill(this.color);
+        fill(this.getColor());
         ellipse(0, 0, this.radius * ts, this.radius * ts);
+    }
+
+    getColor() {
+        var l = this.effects.length;
+        if (l > 0) return this.effects[l - 1].color;
+        return this.color;
     }
 
     kill() {
@@ -95,6 +111,15 @@ class Enemy {
     }
 
     update() {
+        // Apply status effects
+        for (var i = 0; i < this.effects.length; i++) {
+            this.effects[i].update(this);
+        }
+
+        // Remove expired status effects
+        removeDead(this.effects);
+        
+        // Movement
         this.vel.limit(96 / ts);
         this.vel.limit(this.pxSpeed());
         this.pos.add(this.vel);

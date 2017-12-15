@@ -43,6 +43,7 @@ class Tower {
     attack(e) {
         var damage = round(random(this.damageMin, this.damageMax));
         e.dealDamage(damage, this.type);
+        this.onHit(e);
     }
 
     // Check if cooldown is completed
@@ -111,6 +112,8 @@ class Tower {
         this.cd = 0;                // current cooldown left
         this.totalCost = this.cost;
     }
+
+    onHit(e) {}
 
     onTarget(entities) {
         entities = this.visible(entities);

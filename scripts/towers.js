@@ -32,12 +32,42 @@ tower.laser = {
     name: 'laser',
     title: 'Laser Tower',
     // Stats
-    cooldoonMax: 1,
+    cooldownMax: 1,
     cost: 75,
     damageMax: 3,
     range: 2,
     type: 'energy'
 };
+
+tower.slow = {
+    // Display
+    baseOnTop: false,
+    color: [68, 108, 179],
+    length: 1.3,
+    secondary: [103, 128, 159],
+    weight: 3,
+    // Misc
+    name: 'slow',
+    title: 'Slow Tower',
+    // Stats
+    cooldownMax: 20,
+    cooldownMin: 10,
+    cost: 75,
+    damageMax: 0,
+    damageMin: 0,
+    range: 4,
+    type: 'chemical',
+    drawBarrel: function() {
+        stroke(this.border);
+        fill(this.secondary);
+        var back = -this.length * ts / 2;
+        var side = this.width * ts / 2;
+        rect(back, -side, this.length * ts, this.width * ts);
+    },
+    onHit: function(e) {
+        e.applyEffect('slow', 40);
+    }
+}
 
 tower.sniper = {
     // Display
