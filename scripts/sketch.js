@@ -202,7 +202,7 @@ function exportMap() {
         // Misc
         cols: cols,
         rows: rows,
-        waves: waves
+        waves: maxWave
     });
 }
 
@@ -788,6 +788,10 @@ function keyPressed() {
         case 83:
             // S
             if (selected) sell(selected);
+            break;
+        case 88:
+            // X
+            copyToClipboard(exportMap());
             break;
         case 219:
             // Left bracket

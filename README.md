@@ -11,3 +11,4 @@ All controls are both mouse- and keyboard-accessable.
 * 0-9 to select a tower to place
 * R to reset game
 * S to sell selected tower
+* X to export map string (copies to clipboard)
