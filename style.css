@@ -98,7 +98,7 @@ canvas {
     display: flex;
     flex-direction: column;
     margin-right: 2px;
-    min-width: 185px;
+    min-width: 190px;
 }
 
 #info {
@@ -111,7 +111,7 @@ canvas {
 }
 
 #info p {
-    font-size: 0.85em;
+    font-size: 0.8em;
 }
 
 footer {

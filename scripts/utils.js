@@ -136,15 +136,6 @@ function stv(str) {
     return createVector(parseInt(arr[0]), parseInt(arr[1]));
 }
 
-// Creates a string representing a range of numbers
-function textRange(min, max) {
-    if (min === max) {
-        return String(min);
-    } else {
-        return String(min) + '-' + String(max);
-    }
-}
-
 // Convert vector to string
 function vts(v) {
     return v.x + ',' + v.y;

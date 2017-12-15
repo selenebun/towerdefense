@@ -85,7 +85,7 @@ var presetWaves = [
     [
         ['strong', 100],
         ['fast', 50],
-        ['taunt', 'strong', 'strong', 25]
+        ['taunt', 'strong', 'strong', 50]
     ]
 ];
 
@@ -456,11 +456,10 @@ function updateInfo(t) {
     document.getElementById('cost').innerHTML = 'Cost: $' + t.cost;
     document.getElementById('sellPrice').innerHTML = 'Sell price: $' +
     t.sellPrice();
-    document.getElementById('damage').innerHTML = 'Damage: ' +
-    rangeText(t.damageMin, t.damageMax);
+    document.getElementById('damage').innerHTML = 'Damage: ' + t.getDamage();
     document.getElementById('range').innerHTML = 'Range: ' + t.range;
-    document.getElementById('cooldown').innerHTML = 'Cooldown: ' +
-    rangeText(t.cooldownMin, t.cooldownMax);
+    document.getElementById('cooldown').innerHTML = 'Avg. Cooldown: ' +
+    t.getCooldown().toFixed(2) + 's';
     document.getElementById('info-div').style.display = 'block';
 }
 

@@ -80,13 +80,15 @@ class Tower {
         ellipse(this.pos.x, this.pos.y, this.radius * ts, this.radius * ts);
     }
 
-    // Returns average DPS
-    // TODO
-    getDPS() {}
+    // Returns damage range
+    getDamage() {
+        return rangeText(this.damageMin, this.damageMax);
+    }
 
     // Returns average cooldown in seconds
-    // TODO
-    getCooldown() {}
+    getCooldown() {
+        return (this.cooldownMin + this.cooldownMax) / 120;
+    }
 
     kill() {
         this.alive = false;

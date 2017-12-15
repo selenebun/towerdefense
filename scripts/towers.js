@@ -84,8 +84,8 @@ tower.laser = {
     // Stats
     cooldoonMax: 1,
     cost: 75,
-    damageMax: 2,
-    range: 3,
+    damageMax: 3,
+    range: 2,
     type: 'energy'
 };
 
