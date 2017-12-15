@@ -160,7 +160,7 @@ tower.poison = {
     damageMax: 0,
     damageMin: 0,
     range: 4,
-    type: 'slow',
+    type: 'poison',
     drawBarrel: function() {
         stroke(this.border);
         fill(this.secondary);

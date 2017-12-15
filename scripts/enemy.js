@@ -27,6 +27,7 @@ class Enemy {
     // Only one of each is allowed at a time
     applyEffect(name, duration) {
         if (getByName(this.effects, name).length > 0) return;
+        if (this.immune.includes(name)) return;
         var e = createEffect(duration, effects[name]);
         e.onStart(this);
         this.effects.push(e);
