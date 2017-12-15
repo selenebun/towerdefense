@@ -427,6 +427,7 @@ function removeDead(entities) {
     }
 }
 
+// TODO vary health based on difficulty
 function resetGame() {
     loadMap(document.getElementById('map').value);
     // Clear all entities
@@ -439,7 +440,7 @@ function resetGame() {
     // Get difficulty
     var d = parseInt(document.getElementById('difficulty').value);
     // Reset all stats
-    health = [30, 20, 15, 10][d];
+    health = [40, 40, 40, 40][d];
     maxHealth = health;
     cash = [40, 55, 65, 65][d];
     wave = 0;
