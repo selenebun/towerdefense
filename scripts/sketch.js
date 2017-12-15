@@ -108,7 +108,7 @@ function buy(t) {
         if (!godMode) cash -= t.cost;
         selected = t;
         toPlace = false;
-        toPathfind = true;
+        if (grid[t.gridPos.x][t.gridPos.y] === 0) toPathfind = true;
         updateInfo(t);
         newTowers.push(t);
     }
