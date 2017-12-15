@@ -184,6 +184,28 @@ function empty(col, row) {
     return true;
 }
 
+// Return map string
+function exportMap() {
+    // Convert spawnpoints into a JSON-friendly format
+    var spawns = [];
+    for (var i = 0; i < spawnpoints.length; i++) {
+        var s = spawnpoints[i];
+        spawns.push([s.x, s.y]);
+    }
+    return JSON.stringify({
+        // Grids
+        grid: grid,
+        paths: paths,
+        // Important tiles
+        exit: [exit.x, exit.y],
+        spawnpoints: spawns,
+        // Misc
+        cols: cols,
+        rows: rows,
+        waves: waves
+    });
+}
+
 // Get an empty tile
 function getEmpty() {
     while (true) {
@@ -279,7 +301,7 @@ function loadMap(name) {
     var m = maps[name];
 
     // Misc
-    resizeTiles();
+    resizeMax();
     if ('cols' in m) cols = m.cols;
     if ('rows' in m) rows = m.rows;
     resizeCanvas(cols * ts, rows * ts, true);
@@ -498,8 +520,17 @@ function resetGame() {
     nextWave();
 }
 
+// Changes tile size to fit everything onscreen
+function resizeFit() {
+    var div = document.getElementById('sketch-holder');
+    var ts1 = floor(div.offsetWidth / cols);
+    var ts2 = floor(div.offsetHeight / rows);
+    ts = Math.min(ts1, ts2);
+    resizeCanvas(cols * ts, rows * ts, true);
+}
+
 // Resizes cols, rows, and canvas based on tile size
-function resizeTiles() {
+function resizeMax() {
     var div = document.getElementById('sketch-holder');
     cols = floor(div.offsetWidth / ts);
     rows = floor(div.offsetHeight / ts);
@@ -762,7 +793,7 @@ function keyPressed() {
             // Left bracket
             if (ts > 16) {
                 ts -= tileZoom;
-                resizeTiles();
+                resizeMax();
                 resetGame();
             }
             break;
@@ -770,7 +801,7 @@ function keyPressed() {
             // Right bracket
             if (ts < 40) {
                 ts += tileZoom;
-                resizeTiles();
+                resizeMax();
                 resetGame();
             }
             break;
