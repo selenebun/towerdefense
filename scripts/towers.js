@@ -44,7 +44,7 @@ tower.slow = {
     baseOnTop: false,
     color: [68, 108, 179],
     length: 1.3,
-    secondary: [103, 128, 159],
+    secondary: [189, 195, 199],
     weight: 3,
     // Misc
     name: 'slow',
@@ -56,7 +56,7 @@ tower.slow = {
     damageMax: 0,
     damageMin: 0,
     range: 4,
-    type: 'chemical',
+    type: 'slow',
     drawBarrel: function() {
         stroke(this.border);
         fill(this.secondary);
@@ -104,3 +104,71 @@ tower.sniper = {
         ellipse(this.pos.x, this.pos.y, this.radius * ts, this.radius * ts);
     }
 };
+
+tower.bomb = {
+    // Display
+    baseOnTop: false,
+    color: [102, 51, 153],
+    secondary: [103, 128, 159],
+    // Misc
+    name: 'bomb',
+    title: 'Bomb Tower',
+    // Stats
+    cooldownMin: 40,
+    cooldownMax: 60,
+    cost: 300,
+    damageMax: 60,
+    damageMin: 20,
+    range: 2,
+    type: 'explosion',
+    // Methods
+    drawBarrel: function() {
+        stroke(this.border);
+        fill(this.secondary);
+        rect(0, -this.width * ts / 2, this.length * ts, this.width * ts);
+        fill(191, 85, 236);
+        ellipse(0, 0, this.radius * ts * 2 / 3, this.radius * ts * 2 / 3);
+    },
+    onHit: function(e) {
+        var blastRadius = 1;
+        var inRadius = getInRange(e.pos.x, e.pos.y, blastRadius, enemies);
+        noStroke();
+        fill(249, 105, 14, 127);
+        ellipse(e.pos.x, e.pos.y, ts * 2.5, ts * 2.5);
+        for (var i = 0; i < inRadius.length; i++) {
+            var h = inRadius[i];
+            var amt = round(random(this.damageMin, this.damageMax));
+            h.dealDamage(amt, this.type);
+        }
+    }
+};
+
+tower.poison = {
+    // Display
+    baseOnTop: false,
+    color: [102, 204, 26],
+    length: 1.3,
+    secondary: [189, 195, 199],
+    weight: 3,
+    // Misc
+    name: 'poison',
+    title: 'Poison Tower',
+    // Stats
+    cooldownMax: 20,
+    cooldownMin: 10,
+    cost: 75,
+    damageMax: 0,
+    damageMin: 0,
+    range: 4,
+    type: 'slow',
+    drawBarrel: function() {
+        stroke(this.border);
+        fill(this.secondary);
+        var back = -this.length * ts / 2;
+        var side = this.width * ts / 2;
+        rect(back, -side, this.length * ts, this.width * ts);
+    },
+    onHit: function(e) {
+        e.applyEffect('poison', 40);
+    }
+}

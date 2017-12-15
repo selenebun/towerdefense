@@ -138,3 +138,11 @@ footer #copyright {
 .sniper {
     background-color: rgb(207, 0, 15);
 }
+
+.bomb {
+    background-color: rgb(102, 51, 153);
+}
+
+.poison {
+    background-color: rgb(102, 204, 26);
+}

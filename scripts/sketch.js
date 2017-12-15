@@ -703,6 +703,14 @@ function keyPressed() {
             // 4
             setPlace('sniper');
             break;
+        case 53:
+            // 5
+            setPlace('bomb');
+            break;
+        case 54:
+            // 6
+            setPlace('poison');
+            break;
         case 82:
             // R
             resetGame();

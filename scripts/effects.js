@@ -29,3 +29,14 @@ effects.slow = {
         e.speed = this.speed;
     }
 };
+
+effects.poison = {
+    // Display
+    color: [102, 204, 26],
+    // Misc
+    name: 'poison',
+    // Methods
+    onTick: function(e) {
+        e.dealDamage(1, 'poison');
+    }
+};
