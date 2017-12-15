@@ -466,7 +466,7 @@ function resizeTiles() {
 // Sell a tower
 function sell(t) {
     selected = null;
-    toPathfind = true;
+    if (grid[t.gridPos.x][t.gridPos.y] === 0) toPathfind = true;
     clearInfo();
     cash += t.sellPrice();
     t.kill();
