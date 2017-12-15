@@ -6,58 +6,8 @@ function createTower(x, y, template) {
 }
 
 
-// Targeting systems
-var target = {};
-
-// Furthest through map (closest to exit)
-target.furthest = function(entities) {
-    var lowestDist = 10000;
-    var chosen = entities[0];
-    for (var i = 0; i < entities.length; i++) {
-        var e = entities[i];
-        var t = gridPos(e.pos.x, e.pos.y);
-        var dist = dists[t.x][t.y];
-        if (dist < lowestDist) {
-            lowestDist = dist;
-            chosen = e;
-        }
-    }
-    return chosen;
-};
-
-// Nearest to tower
-target.nearest = function(entities) {
-    var lowestDist = 10000;
-    var chosen = entities[0];
-    for (var i = 0; i < entities.length; i++) {
-        var e = entities[i];
-        var dist = this.pos.dist(e.pos);
-        if (dist < lowestDist) {
-            lowestDist = dist;
-            chosen = e;
-        }
-    }
-    return chosen;
-};
-
-// Most effective health (including armor)
-target.strongest = function(entities) {
-    var mostStrength = 0;
-    var chosen = entities[0];
-    for (var i = 0; i < entities.length; i++) {
-        var e = entities[i];
-        var strength = e.health / (1 - e.armor);
-        if (strength > mostStrength) {
-            mostStrength = strength;
-            chosen = e;
-        }
-    }
-    return chosen;
-};
-
-
-// Tower templates
 var tower = {};
+
 
 tower.gun = {
     // Display
@@ -109,7 +59,6 @@ tower.sniper = {
     damageMax: 100,
     damageMin: 100,
     range: 9,
-    target: 'furthest',
     // Methods
     drawBarrel: function() {
         stroke(this.border);

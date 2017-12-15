@@ -17,7 +17,6 @@ class Tower {
         // Misc
         this.alive = true;
         this.name = 'tower';
-        this.target = 'furthest';   // targeting function
         this.title = 'Tower';
 
         // Position
@@ -117,7 +116,7 @@ class Tower {
         entities = this.visible(entities);
         var t = getTaunting(entities);
         if (t.length > 0) entities = t;
-        var e = target[this.target](entities);
+        var e = this.target(entities);
         if (typeof e === 'undefined') return;
         this.onAim(e);
     }
@@ -130,6 +129,22 @@ class Tower {
     // Sell price
     sellPrice() {
         return this.totalCost * sellConst;
+    }
+
+    // Target enemy closest to exit
+    target(entities) {
+        var lowestDist = 10000;
+        var chosen = entities[0];
+        for (var i = 0; i < entities.length; i++) {
+            var e = entities[i];
+            var t = gridPos(e.pos.x, e.pos.y);
+            var dist = dists[t.x][t.y];
+            if (dist < lowestDist) {
+                lowestDist = dist;
+                chosen = e;
+            }
+        }
+        return chosen;
     }
 
     update() {

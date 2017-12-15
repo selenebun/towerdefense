@@ -14,6 +14,7 @@ function createEnemy(x, y, template) {
 
 var enemy = {};
 
+
 enemy.weak = {
     // Display
     color: [145, 180, 150],

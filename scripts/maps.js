@@ -1,5 +1,6 @@
 var maps = {};
 
+
 maps.random = {};
 
 maps.zigzag = {
