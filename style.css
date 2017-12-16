@@ -50,6 +50,10 @@ main {
     flex-direction: row;
 }
 
+a:link, a:visited {
+    color: #00E640;
+}
+
 #left-asides, #right-asides {
     display: flex;
     flex-direction: column;
