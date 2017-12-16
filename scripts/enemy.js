@@ -36,8 +36,11 @@ class Enemy {
     draw() {
         push();
         translate(this.pos.x, this.pos.y);
+        push();
         rotate(this.vel.heading());
         this.drawEnemy();
+        pop();
+        this.drawHealth();
         pop();
     }
 
@@ -63,6 +66,19 @@ class Enemy {
         ellipse(0, 0, this.radius * ts, this.radius * ts);
     }
 
+    // Draw health bar
+    drawHealth() {
+        var percent = 1 - this.health / this.maxHealth;
+        if (percent === 0) return;
+        stroke(0);
+        fill(207, 0, 15);
+        var edge = 0.7 * ts / 2;
+        var width = floor(edge * percent * 2);
+        var top = 0.2 * ts;
+        var height = 0.15 * ts;
+        rect(-edge, top, edge * percent * 2, height);
+    }
+
     getColor() {
         var l = this.effects.length;
         if (l > 0) return this.effects[l - 1].color;
@@ -74,7 +90,7 @@ class Enemy {
     }
 
     onCreate() {
-        this.maxHealth = health;
+        this.maxHealth = this.health;
     }
 
     onExit() {
