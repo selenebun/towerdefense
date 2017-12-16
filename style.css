@@ -88,7 +88,7 @@ aside {
     flex: 1;
 }
 
-#store button, #io-aside button {
+#store button, #map-aside button {
     color: #000;
     min-width: 100%;
     text-align: center;
@@ -125,6 +125,18 @@ button {
     height: 30px;
 }
 
+.horiz-buttons {
+    display: flex;
+    flex-direction: row;
+    min-width: 100%;
+}
+
+.horiz-buttons button {
+    display: block;
+    flex: 1;
+    text-align: center;
+}
+
 #info {
     flex: 1;
 }
@@ -140,16 +152,11 @@ button {
 
 #info-buttons {
     display: none;
-    flex-direction: row;
-    min-width: 100%;
 }
 
 #info-buttons button {
     color: #000;
-    display: block;
-    flex: 1;
     font-size: 0.8em;
-    text-align: center;
     text-shadow: none;
 }
 

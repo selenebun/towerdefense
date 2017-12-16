@@ -23,7 +23,7 @@
 
     <main>
       <div id="left-asides">
-        <aside id="io-aside">
+        <aside id="map-aside">
           <div class="group">
             <p><button class="io" onclick="importMap(prompt('Input map string:'))">Import map (M)</button></p>
             <p><button class="io" onclick="copyToClipboard(exportMap())">Export map (X)</button></p>
@@ -50,10 +50,10 @@
           <p id="wave"></p>
           <p id="health"></p>
           <p id="cash"></p>
-          <p>
+          <div class="horiz-buttons">
             <button onclick="pause()">Start</button>
             <button onclick="resetGame()">Restart</button>
-          </p>
+          </div>
           <p>
             Mode:
             <select id="difficulty">
@@ -82,7 +82,7 @@
             <p id="type"></p>
             <p id="range"></p>
             <p id="cooldown"></p>
-            <div id="info-buttons">
+            <div class="horiz-buttons" id="info-buttons">
               <button id="sell" onclick="if (selected) sell(selected)">Sell</button>
               <button id="upgrade">Upgrade</button>
             </div>
