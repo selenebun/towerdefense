@@ -614,6 +614,8 @@ function updateInfo(t) {
     document.getElementById('range').innerHTML = 'Range: ' + t.range;
     document.getElementById('cooldown').innerHTML = 'Avg. Cooldown: ' +
     t.getCooldown().toFixed(2) + 's';
+    var buttons = document.getElementById('info-buttons');
+    buttons.style.display = toPlace ? 'none' : 'flex';
     document.getElementById('info-div').style.display = 'block';
 }
 
