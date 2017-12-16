@@ -4,7 +4,8 @@ new p5();   // p5.js global mode
 // Check if approximately at tile center
 function atTileCenter(x, y, col, row) {
     var c = center(col, row);
-    return between(x, c.x - 1, c.x + 1) && between(y, c.y - 1, c.y + 1);
+    var t = ts / 24;
+    return between(x, c.x - t, c.x + t) && between(y, c.y - t, c.y + t);
 }
 
 // Check if number falls within range
