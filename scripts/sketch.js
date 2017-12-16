@@ -26,7 +26,6 @@ var cash;
 var health;
 var maxHealth;
 var wave;
-var maxWave;            // -1 for infinite waves
 
 var spawnCool;          // number of ticks between spawning enemies
 
@@ -202,8 +201,7 @@ function exportMap() {
         spawnpoints: spawns,
         // Misc
         cols: cols,
-        rows: rows,
-        waves: maxWave
+        rows: rows
     });
 }
 
@@ -300,57 +298,54 @@ function getWave() {
 // Always have an exit and spawnpoints if you do not have a premade grid
 function loadMap() {
     var name = document.getElementById('map').value;
+    
     if (name === 'random') {
-        maxWave = -1;
         resizeMax();
         randomMap();
-        recalculate();
-        return;
+    } else {
+        var m = maps[name];
+
+        // Grids
+        grid = m.grid;
+        paths = m.paths;
+        // Important tiles
+        exit = createVector(m.exit[0], m.exit[1]);
+        spawnpoints = [];
+        for (var i = 0; i < m.spawnpoints.length; i++) {
+            var s = m.spawnpoints[i];
+            spawnpoints.push(createVector(s[0], s[1]));
+        }
+        // Misc
+        cols = m.cols;
+        rows = m.rows;
+
+        // Display tiles
+        display = copyArray(grid);
+        palette = [
+            function() {
+                stroke(255, 31);
+                noFill();
+                rect(0, 0, ts, ts);
+            },
+            [1, 50, 67],
+            function() {
+                stroke(255, 31);
+                noFill();
+                rect(0, 0, ts, ts);
+            },
+            [1, 50, 67]
+        ];
+
+        resizeFit();
     }
-    
-    var m = maps[name];
 
-    // Grids
-    grid = m.grid;
-    paths = m.paths;
-    // Important tiles
-    exit = createVector(m.exit[0], m.exit[1]);
-    spawnpoints = [];
-    for (var i = 0; i < m.spawnpoints.length; i++) {
-        var s = m.spawnpoints[i];
-        spawnpoints.push(createVector(s[0], s[1]));
-    }
-    // Misc
-    cols = m.cols;
-    rows = m.rows;
-    maxWave = m.waves;
-
-    // Display tiles
-    display = copyArray(grid);
-    palette = [
-        function() {
-            stroke(255, 31);
-            noFill();
-            rect(0, 0, ts, ts);
-        },
-        [1, 50, 67],
-        function() {
-            stroke(255, 31);
-            noFill();
-            rect(0, 0, ts, ts);
-        },
-        [1, 50, 67]
-    ];
-
-    resizeFit();
+    recalculate();
 }
 
 // Increment wave counter
 function nextWave() {
-    if (maxWave === -1 || wave < maxWave) {
-        createWave(getWave());
-        wave++;
-    }
+    createWave(getWave());
+    wave++;
 }
 
 function outsideMap(e) {
@@ -464,7 +459,7 @@ function recalculate() {
 
     // Generate usable maps
     dists = buildArray(cols, rows, null);
-    paths = buildArray(cols, rows, null);
+    var newPaths = buildArray(cols, rows, null);
     var keys = Object.keys(cameFrom);
     for (var i = 0; i < keys.length; i++) {
         var key = keys[i];
@@ -480,12 +475,21 @@ function recalculate() {
             var next = stv(val);
             var dir = next.sub(current);
             // Fill tile with direction
-            if (dir.x < 0) paths[current.x][current.y] = 'left';
-            if (dir.y < 0) paths[current.x][current.y] = 'up';
-            if (dir.x > 0) paths[current.x][current.y] = 'right';
-            if (dir.y > 0) paths[current.x][current.y] = 'down';
+            if (dir.x < 0) newPaths[current.x][current.y] = 'left';
+            if (dir.y < 0) newPaths[current.x][current.y] = 'up';
+            if (dir.x > 0) newPaths[current.x][current.y] = 'right';
+            if (dir.y > 0) newPaths[current.x][current.y] = 'down';
         }
     }
+
+    // Preserve old paths on path tiles
+    for (var x = 0; x < cols; x++) {
+        for (var y = 0; y < rows; y++) {
+            if (grid[x][y] === 2) newPaths[x][y] = paths[x][y];
+        }
+    }
+
+    paths = newPaths;
 }
 
 // Remove dead entities
@@ -583,7 +587,7 @@ function updateInfo(t) {
 
 // Update game status display with wave, health, and cash
 function updateStatus() {
-    waveText = 'Wave ' + wave + (maxWave === -1 ? '' : '/' + maxWave);
+    waveText = 'Wave ' + wave;
     document.getElementById('wave').innerHTML = waveText;
     document.getElementById('health').innerHTML = health + '/' + maxHealth;
     document.getElementById('cash').innerHTML = '$' + cash;
