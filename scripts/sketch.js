@@ -606,8 +606,8 @@ function updateInfo(t) {
     var name = document.getElementById('name');
     name.innerHTML = '<span style="color:rgb(' + t.color + ')">' + t.title +
     '</span>';
-    document.getElementById('cost').innerHTML = 'Cost: $' + t.cost;
-    document.getElementById('sellPrice').innerHTML = 'Sell price: $' +
+    document.getElementById('cost').innerHTML = 'Cost: ¤' + t.cost;
+    document.getElementById('sellPrice').innerHTML = 'Sell price: ¤' +
     t.sellPrice();
     document.getElementById('damage').innerHTML = 'Damage: ' + t.getDamage();
     document.getElementById('type').innerHTML = 'Type: ' +
@@ -622,9 +622,9 @@ function updateInfo(t) {
 
 // Update game status display with wave, health, and cash
 function updateStatus() {
-    document.getElementById('wave').innerHTML = 'Wave ' + wave;
-    document.getElementById('health').innerHTML = health + '/' + maxHealth;
-    document.getElementById('cash').innerHTML = '$' + cash;
+    document.getElementById('wave').innerHTML = 'Wave ' + wave + '/' + presetWaves.length;
+    document.getElementById('health').innerHTML = 'Health: ' + health + '/' + maxHealth;
+    document.getElementById('cash').innerHTML = 'Money: ¤' + cash;
 }
 
 // Return whether tile is walkable
