@@ -22,19 +22,29 @@
     </header>
 
     <main>
-      <aside id="store">
-        <h2>Store</h2>
-        <p><button class="gun" onclick="setPlace('gun')">Gun Tower (1)</button></p>
-        <p><button class="laser" onclick="setPlace('laser')">Laser Tower (2)</button></p>
-        <p><button class="slow" onclick="setPlace('slow')">Slow Tower (3)</button></p>
-        <p><button class="sniper" onclick="setPlace('sniper')">Sniper Tower (4)</button></p>
-        <p><button class="bomb" onclick="setPlace('bomb')">Bomb Tower (5)</button></p>
-        <p><button class="poison" onclick="setPlace('poison')">Poison Tower (6)</button></p>
-      </aside>
+      <div id="left-asides">
+        <aside id="io-aside">
+          <div class="group">
+            <p><button class="io" onclick="importMap(prompt('Input map string:'))">Import map (M)</button></p>
+            <p><button class="io" onclick="copyToClipboard(exportMap())">Export map (X)</button></p>
+          </div>
+        </aside>
+        <aside id="store">
+          <h2>Store</h2>
+          <div class="group">
+            <p><button class="gun" onclick="setPlace('gun')">Gun Tower (1)</button></p>
+            <p><button class="laser" onclick="setPlace('laser')">Laser Tower (2)</button></p>
+            <p><button class="slow" onclick="setPlace('slow')">Slow Tower (3)</button></p>
+            <p><button class="sniper" onclick="setPlace('sniper')">Sniper Tower (4)</button></p>
+            <p><button class="bomb" onclick="setPlace('bomb')">Bomb Tower (5)</button></p>
+            <p><button class="poison" onclick="setPlace('poison')">Poison Tower (6)</button></p>
+          </div>
+        </aside>
+      </div>
 
       <div id="sketch-holder"></div>
 
-      <div class="aside-holder">
+      <div id="right-asides">
         <aside id="status">
           <p id="wave"></p>
           <p id="health"></p>
