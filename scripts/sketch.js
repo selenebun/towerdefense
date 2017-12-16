@@ -609,6 +609,8 @@ function updateInfo(t) {
     document.getElementById('sellPrice').innerHTML = 'Sell price: $' +
     t.sellPrice();
     document.getElementById('damage').innerHTML = 'Damage: ' + t.getDamage();
+    document.getElementById('type').innerHTML = 'Type: ' +
+    t.type.toUpperCase();
     document.getElementById('range').innerHTML = 'Range: ' + t.range;
     document.getElementById('cooldown').innerHTML = 'Avg. Cooldown: ' +
     t.getCooldown().toFixed(2) + 's';
