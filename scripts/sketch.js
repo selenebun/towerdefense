@@ -35,6 +35,7 @@ var towerType;
 
 // TODO add more functionality to god mode
 var godMode = false;    // make player immortal for test purposes
+var healthBar = true;   // display enemy health bar
 var paused;             // whether to update or not
 var scd;                // number of ticks to next spawn cycle
 var toCooldown;         // flag to reset spawning cooldown
@@ -717,6 +718,16 @@ function draw() {
         e.draw();
     }
 
+    // Draw health bars
+    for (var i = 0; i < enemies.length; i++) {
+        if (!healthBar) continue;
+        var e = enemies[i];
+        push();
+        translate(e.pos.x, e.pos.y);
+        e.drawHealth();
+        pop();
+    }
+
     // Update and draw towers
     for (var i = 0; i < towers.length; i++) {
         var t = towers[i];
@@ -829,6 +840,10 @@ function keyPressed() {
         case 54:
             // 6
             setPlace('poison');
+            break;
+        case 72:
+            // H
+            healthBar = !healthBar;
             break;
         case 77:
             // M

@@ -36,11 +36,8 @@ class Enemy {
     draw() {
         push();
         translate(this.pos.x, this.pos.y);
-        push();
         rotate(this.vel.heading());
         this.drawEnemy();
-        pop();
-        this.drawHealth();
         pop();
     }
 
@@ -70,7 +67,6 @@ class Enemy {
     drawHealth() {
         var percent = 1 - this.health / this.maxHealth;
         if (percent === 0) return;
-        stroke(0);
         fill(207, 0, 15);
         var edge = 0.7 * ts / 2;
         var width = floor(edge * percent * 2);
