@@ -12,7 +12,8 @@ located on the Github [repo](https://github.com/xithiox/td-editor/).
 * Esc to deselect tower
 * Left and right brackets to change map size (will reset game!)
 * 0-9 to select a tower to place
+* M to import and load map string (will reset game!)
 * R to reset game
 * S to sell selected tower
 * X to export map string (copies to clipboard)
-* Z to return to default zoom level (will reset map!)
+* Z to return to default zoom level (will reset game!)

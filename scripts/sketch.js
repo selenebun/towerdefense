@@ -11,6 +11,7 @@ var tileZoom = 2;
 var ts = 24;            // tile size
 var zoomDefault = ts;
 
+var custom;             // custom map JSON
 var display;            // display tiles
 var dists;              // distance to exit
 var grid;               // tile type (0 = empty, 1 = wall, 2 = path, 3 = tower)
@@ -294,15 +295,56 @@ function getWave() {
     }
 }
 
+// Load a map from a map string
+function importMap(str) {
+    try {
+        custom = JSON.parse(str);
+        document.querySelector('#map [value="custom"]').selected = true;
+        resetGame();
+    } catch (err) {}
+}
+
 // Load map from template
 // Always have an exit and spawnpoints if you do not have a premade grid
+// TODO display and palette
 function loadMap() {
     var name = document.getElementById('map').value;
     
-    if (name === 'random') {
-        resizeMax();
-        randomMap();
-    } else {
+    if (name === 'custom' && custom) {
+        // Grids
+        grid = copyArray(custom.grid);
+        paths = copyArray(custom.paths);
+        
+        // Important tiles
+        exit = createVector(custom.exit[0], custom.exit[1]);
+        spawnpoints = [];
+        for (var i = 0; i < custom.spawnpoints.length; i++) {
+            var s = custom.spawnpoints[i];
+            spawnpoints.push(createVector(s[0], s[1]));
+        }
+        // Misc
+        cols = custom.cols;
+        rows = custom.rows;
+
+        // Display tiles
+        display = copyArray(grid);
+        palette = [
+            function() {
+                stroke(255, 31);
+                noFill();
+                rect(0, 0, ts, ts);
+            },
+            [1, 50, 67],
+            function() {
+                stroke(255, 31);
+                noFill();
+                rect(0, 0, ts, ts);
+            },
+            [1, 50, 67]
+        ];
+
+        resizeFit();
+    } else if (name in maps) {
         var m = maps[name];
 
         // Grids
@@ -337,6 +379,9 @@ function loadMap() {
         ];
 
         resizeFit();
+    } else {
+        resizeMax();
+        randomMap();
     }
 
     recalculate();
@@ -612,7 +657,6 @@ function setup() {
     resetGame();
 }
 
-// TODO change color of tower-only tiles (maybe to grey?)
 // TODO indicate whether tower can be placed while hovering
 // TODO show range of selected tower
 function draw() {
@@ -789,6 +833,10 @@ function keyPressed() {
         case 54:
             // 6
             setPlace('poison');
+            break;
+        case 77:
+            // M
+            importMap(prompt('Input map string:'));
             break;
         case 82:
             // R
