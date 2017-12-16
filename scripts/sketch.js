@@ -151,21 +151,6 @@ function doRange() {
     return mouseInMap() && toPlace && typeof towerType !== 'undefined';
 }
 
-// Draw a display tile
-function drawTile(col, row) {
-    push();
-    translate(col * ts, row * ts);
-    var g = palette[display[col][row]];
-    if (typeof g === 'function') {
-        g();
-    } else {
-        stroke(255, 31);
-        fill(g);
-        rect(0, 0, ts, ts);
-    }
-    pop();
-}
-
 // Check if tile is empty
 function empty(col, row) {
     // Check if not walkable
@@ -329,16 +314,16 @@ function loadMap() {
         // Display tiles
         display = copyArray(grid);
         palette = [
-            function() {
+            function(col, row) {
                 stroke(255, 31);
                 noFill();
-                rect(0, 0, ts, ts);
+                rect(col * ts, row * ts, ts, ts);
             },
             [1, 50, 67],
-            function() {
+            function(col, row) {
                 stroke(255, 31);
                 noFill();
-                rect(0, 0, ts, ts);
+                rect(col * ts, row * ts, ts, ts);
             },
             [1, 50, 67]
         ];
@@ -364,16 +349,16 @@ function loadMap() {
         // Display tiles
         display = copyArray(grid);
         palette = [
-            function() {
+            function(col, row) {
                 stroke(255, 31);
                 noFill();
-                rect(0, 0, ts, ts);
+                rect(col * ts, row * ts, ts, ts);
             },
             [1, 50, 67],
-            function() {
+            function(col, row) {
                 stroke(255, 31);
                 noFill();
-                rect(0, 0, ts, ts);
+                rect(col * ts, row * ts, ts, ts);
             },
             [1, 50, 67]
         ];
@@ -437,10 +422,10 @@ function randomMap() {
     // Copy to display grid
     display = copyArray(grid);
     palette = [
-        function() {
+        function(col, row) {
             stroke(255, 31);
             noFill();
-            rect(0, 0, ts, ts);
+            rect(col * ts, row * ts, ts, ts);
         },
         [1, 50, 67]
     ];
@@ -671,7 +656,14 @@ function draw() {
     // Draw basic tiles
     for (var x = 0; x < cols; x++) {
         for (var y = 0; y < rows; y++) {
-            drawTile(x, y);
+            var g = palette[display[x][y]];
+            if (typeof g === 'function') {
+                g(x, y);
+            } else {
+                stroke(255, 31);
+                fill(g);
+                rect(x * ts, y * ts, ts, ts);
+            }
         }
     }
 
