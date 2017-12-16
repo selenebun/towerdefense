@@ -647,7 +647,6 @@ function setup() {
     resetGame();
 }
 
-// TODO indicate whether tower can be placed while hovering
 // TODO show range of selected tower
 function draw() {
     background(0);
@@ -746,7 +745,6 @@ function draw() {
     }
 
     // Draw range of tower being placed
-    // TODO indicate whether tower can be placed or not
     if (doRange()) {
         var p = gridPos(mouseX, mouseY);
         var c = center(p.x, p.y);
