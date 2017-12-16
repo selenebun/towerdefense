@@ -490,7 +490,7 @@ function recalculate() {
 
     // Generate usable maps
     dists = buildArray(cols, rows, null);
-    var newPaths = buildArray(cols, rows, null);
+    var newPaths = buildArray(cols, rows, 0);
     var keys = Object.keys(cameFrom);
     for (var i = 0; i < keys.length; i++) {
         var key = keys[i];
@@ -506,10 +506,10 @@ function recalculate() {
             var next = stv(val);
             var dir = next.sub(current);
             // Fill tile with direction
-            if (dir.x < 0) newPaths[current.x][current.y] = 'left';
-            if (dir.y < 0) newPaths[current.x][current.y] = 'up';
-            if (dir.x > 0) newPaths[current.x][current.y] = 'right';
-            if (dir.y > 0) newPaths[current.x][current.y] = 'down';
+            if (dir.x < 0) newPaths[current.x][current.y] = 1;
+            if (dir.y < 0) newPaths[current.x][current.y] = 2;
+            if (dir.x > 0) newPaths[current.x][current.y] = 3;
+            if (dir.y > 0) newPaths[current.x][current.y] = 4;
         }
     }
 

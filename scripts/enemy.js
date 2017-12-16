@@ -116,10 +116,10 @@ class Enemy {
             if (dir === null) return;
             // Adjust velocity
             var speed = this.pxSpeed();
-            if (dir === 'left') this.vel = createVector(-speed, 0);
-            if (dir === 'up') this.vel = createVector(0, -speed);
-            if (dir === 'right') this.vel = createVector(speed, 0);
-            if (dir === 'down') this.vel = createVector(0, speed);
+            if (dir === 1) this.vel = createVector(-speed, 0);
+            if (dir === 2) this.vel = createVector(0, -speed);
+            if (dir === 3) this.vel = createVector(speed, 0);
+            if (dir === 4) this.vel = createVector(0, speed);
         }
     }
 
