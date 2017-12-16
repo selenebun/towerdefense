@@ -326,7 +326,7 @@ function loadMap() {
                 noFill();
                 rect(col * ts, row * ts, ts, ts);
             },
-            [1, 50, 67]
+            [51, 110, 123]
         ];
 
         resizeFit();
@@ -361,7 +361,7 @@ function loadMap() {
                 noFill();
                 rect(col * ts, row * ts, ts, ts);
             },
-            [1, 50, 67]
+            [51, 110, 123]
         ];
 
         resizeFit();
