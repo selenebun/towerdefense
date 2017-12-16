@@ -753,19 +753,23 @@ function draw() {
         var t = createTower(0, 0, tower[towerType]);
         showRange(t, c.x, c.y);
 
-        // Indicate whether tower can be placed
-        push();
-        translate(c.x, c.y);
-        rotate(PI / 4);
-        stroke(255);
-        if (canPlace(p.x, p.y)) {
-            // Draw a green check mark
-            fill(0, 230, 64);
-        } else {
+        // Draw a red X if tower cannot be placed
+        if (!canPlace(p.x, p.y)) {
+            push();
+            translate(c.x, c.y);
+            rotate(PI / 4);
+
             // Draw a red X
+            noStroke();
             fill(207, 0, 15);
+            var edge = 0.1 * ts;
+            var len = 0.9 * ts / 2;
+            rect(-edge, len, edge * 2, -len * 2);
+            rotate(PI / 2);
+            rect(-edge, len, edge * 2, -len * 2);
+
+            pop();
         }
-        pop();
     }
 
     removeDead(enemies);
