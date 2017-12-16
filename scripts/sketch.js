@@ -623,7 +623,8 @@ function updateInfo(t) {
 // Update game status display with wave, health, and cash
 function updateStatus() {
     document.getElementById('wave').innerHTML = 'Wave ' + wave;
-    document.getElementById('health').innerHTML = health + '/' + maxHealth;
+    document.getElementById('health').innerHTML = 'Health: ' +
+    health + '/' + maxHealth;
     document.getElementById('cash').innerHTML = '$' + cash;
 }
 
