@@ -210,7 +210,7 @@ function getWalkMap() {
 function importMap(str) {
     try {
         custom = JSON.parse(str);
-        document.querySelector('#map [value="custom"]').selected = true;
+        document.getElementById('custom').selected = true;
         resetGame();
     } catch (err) {}
 }
@@ -889,3 +889,8 @@ function mousePressed() {
         buy(createTower(p.x, p.y, tower[towerType]));
     }
 }
+
+
+// Events
+
+document.getElementById('map').addEventListener('change', resetGame);
