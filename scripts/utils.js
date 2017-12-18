@@ -8,7 +8,7 @@ function atTileCenter(x, y, col, row) {
     return between(x, c.x - t, c.x + t) && between(y, c.y - t, c.y + t);
 }
 
-// Check if number falls within range
+// Check if number falls within range (exclusive)
 function between(num, min, max) {
     return num > Math.min(min, max) && num < Math.max(min, max);
 }
