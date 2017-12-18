@@ -39,6 +39,7 @@ var healthBar = true;   // display enemy health bar
 var paused;             // whether to update or not
 var randomWaves = true; // whether to do random or custom waves
 var scd;                // number of ticks until next spawn cycle
+var skipToNext = false; // whether or not to immediately start next wave
 var toCooldown;         // flag to reset spawning cooldown
 var toPathfind;         // flag to update enemy pathfinding
 var toPlace;            // flag to place a tower
@@ -308,6 +309,11 @@ function loadMap() {
 function nextWave() {
     addWave(randomWaves ? randomWave() : customWave());
     wave++;
+}
+
+// Check if no more enemies
+function noMoreEnemies() {
+    return enemies.length === 0 && newEnemies.length === 0;
 }
 
 function outsideMap(e) {
@@ -763,16 +769,17 @@ function draw() {
     // If player is dead, reset game
     if (health <= 0) resetGame();
 
-    // Wait for next wave
-    if (enemies.length === 0 && newEnemies.length === 0 && !toWait) {
-        wcd = waveCool;
-        toWait = true;
+    // Start next wave
+    if (toWait && wcd === 0 || skipToNext && noMoreEnemies()) {
+        toWait = false;
+        wcd = 0;
+        nextWave();
     }
 
-    // Start next wave
-    if (toWait && wcd === 0) {
-        toWait = false;
-        nextWave();
+    // Wait for next wave
+    if (noMoreEnemies() && !toWait) {
+        wcd = waveCool;
+        toWait = true;
     }
 
     // Reset spawn cooldown
@@ -845,6 +852,10 @@ function keyPressed() {
         case 83:
             // S
             if (selected) sell(selected);
+            break;
+        case 87:
+            // W
+            skipToNext = !skipToNext;
             break;
         case 88:
             // X

@@ -16,5 +16,6 @@ located on the Github [repo](https://github.com/xithiox/td-editor/).
 * M to import and load map string (will reset game!)
 * R to reset game
 * S to sell selected tower
+* W to toggle short delay between waves
 * X to export map string (copies to clipboard)
 * Z to return to default zoom level (will reset game!)
