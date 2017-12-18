@@ -42,6 +42,7 @@ var scd;                // number of ticks until next spawn cycle
 var toCooldown;         // flag to reset spawning cooldown
 var toPathfind;         // flag to update enemy pathfinding
 var toPlace;            // flag to place a tower
+var toWait;             // flag to wait before next wave
 var wcd;                // number of ticks until next wave
 
 var minDist = 15;       // minimum distance between spawnpoint and exit
@@ -631,8 +632,11 @@ function draw() {
     // Update game status display
     updateStatus();
 
-    // Update spawn cooldown
-    if (!paused && scd > 0) scd--;
+    // Update spawn and wave cooldown
+    if (!paused) {
+        if (scd > 0) scd--;
+        if (wcd > 0 && toWait) wcd--;
+    }
 
     // Draw basic tiles
     for (var x = 0; x < cols; x++) {
@@ -759,9 +763,15 @@ function draw() {
     // If player is dead, reset game
     if (health <= 0) resetGame();
 
+    // Wait for next wave
+    if (enemies.length === 0 && newEnemies.length === 0 && !toWait) {
+        wcd = waveCool;
+        toWait = true;
+    }
+
     // Start next wave
-    if (enemies.length === 0 && newEnemies.length === 0) {
-        paused = true;
+    if (toWait && wcd === 0) {
+        toWait = false;
         nextWave();
     }
 
