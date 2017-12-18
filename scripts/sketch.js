@@ -402,7 +402,9 @@ function placeable(col, row) {
     // Check each enemy
     for (var i = 0; i < enemies.length; i++) {
         var e = enemies[i];
-        if (!visitMap[vts(gridPos(e.pos.x, e.pos.y))]) return false;
+        var p = gridPos(e.pos.x, e.pos.y);
+        if (p.equals(col, row)) continue;
+        if (!visitMap[vts(p)]) return false;
     }
 
     return true;
