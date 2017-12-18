@@ -37,72 +37,37 @@ var towerType;
 var godMode = false;    // make player immortal for test purposes
 var healthBar = true;   // display enemy health bar
 var paused;             // whether to update or not
-var scd;                // number of ticks to next spawn cycle
+var randomWaves = true; // whether to do random or custom waves
+var scd;                // number of ticks until next spawn cycle
 var toCooldown;         // flag to reset spawning cooldown
 var toPathfind;         // flag to update enemy pathfinding
 var toPlace;            // flag to place a tower
+var wcd;                // number of ticks until next wave
 
 var minDist = 15;       // minimum distance between spawnpoint and exit
 var resistance = 0.3;   // percentage of damage blocked by resistance
 var sellConst = 0.8;    // ratio of tower cost to sell price
 var wallCover = 0.1;    // percentage of map covered by walls
-
-var presetCools = [
-    40,
-    20,
-    20,
-    40,
-    20,
-    10,
-    10,
-    20,
-    10,
-    10
-];
-var presetWaves = [
-    [['weak', 50]],
-    [['weak', 25]],
-    [
-        ['weak', 15],
-        ['strong', 10]
-    ],
-    [['fast', 25]],
-    [
-        ['strong', 50],
-        ['fast', 25]
-    ],
-    [
-        ['strong', 100],
-        ['fast', 50]
-    ],
-    [
-        ['strong', 100],
-        ['fast', 50]
-    ],
-    [
-        ['taunt', 'strong', 'strong', 'strong', 'strong', 10]
-    ],
-    [
-        ['strong', 100],
-        ['fast', 50]
-    ],
-    [
-        ['strong', 100],
-        ['fast', 50],
-        ['taunt', 'strong', 'strong', 50]
-    ]
-];
+var waveCool = 120;     // number of ticks between waves
 
 
 // Misc functions
 
 // Spawn a group of enemies, alternating if multiple types
-function addEnemies(enemies, count) {
-    if (!Array.isArray(enemies)) enemies = [enemies];
+function addGroup(group) {
+    var count = group.pop();
     for (var i = 0; i < count; i++) {
-        for (var j = 0; j < enemies.length; j++) {
-            newEnemies.push(enemies[j]);
+        for (var j = 0; j < group.length; j++) {
+            newEnemies.push(group[j]);
         }
+    }
+}
+
+// Prepare a wave
+function addWave(pattern) {
+    spawnCool = pattern.shift();
+    for (var i = 0; i < pattern.length; i++) {
+        addGroup(pattern[i]);
     }
 }
 
@@ -137,15 +102,8 @@ function clearInfo() {
     document.getElementById('info-div').style.display = 'none';
 }
 
-// Add enemies to spawn
-function createWave(pattern) {
-    if (typeof pattern === 'undefined') pattern = [];
-    for (var i = 0; i < pattern.length; i++) {
-        var group = pattern[i];
-        var count = group.pop();
-        addEnemies(group, count);
-    }
-}
+// TODO implement
+function customWave() {}
 
 // Check if all conditions for showing a range are true
 function doRange() {
@@ -247,40 +205,6 @@ function getWalkMap() {
     return walkMap;
 }
 
-// Set spawn cooldown and generate enemies
-// TODO better random wave generation
-// TODO fix wave bug (only first branch of if statement causes it)
-function getWave() {
-    if (wave < presetWaves.length) {
-        spawnCool = presetCools[wave];
-        return presetWaves[wave];
-    } else {
-        spawnCool = randint(5, 21);
-        return random([
-            [
-                ['strong', 100],
-                ['fast', 50]
-            ],
-            [
-                ['strong', 100]
-            ],
-            [
-                ['fast', 100]
-            ],
-            [
-                ['taunt', 'strong', 'strong', 'strong', 'strong', 100],
-                ['fast', 50]
-            ],
-            [
-                ['taunt', 'strong', 'strong', 100],
-                ['fast', 25],
-                ['taunt', 'strong', 'strong', 100],
-                ['fast', 50]
-            ]
-        ]);
-    }
-}
-
 // Load a map from a map string
 function importMap(str) {
     try {
@@ -288,6 +212,12 @@ function importMap(str) {
         document.querySelector('#map [value="custom"]').selected = true;
         resetGame();
     } catch (err) {}
+}
+
+// Check if wave is at least min and less than max
+function isWave(min, max) {
+    if (typeof max === 'undefined') return wave >= min;
+    return wave >= min && wave < max;
 }
 
 // Load map from template
@@ -373,9 +303,9 @@ function loadMap() {
     recalculate();
 }
 
-// Increment wave counter
+// Increment wave counter and prepare wave
 function nextWave() {
-    createWave(getWave());
+    addWave(randomWaves ? randomWave() : customWave());
     wave++;
 }
 
@@ -460,6 +390,51 @@ function randomMap() {
 // Random grid coordinate
 function randomTile() {
     return createVector(randint(cols), randint(rows));
+}
+
+// Generate a random wave
+function randomWave() {
+    var waves = [];
+
+    if (isWave(0, 5)) {
+        waves.push([40, ['weak', 50]]);
+    }
+    if (isWave(1, 5)) {
+        waves.push([20, ['weak', 25]]);
+    }
+    if (isWave(2, 5)) {
+        waves.push([20, ['weak', 40], ['strong', 10]]);
+        waves.push([40, ['fast', 25]]);
+    }
+    if (isWave(4, 10)) {
+        waves.push([20, ['strong', 50], ['fast', 25]]);
+    }
+    if (isWave(5)) {
+        waves.push([10, ['strong', 100], ['fast', 50]]);
+    }
+    if (isWave(7)) {
+        waves.push([
+            20, ['taunt', 'strong', 'strong', 'strong', 'strong', 10]
+        ]);
+    }
+    if (isWave(9)) {
+        waves.push([
+            10, ['strong', 100], ['fast', 50],
+            ['taunt', 'strong', 'strong', 50]
+        ]);
+    }
+    if (isWave(10)) {
+        waves.push([5, ['fast', 100]]);
+        waves.push([
+            randint(5, 11), ['taunt', 'strong', 'strong', 100],
+            ['fast', 50]
+        ]);
+    }
+    if (isWave(11)) {
+        waves.push([20, ['weak', 10]]);
+    }
+
+    return random(waves);
 }
 
 // Recalculate pathfinding maps
