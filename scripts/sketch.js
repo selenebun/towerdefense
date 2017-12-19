@@ -39,12 +39,16 @@ var healthBar = true;   // display enemy health bar
 var paused;             // whether to update or not
 var randomWaves = true; // whether to do random or custom waves
 var scd;                // number of ticks until next spawn cycle
+var showFPS = false;    // whether or not to display FPS
 var skipToNext = false; // whether or not to immediately start next wave
 var toCooldown;         // flag to reset spawning cooldown
 var toPathfind;         // flag to update enemy pathfinding
 var toPlace;            // flag to place a tower
 var toWait;             // flag to wait before next wave
 var wcd;                // number of ticks until next wave
+
+var avgFPS = 0;         // current average of all FPS values
+var numFPS = 0;         // number of FPS values calculated so far
 
 var minDist = 15;       // minimum distance between spawnpoint and exit
 var resistance = 0.5;   // percentage of damage blocked by resistance
@@ -84,6 +88,18 @@ function buy(t) {
         updateInfo(t);
         newTowers.push(t);
     }
+}
+
+// Calculate and display current and average FPS
+function calcFPS() {
+    var fps = frameRate();
+    avgFPS += (fps - avgFPS) / ++numFPS;
+
+    // Update FPS meter
+    fill(255);
+    textFont('Source Code Pro');
+    var fpsText = 'FPS: ' + fps.toFixed(2) + ' Avg: ' + avgFPS.toFixed(2);
+    text(fpsText, 10, height - 10);
 }
 
 // Check if all conditions for placing a tower are true
@@ -791,6 +807,9 @@ function draw() {
         }
     }
 
+    // Update FPS meter
+    if (showFPS) calcFPS();
+
     removeDead(enemies);
     removeDead(projectiles);
     removeDead(towers);
@@ -870,6 +889,10 @@ function keyPressed() {
         case 54:
             // 6
             setPlace('poison');
+            break;
+        case 70:
+            // F
+            showFPS = !showFPS;
             break;
         case 72:
             // H
