@@ -39,6 +39,7 @@ var paused;             // whether to update or not
 var randomWaves = true; // whether to do random or custom waves
 var scd;                // number of ticks until next spawn cycle
 var showFPS = false;    // whether or not to display FPS
+var showTile = false;   // whether or not to display mouse tile
 var skipToNext = false; // whether or not to immediately start next wave
 var toCooldown;         // flag to reset spawning cooldown
 var toPathfind;         // flag to update enemy pathfinding
@@ -260,7 +261,7 @@ function loadMap() {
 
         // Display tiles
         display = replaceArray(
-            grid, [0, 1, 2, 3], ['empty', 'wall', 'empty', 'tower']
+            grid, [0, 1, 2, 3], ['empty', 'wall', 'road', 'tower']
         );
 
         resizeFit();
@@ -283,7 +284,7 @@ function loadMap() {
 
         // Display tiles
         display = replaceArray(
-            grid, [0, 1, 2, 3], ['empty', 'wall', 'empty', 'tower']
+            grid, [0, 1, 2, 3], ['empty', 'wall', 'road', 'tower']
         );
 
         resizeFit();
@@ -772,6 +773,13 @@ function draw() {
     // Update FPS meter
     if (showFPS) calcFPS();
 
+    // Update mouse tile
+    if (showTile) {
+        var t = gridPos(mouseX, mouseY);
+        fill(255);
+        text('(' + t.x + ', ' + t.y + ')', width - 70, height - 10);
+    }
+
     removeDead(enemies);
     removeDead(projectiles);
     removeDead(towers);
@@ -851,6 +859,10 @@ function keyPressed() {
         case 54:
             // 6
             setPlace('poison');
+            break;
+        case 67:
+            // C
+            showTile = !showTile;
             break;
         case 70:
             // F
