@@ -74,31 +74,15 @@ enemy.strongFast = {
     }
 };
 
-enemy.tank = {
+enemy.stronger = {
     // Display
-    color: [30, 130, 76],
-    radius: 1,
+    color: [52, 73, 94],
+    radius: 0.8,
     // Misc
-    name: 'tank',
+    name: 'stronger',
     // Stats
     cash: 4,
-    health: 375,
-    immune: ['poison', 'slow'],
-    resistant: ['energy', 'physical'],
-    weak: ['explosion'],
-    drawEnemy: function() {
-        stroke(0);
-        fill(this.getColor());
-        var front = this.radius * ts / 2;
-        var side = 0.7 * ts / 2;
-        var barrel = 0.15 * ts / 2;
-        var length = 0.7 * ts;
-        var curve = 0.2 * ts;
-        rect(-front, -side, front * 2, side * 2, curve);
-        fill(149, 165, 166);
-        rect(0, -barrel, length, barrel * 2);
-        ellipse(0, 0, 0.2 * ts * 2, 0.2 * ts * 2);
-    }
+    health: 375
 };
 
 enemy.faster = {
@@ -120,6 +104,33 @@ enemy.faster = {
     }
 };
 
+enemy.tank = {
+    // Display
+    color: [30, 130, 76],
+    radius: 1,
+    // Misc
+    name: 'tank',
+    // Stats
+    cash: 4,
+    health: 750,
+    immune: ['poison', 'slow'],
+    resistant: ['energy', 'physical'],
+    weak: ['explosion'],
+    drawEnemy: function() {
+        stroke(0);
+        fill(this.getColor());
+        var front = this.radius * ts / 2;
+        var side = 0.7 * ts / 2;
+        var barrel = 0.15 * ts / 2;
+        var length = 0.7 * ts;
+        var curve = 0.2 * ts;
+        rect(-front, -side, front * 2, side * 2, curve);
+        fill(149, 165, 166);
+        rect(0, -barrel, length, barrel * 2);
+        ellipse(0, 0, 0.2 * ts * 2, 0.2 * ts * 2);
+    }
+};
+
 enemy.taunt = {
     // Display
     color: [102, 51, 153],
@@ -128,9 +139,9 @@ enemy.taunt = {
     name: 'taunt',
     // Stats
     cash: 8,
-    health: 1125,
+    health: 1500,
     immune: ['poison', 'slow'],
-    resistant: ['physical'],
+    resistant: ['energy', 'physical'],
     taunt: true,
     drawEnemy: function() {
         stroke(0);

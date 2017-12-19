@@ -47,11 +47,11 @@ var toWait;             // flag to wait before next wave
 var wcd;                // number of ticks until next wave
 
 var minDist = 15;       // minimum distance between spawnpoint and exit
-var resistance = 0.3;   // percentage of damage blocked by resistance
+var resistance = 0.5;   // percentage of damage blocked by resistance
 var sellConst = 0.8;    // ratio of tower cost to sell price
 var wallCover = 0.1;    // percentage of map covered by walls
 var waveCool = 120;     // number of ticks between waves
-var weakness = 0.3;     // damage increase from weakness
+var weakness = 0.5;     // damage increase from weakness
 
 
 // Misc functions
@@ -424,11 +424,14 @@ function randomWave() {
     }
     if (isWave(12, 17)) {
         waves.push([10, ['strong', 50], ['strongFast', 50]]);
+        waves.push([10, ['strong', 25], ['stronger', 25], ['strongFast', 50]]);
         waves.push([5, ['strongFast', 100]]);
     }
     if (isWave(15, 20)) {
-        waves.push([40, ['tank', 'strong', 'strong', 'strong', 'strong', 10]]);
-        waves.push([20, ['tank', 25]]);
+        waves.push([
+            40, ['tank', 'stronger', 'stronger', 'stronger', 10]
+        ]);
+        waves.push([40, ['tank', 25]]);
     }
     if (isWave(17)) {
         waves.push([10, ['tank', 50], ['strongFast', 25]]);
@@ -436,7 +439,7 @@ function randomWave() {
         waves.push([20, ['tank', 50], ['faster', 25]]);
     }
     if (isWave(20)) {
-        waves.push([20, ['taunt', 'strong', 'strong', 'strong', 25]]);
+        waves.push([20, ['taunt', 'stronger', 'stronger', 'stronger', 25]]);
     }
     if (isWave(23)) {
         waves.push([40, ['taunt', 'tank', 'tank', 'tank', 25]]);
@@ -445,9 +448,13 @@ function randomWave() {
             20, ['tank', 100], ['faster', 50],
             ['taunt', 'tank', 'tank', 'tank', 50]
         ]);
+        waves.push([
+            10, ['taunt', 'stronger', 'tank', 'stronger', 50],
+            ['faster', 50]
+        ]);
     }
     if (isWave(25)) {
-        waves.push([10, ['taunt', 'faster', 'faster', 'faster', 50]]);
+        waves.push([5, ['taunt', 'faster', 'faster', 'faster', 50]]);
         waves.push([
             10, ['taunt', 'tank', 'tank', 'tank', 50],
             ['faster', 50]
@@ -457,6 +464,9 @@ function randomWave() {
         waves.push([5, ['taunt', 'faster', 'faster', 'faster', 50]]);
         waves.push([5, ['taunt', 'tank', 'tank', 'tank', 50]]);
         waves.push([1, ['faster', 200]]);
+    }
+    if (isWave(35)) {
+        waves.push([0, ['taunt', 'faster', 200]]);
     }
 
     return random(waves);

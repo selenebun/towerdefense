@@ -27,7 +27,6 @@ tower.laser = {
     // Display
     color: [25, 181, 254],
     secondary: [103, 128, 159],
-    weight: 1,
     // Misc
     name: 'laser',
     title: 'Laser Tower',
