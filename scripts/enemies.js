@@ -106,7 +106,7 @@ enemy.faster = {
     cash: 4,
     health: 375,
     speed: 3,
-    drawEnemy: function() {
+    draw: function() {
         push();
         translate(this.pos.x, this.pos.y);
         rotate(this.vel.heading());
@@ -134,7 +134,7 @@ enemy.tank = {
     immune: ['poison', 'slow'],
     resistant: ['energy', 'physical'],
     weak: ['explosion'],
-    drawEnemy: function() {
+    draw: function() {
         push();
         translate(this.pos.x, this.pos.y);
         rotate(this.vel.heading());
@@ -167,7 +167,7 @@ enemy.taunt = {
     immune: ['poison', 'slow'],
     resistant: ['energy', 'physical'],
     taunt: true,
-    drawEnemy: function() {
+    draw: function() {
         push();
         translate(this.pos.x, this.pos.y);
         rotate(this.vel.heading());
