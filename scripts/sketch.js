@@ -720,7 +720,7 @@ function draw() {
 
         // Target enemies and update cooldowns
         if (!paused) {
-            t.onTarget(enemies);
+            t.target(enemies);
             t.update();
         }
 

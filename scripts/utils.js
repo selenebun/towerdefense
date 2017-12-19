@@ -93,6 +93,23 @@ function getByName(entities, names) {
     return results;
 }
 
+// Get first enemy (i.e. closest to exit)
+// TODO determine more accurate selection system that is not fooled by loops
+function getFirst(entities) {
+    var leastDist = 10000;
+    var chosen = entities[0];
+    for (var i = 0; i < entities.length; i++) {
+        var e = entities[i];
+        var t = gridPos(e.pos.x, e.pos.y);
+        var dist = dists[t.x][t.y];
+        if (dist < leastDist) {
+            leastDist = dist;
+            chosen = e;
+        }
+    }
+    return chosen;
+}
+
 // Get entities within a range (radius in tiles)
 // TODO have minimum and maximum range
 function getInRange(cx, cy, radius, entities) {

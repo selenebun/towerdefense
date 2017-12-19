@@ -115,15 +115,6 @@ class Tower {
 
     onHit(e) {}
 
-    onTarget(entities) {
-        entities = this.visible(entities);
-        var t = getTaunting(entities);
-        if (t.length > 0) entities = t;
-        var e = this.target(entities);
-        if (typeof e === 'undefined') return;
-        this.onAim(e);
-    }
-
     resetCooldown() {
         var cooldown = round(random(this.cooldownMin, this.cooldownMax));
         this.cd = cooldown;
@@ -134,20 +125,15 @@ class Tower {
         return this.totalCost * sellConst;
     }
 
-    // Target enemy closest to exit
+    // Target correct enemy
     target(entities) {
-        var lowestDist = 10000;
-        var chosen = entities[0];
-        for (var i = 0; i < entities.length; i++) {
-            var e = entities[i];
-            var t = gridPos(e.pos.x, e.pos.y);
-            var dist = dists[t.x][t.y];
-            if (dist < lowestDist) {
-                lowestDist = dist;
-                chosen = e;
-            }
-        }
-        return chosen;
+        entities = this.visible(entities);
+        if (entities.length === 0) return;
+        var t = getTaunting(entities);
+        if (t.length > 0) entities = t;
+        var e = getLeastDist(entities);
+        if (typeof e === 'undefined') return;
+        this.onAim(e);
     }
 
     update() {
