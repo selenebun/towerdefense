@@ -61,6 +61,7 @@ enemy.taunt = {
     // Stats
     cash: 8,
     health: 375,
+    taunt: true,
     drawEnemy: function() {
         stroke(0);
         fill(this.getColor());
