@@ -29,7 +29,7 @@ enemy.strong = {
     // Misc
     name: 'strong',
     // Stats
-    cash: 2,
+    cash: 1,
     health: 75
 };
 
@@ -39,7 +39,7 @@ enemy.fast = {
     // Misc
     name: 'fast',
     // Stats
-    cash: 4,
+    cash: 2,
     health: 75,
     speed: 2,
     drawEnemy: function() {
