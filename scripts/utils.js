@@ -68,7 +68,8 @@ function copyToClipboard(str) {
         var msg = successful ? 'successful' : 'unsuccessful';
         console.log('Copying text was ' + msg);
     } catch (err) {
-        console.log('Unable to copy');
+        console.log('Unable to copy to clipboard');
+        prompt('Map string:', str);
     }
 
     document.body.removeChild(textArea);
