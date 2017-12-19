@@ -137,5 +137,9 @@ enemy.taunt = {
         fill(this.getColor());
         var edge = this.radius * ts / 2;
         rect(-edge, -edge, this.radius * ts, this.radius * ts);
+        stroke(232, 126, 4);
+        noFill();
+        rect(-0.3 * ts, -0.3 * ts, 0.6 * ts, 0.6 * ts);
+        rect(-0.2 * ts, -0.2 * ts, 0.4 * ts, 0.4 * ts);
     }
 };

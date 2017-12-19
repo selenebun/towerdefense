@@ -19,7 +19,7 @@ class Enemy {
         this.health = 1;
         this.immune = [];           // no damage from these damage types
         this.resistant = [];        // reduced damage from these damage types
-        this.weak = [];
+        this.weak = [];             // increased damage from these damage types
         this.speed = 1;             // 4 is the max
         this.taunt = false;         // force towers to target
     }
