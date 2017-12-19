@@ -247,7 +247,6 @@ function loadMap() {
         // Grids
         grid = copyArray(custom.grid);
         paths = copyArray(custom.paths);
-        
         // Important tiles
         exit = createVector(custom.exit[0], custom.exit[1]);
         spawnpoints = [];
@@ -260,7 +259,9 @@ function loadMap() {
         rows = custom.rows;
 
         // Display tiles
-        display = copyArray(grid);
+        display = replaceArray(
+            grid, [0, 1, 2, 3], ['empty', 'wall', 'empty', 'tower']
+        );
 
         resizeFit();
     } else if (name in maps) {
@@ -281,7 +282,9 @@ function loadMap() {
         rows = m.rows;
 
         // Display tiles
-        display = copyArray(grid);
+        display = replaceArray(
+            grid, [0, 1, 2, 3], ['empty', 'wall', 'empty', 'tower']
+        );
 
         resizeFit();
     } else {
@@ -370,7 +373,7 @@ function randomMap() {
     }
 
     // Copy to display grid
-    display = copyArray(grid);
+    display = replaceArray(grid, [0, 1], ['empty', 'wall']);
 }
 
 // Random grid coordinate
@@ -659,8 +662,7 @@ function draw() {
     // Draw basic tiles
     for (var x = 0; x < cols; x++) {
         for (var y = 0; y < rows; y++) {
-            var g = display[x][y];
-            var t = tiles[['empty', 'wall', 'empty', 'tower'][g]];
+            var t = tiles[display[x][y]];
             if (typeof t === 'function') {
                 t(x, y, paths[x][y]);
             } else {

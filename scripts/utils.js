@@ -182,6 +182,24 @@ function rangeText(min, max) {
     }
 }
 
+// Replace values in copy of 2d array
+function replaceArray(arr, vals, subs) {
+    var newArr = [];
+    for (var x = 0; x < arr.length; x++) {
+        newArr[x] = [];
+        for (var y = 0; y < arr[x].length; y++) {
+            var curVal = arr[x][y];
+            var i = vals.indexOf(curVal);
+            if (i === -1) {
+                newArr[x][y] = curVal;
+            } else {
+                newArr[x][y] = vals.length === subs.length ? subs[i] : subs[0];
+            }
+        }
+    }
+    return newArr;
+}
+
 // Convert string to vector
 function stv(str) {
     var arr = str.split(',');
