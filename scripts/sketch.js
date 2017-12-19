@@ -15,7 +15,6 @@ var custom;             // custom map JSON
 var display;            // display tiles
 var dists;              // distance to exit
 var grid;               // tile type (0 = empty, 1 = wall, 2 = path, 3 = tower)
-var palette;            // what to display for each display tile
 var paths;              // direction to reach exit
 var visitMap;           // whether exit can be reached
 var walkMap;            // walkability map
@@ -97,9 +96,8 @@ function calcFPS() {
 
     // Update FPS meter
     fill(255);
-    textFont('Source Code Pro');
-    var fpsText = 'FPS: ' + fps.toFixed(2) + ' Avg: ' + avgFPS.toFixed(2);
-    text(fpsText, 10, height - 10);
+    var fpsText = 'FPS: ' + fps.toFixed(2) + '\nAvg: ' + avgFPS.toFixed(2);
+    text(fpsText, 10, height - 30);
 }
 
 // Check if all conditions for placing a tower are true
@@ -241,7 +239,7 @@ function isWave(min, max) {
 
 // Load map from template
 // Always have an exit and spawnpoints if you do not have a premade grid
-// TODO display and palette
+// TODO display
 function loadMap() {
     var name = document.getElementById('map').value;
     
@@ -263,20 +261,6 @@ function loadMap() {
 
         // Display tiles
         display = copyArray(grid);
-        palette = [
-            function(col, row) {
-                stroke(255, 31);
-                noFill();
-                rect(col * ts, row * ts, ts, ts);
-            },
-            [1, 50, 67],
-            function(col, row) {
-                stroke(255, 31);
-                noFill();
-                rect(col * ts, row * ts, ts, ts);
-            },
-            [51, 110, 123]
-        ];
 
         resizeFit();
     } else if (name in maps) {
@@ -298,20 +282,6 @@ function loadMap() {
 
         // Display tiles
         display = copyArray(grid);
-        palette = [
-            function(col, row) {
-                stroke(255, 31);
-                noFill();
-                rect(col * ts, row * ts, ts, ts);
-            },
-            [1, 50, 67],
-            function(col, row) {
-                stroke(255, 31);
-                noFill();
-                rect(col * ts, row * ts, ts, ts);
-            },
-            [51, 110, 123]
-        ];
 
         resizeFit();
     } else {
@@ -401,14 +371,6 @@ function randomMap() {
 
     // Copy to display grid
     display = copyArray(grid);
-    palette = [
-        function(col, row) {
-            stroke(255, 31);
-            noFill();
-            rect(col * ts, row * ts, ts, ts);
-        },
-        [1, 50, 67]
-    ];
 }
 
 // Random grid coordinate
@@ -697,12 +659,13 @@ function draw() {
     // Draw basic tiles
     for (var x = 0; x < cols; x++) {
         for (var y = 0; y < rows; y++) {
-            var g = palette[display[x][y]];
-            if (typeof g === 'function') {
-                g(x, y);
+            var g = display[x][y];
+            var t = tiles[['empty', 'wall', 'empty', 'tower'][g]];
+            if (typeof t === 'function') {
+                t(x, y, paths[x][y]);
             } else {
                 stroke(255, 31);
-                fill(g);
+                t ? fill(t) : noFill();
                 rect(x * ts, y * ts, ts, ts);
             }
         }
