@@ -51,6 +51,7 @@ var resistance = 0.3;   // percentage of damage blocked by resistance
 var sellConst = 0.8;    // ratio of tower cost to sell price
 var wallCover = 0.1;    // percentage of map covered by walls
 var waveCool = 120;     // number of ticks between waves
+var weakness = 0.3;     // damage increase from weakness
 
 
 // Misc functions
@@ -403,42 +404,58 @@ function randomTile() {
 function randomWave() {
     var waves = [];
 
-    if (isWave(0, 5)) {
+    if (isWave(0, 3)) {
         waves.push([40, ['weak', 50]]);
     }
-    if (isWave(1, 5)) {
+    if (isWave(2, 4)) {
         waves.push([20, ['weak', 25]]);
     }
-    if (isWave(2, 5)) {
-        waves.push([20, ['weak', 40], ['strong', 10]]);
+    if (isWave(2, 7)) {
+        waves.push([30, ['weak', 25], ['strong', 25]]);
         waves.push([40, ['fast', 25]]);
+        waves.push([20, ['strong', 25]]);
     }
     if (isWave(4, 10)) {
         waves.push([20, ['strong', 50], ['fast', 25]]);
+        waves.push([10, ['fast', 50]]);
     }
-    if (isWave(5)) {
-        waves.push([10, ['strong', 100], ['fast', 50]]);
+    if (isWave(6, 11)) {
+        waves.push([5, ['fast', 50]]);
     }
-    if (isWave(7)) {
+    if (isWave(8, 17)) {
+        waves.push([10, ['strong', 50], ['strongFast', 50]]);
+        waves.push([5, ['strongFast', 100]]);
+    }
+    if (isWave(15)) {
+        waves.push([40, ['tank', 'strong', 'strong', 'strong', 'strong', 10]]);
+        waves.push([20, ['tank', 25]]);
+    }
+    if (isWave(17)) {
+        waves.push([10, ['tank', 50], ['strongFast', 25]]);
+        waves.push([10, ['faster', 50]]);
+        waves.push([20, ['tank', 50], ['faster', 25]]);
+    }
+    if (isWave(20)) {
+        waves.push([20, ['taunt', 'strong', 'strong', 'strong', 25]]);
+    }
+    if (isWave(23)) {
+        waves.push([20, ['taunt', 'tank', 'tank', 'tank', 25]]);
         waves.push([
-            20, ['taunt', 'strong', 'strong', 'strong', 'strong', 10]
+            10, ['tank', 100], ['faster', 50],
+            ['taunt', 'tank', 'tank', 'tank', 50]
         ]);
     }
-    if (isWave(9)) {
+    if (isWave(25)) {
+        waves.push([10, ['taunt', 'faster', 'faster', 'faster', 50]]);
         waves.push([
-            10, ['strong', 100], ['fast', 50],
-            ['taunt', 'strong', 'strong', 50]
+            10, ['taunt', 'tank', 'tank', 'tank', 50],
+            ['faster', 50]
         ]);
     }
-    if (isWave(10)) {
-        waves.push([5, ['fast', 100]]);
-        waves.push([
-            randint(5, 11), ['taunt', 'strong', 'strong', 100],
-            ['fast', 50]
-        ]);
-    }
-    if (isWave(11)) {
-        waves.push([20, ['weak', 10]]);
+    if (isWave(30)) {
+        waves.push([5, ['taunt', 'faster', 'faster', 'faster', 50]]);
+        waves.push([5, ['taunt', 'tank', 'tank', 'tank', 50]]);
+        waves.push([1, ['faster', 200]]);
     }
 
     return random(waves);

@@ -131,7 +131,7 @@ class Tower {
         if (entities.length === 0) return;
         var t = getTaunting(entities);
         if (t.length > 0) entities = t;
-        var e = getLeastDist(entities);
+        var e = getFirst(entities);
         if (typeof e === 'undefined') return;
         this.onAim(e);
     }

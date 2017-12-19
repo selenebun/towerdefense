@@ -14,11 +14,12 @@ class Enemy {
         this.vel = createVector(0, 0);
         
         // Stats
-        this.cash = 1;
+        this.cash = 0;
         this.damage = 1;
-        this.health = 35;
+        this.health = 1;
         this.immune = [];           // no damage from these damage types
         this.resistant = [];        // reduced damage from these damage types
+        this.weak = [];
         this.speed = 1;             // 4 is the max
         this.taunt = false;         // force towers to target
     }
@@ -48,6 +49,8 @@ class Enemy {
             mult = 0;
         } else if (this.resistant.includes(type)) {
             mult = 1 - resistance;
+        } else if (this.weak.includes(type)) {
+            mult = 1 + weakness;
         } else {
             mult = 1;
         }
