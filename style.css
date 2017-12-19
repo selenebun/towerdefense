@@ -137,6 +137,10 @@ button {
     text-align: center;
 }
 
+#status {
+    font-size: 0.95em;
+}
+
 #info {
     flex: 1;
 }

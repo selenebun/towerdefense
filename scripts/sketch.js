@@ -12,7 +12,7 @@ var ts = 24;            // tile size
 var zoomDefault = ts;
 
 var custom;             // custom map JSON
-var display;            // display tiles
+var display;            // graphical display tiles
 var dists;              // distance to exit
 var grid;               // tile type (0 = empty, 1 = wall, 2 = path, 3 = tower)
 var paths;              // direction to reach exit
@@ -157,6 +157,7 @@ function exportMap() {
     }
     return JSON.stringify({
         // Grids
+        display: display,
         grid: grid,
         paths: paths,
         // Important tiles
@@ -240,7 +241,6 @@ function isWave(min, max) {
 
 // Load map from template
 // Always have an exit and spawnpoints if you do not have a premade grid
-// TODO display
 function loadMap() {
     var name = document.getElementById('map').value;
     
@@ -258,11 +258,6 @@ function loadMap() {
         // Misc
         cols = custom.cols;
         rows = custom.rows;
-
-        // Display tiles
-        display = replaceArray(
-            grid, [0, 1, 2, 3], ['empty', 'wall', 'road', 'tower']
-        );
 
         resizeFit();
     } else if (name in maps) {
@@ -282,16 +277,16 @@ function loadMap() {
         cols = m.cols;
         rows = m.rows;
 
-        // Display tiles
-        display = replaceArray(
-            grid, [0, 1, 2, 3], ['empty', 'wall', 'road', 'tower']
-        );
-
         resizeFit();
     } else {
         resizeMax();
         randomMap();
     }
+
+    // Graphical display tiles
+    display = replaceArray(
+        grid, [0, 1, 2, 3], ['empty', 'wall', 'empty', 'tower']
+    );
 
     recalculate();
 }
@@ -774,10 +769,10 @@ function draw() {
     if (showFPS) calcFPS();
 
     // Update mouse tile
-    if (showTile) {
+    if (showTile && mouseInMap()) {
         var t = gridPos(mouseX, mouseY);
         fill(255);
-        text('(' + t.x + ', ' + t.y + ')', width - 70, height - 10);
+        text('(' + t.x + ', ' + t.y + ')', width - 60, height - 10);
     }
 
     removeDead(enemies);
