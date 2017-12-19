@@ -157,7 +157,6 @@ function exportMap() {
     }
     return JSON.stringify({
         // Grids
-        display: display,
         grid: grid,
         paths: paths,
         // Important tiles
