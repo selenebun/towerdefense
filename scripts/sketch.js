@@ -360,17 +360,6 @@ function randomMap() {
     }
     walkMap = getWalkMap();
 
-    // Copy to display grid
-    display = copyArray(grid);
-    palette = [
-        function(col, row) {
-            stroke(255, 31);
-            noFill();
-            rect(col * ts, row * ts, ts, ts);
-        },
-        [1, 50, 67]
-    ];
-
     // Generate exit and remove walls that are adjacent
     exit = getEmpty();
     var adj = neighbors(walkMap, exit.x, exit.y, false);
@@ -393,6 +382,17 @@ function randomMap() {
         }
         spawnpoints.push(s);
     }
+
+    // Copy to display grid
+    display = copyArray(grid);
+    palette = [
+        function(col, row) {
+            stroke(255, 31);
+            noFill();
+            rect(col * ts, row * ts, ts, ts);
+        },
+        [1, 50, 67]
+    ];
 }
 
 // Random grid coordinate
@@ -415,18 +415,18 @@ function randomWave() {
         waves.push([40, ['fast', 25]]);
         waves.push([20, ['strong', 25]]);
     }
-    if (isWave(4, 10)) {
+    if (isWave(4, 14)) {
         waves.push([20, ['strong', 50], ['fast', 25]]);
         waves.push([10, ['fast', 50]]);
     }
-    if (isWave(6, 11)) {
+    if (isWave(10, 13)) {
         waves.push([5, ['fast', 50]]);
     }
-    if (isWave(8, 17)) {
+    if (isWave(12, 17)) {
         waves.push([10, ['strong', 50], ['strongFast', 50]]);
         waves.push([5, ['strongFast', 100]]);
     }
-    if (isWave(15)) {
+    if (isWave(15, 20)) {
         waves.push([40, ['tank', 'strong', 'strong', 'strong', 'strong', 10]]);
         waves.push([20, ['tank', 25]]);
     }
@@ -439,9 +439,10 @@ function randomWave() {
         waves.push([20, ['taunt', 'strong', 'strong', 'strong', 25]]);
     }
     if (isWave(23)) {
-        waves.push([20, ['taunt', 'tank', 'tank', 'tank', 25]]);
+        waves.push([40, ['taunt', 'tank', 'tank', 'tank', 25]]);
+        waves.push([5, ['faster', 100]]);
         waves.push([
-            10, ['tank', 100], ['faster', 50],
+            20, ['tank', 100], ['faster', 50],
             ['taunt', 'tank', 'tank', 'tank', 50]
         ]);
     }
@@ -621,6 +622,11 @@ function updateInfo(t) {
     document.getElementById('info-div').style.display = 'block';
 }
 
+// Update pause button
+function updatePause() {
+    document.getElementById('pause').innerHTML = paused ? 'Start' : 'Pause';
+}
+
 // Update game status display with wave, health, and cash
 function updateStatus() {
     document.getElementById('wave').innerHTML = 'Wave ' + wave;
@@ -652,7 +658,8 @@ function setup() {
 function draw() {
     background(0);
 
-    // Update game status display
+    // Update game status
+    updatePause();
     updateStatus();
 
     // Update spawn and wave cooldown

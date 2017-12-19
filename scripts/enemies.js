@@ -128,7 +128,7 @@ enemy.taunt = {
     name: 'taunt',
     // Stats
     cash: 8,
-    health: 700,
+    health: 1125,
     immune: ['poison', 'slow'],
     resistant: ['physical'],
     taunt: true,
