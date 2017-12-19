@@ -755,13 +755,10 @@ function draw() {
     }
 
     // Draw health bars
-    for (var i = 0; i < enemies.length; i++) {
-        if (!healthBar) continue;
-        var e = enemies[i];
-        push();
-        translate(e.pos.x, e.pos.y);
-        e.drawHealth();
-        pop();
+    if (healthBar) {
+        for (var i = 0; i < enemies.length; i++) {
+            enemies[i].drawHealth();
+        }
     }
 
     // Update and draw towers

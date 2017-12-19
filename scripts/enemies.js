@@ -45,13 +45,19 @@ enemy.fast = {
     cash: 2,
     health: 75,
     speed: 2,
-    drawEnemy: function() {
+    draw: function() {
+        push();
+        translate(this.pos.x, this.pos.y);
+        rotate(this.vel.heading());
+
         stroke(0);
 		fill(this.getColor());
         var back = -0.55 * ts / 3;
         var front = back + 0.55 * ts;
         var side = 0.8 * ts / 2;
-		quad(back, -side, 0, 0, back, side, front, 0);
+        quad(back, -side, 0, 0, back, side, front, 0);
+        
+        pop();
     }
 };
 
@@ -64,13 +70,19 @@ enemy.strongFast = {
     cash: 2,
     health: 135,
     speed: 2,
-    drawEnemy: function() {
+    draw: function() {
+        push();
+        translate(this.pos.x, this.pos.y);
+        rotate(this.vel.heading());
+        
         stroke(0);
 		fill(this.getColor());
         var back = -0.8 * ts / 3;
         var front = back + 0.8 * ts;
         var side = ts / 2;
-		quad(back, -side, 0, 0, back, side, front, 0);
+        quad(back, -side, 0, 0, back, side, front, 0);
+        
+        pop();
     }
 };
 
@@ -95,12 +107,18 @@ enemy.faster = {
     health: 375,
     speed: 3,
     drawEnemy: function() {
+        push();
+        translate(this.pos.x, this.pos.y);
+        rotate(this.vel.heading());
+
         stroke(0);
 		fill(this.getColor());
         var back = -0.7 * ts / 3;
         var front = back + 0.7 * ts;
         var side = 0.9 * ts / 2;
-		quad(back, -side, 0, 0, back, side, front, 0);
+        quad(back, -side, 0, 0, back, side, front, 0);
+        
+        pop();
     }
 };
 
@@ -117,6 +135,10 @@ enemy.tank = {
     resistant: ['energy', 'physical'],
     weak: ['explosion'],
     drawEnemy: function() {
+        push();
+        translate(this.pos.x, this.pos.y);
+        rotate(this.vel.heading());
+        
         stroke(0);
         fill(this.getColor());
         var front = this.radius * ts / 2;
@@ -128,6 +150,8 @@ enemy.tank = {
         fill(149, 165, 166);
         rect(0, -barrel, length, barrel * 2);
         ellipse(0, 0, 0.2 * ts * 2, 0.2 * ts * 2);
+
+        pop();
     }
 };
 
@@ -144,6 +168,10 @@ enemy.taunt = {
     resistant: ['energy', 'physical'],
     taunt: true,
     drawEnemy: function() {
+        push();
+        translate(this.pos.x, this.pos.y);
+        rotate(this.vel.heading());
+        
         stroke(0);
         fill(this.getColor());
         var edge = this.radius * ts / 2;
@@ -152,5 +180,7 @@ enemy.taunt = {
         noFill();
         rect(-0.3 * ts, -0.3 * ts, 0.6 * ts, 0.6 * ts);
         rect(-0.2 * ts, -0.2 * ts, 0.4 * ts, 0.4 * ts);
+
+        pop();
     }
 };

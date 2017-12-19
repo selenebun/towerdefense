@@ -35,11 +35,9 @@ class Enemy {
     }
 
     draw() {
-        push();
-        translate(this.pos.x, this.pos.y);
-        rotate(this.vel.heading());
-        this.drawEnemy();
-        pop();
+        stroke(0);
+        fill(this.getColor());
+        ellipse(this.pos.x, this.pos.y, this.radius * ts, this.radius * ts);
     }
 
     // Subtract damage amount from health, account for resistances, etc.
@@ -59,23 +57,23 @@ class Enemy {
         if (this.health <= 0) this.onKilled();
     }
 
-    // Draw enemy after translation and rotation
-    drawEnemy() {
-        stroke(0);
-        fill(this.getColor());
-        ellipse(0, 0, this.radius * ts, this.radius * ts);
-    }
-
     // Draw health bar
     drawHealth() {
         var percent = 1 - this.health / this.maxHealth;
         if (percent === 0) return;
+        
+        push();
+        translate(this.pos.x, this.pos.y);
+
+        stroke(255);
         fill(207, 0, 15);
         var edge = 0.7 * ts / 2;
         var width = floor(edge * percent * 2);
         var top = 0.2 * ts;
         var height = 0.15 * ts;
         rect(-edge, top, edge * percent * 2, height);
+
+        pop();
     }
 
     getColor() {
