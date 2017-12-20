@@ -621,6 +621,16 @@ function updateStatus() {
     document.getElementById('cash').innerHTML = '$' + cash;
 }
 
+// Upgrade tower
+function upgrade(t, template) {
+    if (godMode || cash >= template.cost) {
+        if (!godMode) cash -= template.cost;
+        selected.upgrade(t);
+        selected.upgrades = t.upgrades ? t.upgrades : [];
+        updateInfo(selected);
+    }
+}
+
 // Return whether tile is walkable
 function walkable(col, row) {
     // Check if wall or tower-only tile
@@ -878,6 +888,12 @@ function keyPressed() {
             // S
             if (selected) sell(selected);
             break;
+        case 85:
+            // U
+            if (selected && selected.upgrades.length > 0) {
+                upgrade(selected.upgrades[0]);
+            }
+            break;
         case 87:
             // W
             skipToNext = !skipToNext;
@@ -929,4 +945,5 @@ function mousePressed() {
 
 // Events
 
+document.getElementById('difficulty').addEventListener('change', resetGame);
 document.getElementById('map').addEventListener('change', resetGame);

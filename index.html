@@ -87,7 +87,7 @@
             <p id="cooldown"></p>
             <div class="horiz-buttons" id="info-buttons">
               <button id="sell" onclick="if (selected) sell(selected)">Sell</button>
-              <button id="upgrade">Upgrade</button>
+              <button id="upgrade" onclick="if (selected && selected.upgrades.length > 0) upgrade(selected.upgrades[0])">Upgrade</button>
             </div>
           </div>
         </aside>

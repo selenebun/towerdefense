@@ -31,7 +31,9 @@ class Tower {
         this.damageMax = 20;
         this.damageMin = 1;
         this.range = 3;
+        this.totalCost = 0;
         this.type = 'physical';     // damage type
+        this.upgrades = [];
     }
 
     // Adjust angle to point towards pixel position
@@ -110,7 +112,6 @@ class Tower {
 
     onCreate() {
         this.cd = 0;                // current cooldown left
-        this.totalCost = this.cost;
     }
 
     onHit(e) {}
@@ -148,6 +149,7 @@ class Tower {
             var key = keys[i];
             this[key] = template[key];
         }
+        if (template.cost) this.totalCost += template.cost;
     }
 
     // Returns array of visible entities out of passed array

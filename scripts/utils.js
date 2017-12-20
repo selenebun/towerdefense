@@ -123,6 +123,16 @@ function getInRange(cx, cy, radius, entities) {
     return results;
 }
 
+// Get entities without a certain status effect
+function getNoEffect(entities, effect) {
+    var results = [];
+    for (var i = 0; i < entities.length; i++) {
+        var e = entities[i];
+        if (getByName(e.effects, effect).length === 0) results.push(e);
+    }
+    return results;
+}
+
 // Get all taunting enemies
 function getTaunting(entities) {
     var results = [];
