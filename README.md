@@ -8,12 +8,12 @@ located on the Github [repo](https://github.com/xithiox/td-editor/).
 
 ### Controls:
 * Mouse to place a tower
-* Ctrl to toggle god mode
 * Esc to deselect tower
 * Left and right brackets to change map size (will reset game!)
 * 0-9 to select a tower to place
 * C to toggle tile coordinate display
 * F to toggle FPS display
+* G to toggle god mode
 * H to toggle displaying enemy health bars
 * M to import and load map string (will reset game!)
 * R to reset game

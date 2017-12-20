@@ -827,10 +827,6 @@ function draw() {
 
 function keyPressed() {
     switch (keyCode) {
-        case 17:
-            // Ctrl
-            godMode = !godMode;
-            break;
         case 27:
             // Esc
             toPlace = false;
@@ -871,6 +867,10 @@ function keyPressed() {
         case 70:
             // F
             showFPS = !showFPS;
+            break;
+        case 71:
+            // G
+            godMode = !godMode;
             break;
         case 72:
             // H
