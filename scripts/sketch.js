@@ -14,7 +14,9 @@ var zoomDefault = ts;
 var custom;             // custom map JSON
 var display;            // graphical display tiles
 var dists;              // distance to exit
-var grid;               // tile type (0 = empty, 1 = wall, 2 = path, 3 = tower)
+var grid;               // tile type
+                        // (0 = empty, 1 = wall, 2 = path, 3 = tower,
+                        //  4 = enemy-only pathing)
 var paths;              // direction to reach exit
 var visitMap;           // whether exit can be reached
 var walkMap;            // walkability map
@@ -104,8 +106,9 @@ function calcFPS() {
 // Check if all conditions for placing a tower are true
 function canPlace(col, row) {
     if (!toPlace) return false;
-    if (grid[col][row] === 3) return true;
-    if (grid[col][row] === 1 || grid[col][row] === 2) return false;
+    var g = grid[col][row];
+    if (g === 3) return true;
+    if (g === 1 || g === 2 || g === 4) return false;
     if (!empty(col, row) || !placeable(col, row)) return false;
     return true;
 }
@@ -284,7 +287,7 @@ function loadMap() {
 
     // Graphical display tiles
     display = replaceArray(
-        grid, [0, 1, 2, 3], ['empty', 'wall', 'empty', 'tower']
+        grid, [0, 1, 2, 3, 4], ['empty', 'wall', 'empty', 'tower', 'empty']
     );
 
     recalculate();
