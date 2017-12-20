@@ -64,6 +64,7 @@ tower.laser = {
             length: 0.65,
             radius: 0.9,
             secondary: [191, 191, 191],
+            weight: 3,
             width: 0.35,
             // Misc
             title: 'Beam Emitter',
