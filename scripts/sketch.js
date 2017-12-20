@@ -622,9 +622,9 @@ function updateStatus() {
 }
 
 // Upgrade tower
-function upgrade(t, template) {
-    if (godMode || cash >= template.cost) {
-        if (!godMode) cash -= template.cost;
+function upgrade(t) {
+    if (godMode || cash >= t.cost) {
+        if (!godMode) cash -= t.cost;
         selected.upgrade(t);
         selected.upgrades = t.upgrades ? t.upgrades : [];
         updateInfo(selected);
