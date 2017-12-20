@@ -7,9 +7,10 @@ You can also make and edit custom maps using this
 located on the Github [repo](https://github.com/xithiox/td-editor/).
 
 ### Controls:
-* Mouse to place a tower
 * Esc to deselect tower
 * Left and right brackets to change map size (will reset game!)
+* Mouse to place a tower
+* Spacebar to pause
 * 0-9 to select a tower to place
 * C to toggle tile coordinate display
 * F to toggle FPS display

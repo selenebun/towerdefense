@@ -13,10 +13,13 @@ var zoomDefault = ts;
 
 var custom;             // custom map JSON
 var display;            // graphical display tiles
+var displayDir;         // direction display tiles are facing
+                        // (0 = none, 1 = left, 2 = up, 3 = right, 4 = down)
 var dists;              // distance to exit
 var grid;               // tile type
                         // (0 = empty, 1 = wall, 2 = path, 3 = tower,
                         //  4 = enemy-only pathing)
+var metadata;           // tile metadata
 var paths;              // direction to reach exit
 var visitMap;           // whether exit can be reached
 var walkMap;            // walkability map
@@ -30,6 +33,10 @@ var maxHealth;
 var wave;
 
 var spawnCool;          // number of ticks between spawning enemies
+
+var bg;                 // background color
+var border;             // color to draw on tile borders
+var borderAlpha;        // alpha of tile borders
 
 var selected;
 var towerType;
@@ -160,11 +167,18 @@ function exportMap() {
     }
     return JSON.stringify({
         // Grids
+        display: display,
+        displayDir: displayDir,
         grid: grid,
+        metadata: metadata,
         paths: paths,
         // Important tiles
         exit: [exit.x, exit.y],
         spawnpoints: spawns,
+        // Colors
+        bg: bg,
+        border: border,
+        borderAlpha, borderAlpha,
         // Misc
         cols: cols,
         rows: rows
@@ -248,7 +262,10 @@ function loadMap() {
     
     if (name === 'custom' && custom) {
         // Grids
+        display = copyArray(custom.display);
+        displayDir = copyArray(custom.displayDir);
         grid = copyArray(custom.grid);
+        metadata = copyArray(custom.metadata);
         paths = copyArray(custom.paths);
         // Important tiles
         exit = createVector(custom.exit[0], custom.exit[1]);
@@ -257,6 +274,10 @@ function loadMap() {
             var s = custom.spawnpoints[i];
             spawnpoints.push(createVector(s[0], s[1]));
         }
+        // Colors
+        bg = custom.bg;
+        border = custom.border;
+        borderAlpha = custom.borderAlpha;
         // Misc
         cols = custom.cols;
         rows = custom.rows;
@@ -266,8 +287,11 @@ function loadMap() {
         var m = maps[name];
 
         // Grids
-        grid = m.grid;
-        paths = m.paths;
+        display = copyArray(m.display);
+        displayDir = copyArray(m.displayDir);
+        grid = copyArray(m.grid);
+        metadata = copyArray(m.metadata);
+        paths = copyArray(m.paths);
         // Important tiles
         exit = createVector(m.exit[0], m.exit[1]);
         spawnpoints = [];
@@ -275,6 +299,10 @@ function loadMap() {
             var s = m.spawnpoints[i];
             spawnpoints.push(createVector(s[0], s[1]));
         }
+        // Colors
+        bg = m.bg;
+        border = m.border;
+        borderAlpha = m.borderAlpha;
         // Misc
         cols = m.cols;
         rows = m.rows;
@@ -283,12 +311,17 @@ function loadMap() {
     } else {
         resizeMax();
         randomMap();
+        display = replaceArray(
+            grid, [0, 1, 2, 3, 4], ['empty', 'wall', 'empty', 'tower', 'empty']
+        );
+        displayDir = buildArray(cols, rows, 0);
+        // Colors
+        bg = [0, 0, 0];
+        border = 255;
+        borderAlpha = 31;
+        // Misc
+        metadata = buildArray(cols, rows, null);
     }
-
-    // Graphical display tiles
-    display = replaceArray(
-        grid, [0, 1, 2, 3, 4], ['empty', 'wall', 'empty', 'tower', 'empty']
-    );
 
     recalculate();
 }
@@ -369,9 +402,6 @@ function randomMap() {
         }
         spawnpoints.push(s);
     }
-
-    // Copy to display grid
-    display = replaceArray(grid, [0, 1], ['empty', 'wall']);
 }
 
 // Random grid coordinate
@@ -655,7 +685,7 @@ function setup() {
 
 // TODO show range of selected tower
 function draw() {
-    background(0);
+    background(bg);
 
     // Update game status
     updatePause();
@@ -672,9 +702,9 @@ function draw() {
         for (var y = 0; y < rows; y++) {
             var t = tiles[display[x][y]];
             if (typeof t === 'function') {
-                t(x, y, paths[x][y]);
+                t(x, y, displayDir[x][y]);
             } else {
-                stroke(255, 31);
+                stroke(border, borderAlpha);
                 t ? fill(t) : noFill();
                 rect(x * ts, y * ts, ts, ts);
             }
