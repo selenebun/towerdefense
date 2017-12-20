@@ -156,6 +156,7 @@ tower.slow = {
             // Stats
             cooldownMax: 30,
             cooldownMin: 30,
+            cost: 50,
             range: 2,
             // Methods
             drawBarrel: function() {
@@ -274,33 +275,3 @@ tower.bomb = {
         }
     }
 };
-
-tower.poison = {
-    // Display
-    baseOnTop: false,
-    color: [102, 204, 26],
-    length: 1.3,
-    secondary: [189, 195, 199],
-    weight: 3,
-    // Misc
-    name: 'poison',
-    title: 'Poison Tower',
-    // Stats
-    cooldownMax: 20,
-    cooldownMin: 10,
-    cost: 75,
-    damageMax: 0,
-    damageMin: 0,
-    range: 4,
-    type: 'poison',
-    drawBarrel: function() {
-        stroke(this.border);
-        fill(this.secondary);
-        var back = -this.length * ts / 2;
-        var side = this.width * ts / 2;
-        rect(back, -side, this.length * ts, this.width * ts);
-    },
-    onHit: function(e) {
-        e.applyEffect('poison', 40);
-    }
-}
