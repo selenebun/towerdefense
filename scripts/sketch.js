@@ -797,7 +797,7 @@ function draw() {
     if (health <= 0) resetGame();
 
     // Start next wave
-    if (toWait && wcd === 0 || skipToNext && noMoreEnemies()) {
+    if (toWait && wcd === 0 || skipToNext && newEnemies.length === 0) {
         toWait = false;
         wcd = 0;
         nextWave();
