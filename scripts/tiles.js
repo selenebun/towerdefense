@@ -3,7 +3,8 @@ var tiles = {
     empty: null,
     tower: [51, 110, 123],
     wall: [1, 50, 67],
-    // Roads
+    // City
+    grass: [30, 130, 76],
     lCorner: function(x, y, dir) {
         if (dir === 0) return;
         push();
@@ -48,5 +49,6 @@ var tiles = {
         rect(-back, -side, back * 2, side * 2);
 
         pop();
-    }
+    },
+    sidewalk: [149, 165, 166]
 };

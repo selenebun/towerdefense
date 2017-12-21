@@ -105,7 +105,7 @@ enemy.faster = {
     // Stats
     cash: 4,
     health: 375,
-    immune: ['explosion'],
+    resistant: ['explosion'],
     speed: 3,
     draw: function() {
         push();
