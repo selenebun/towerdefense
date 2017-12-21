@@ -243,6 +243,9 @@ tower.bomb = {
     // Display
     baseOnTop: false,
     color: [102, 51, 153],
+    drawLine: false,
+    length: 0.6,
+    width: 0.35,
     secondary: [103, 128, 159],
     // Misc
     name: 'bomb',
