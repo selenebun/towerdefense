@@ -4,6 +4,36 @@ var tiles = {
     tower: [51, 110, 123],
     wall: [1, 50, 67],
     // Roads
+    lCorner: function(x, y, dir) {
+        if (dir === 0) return;
+        push();
+        var c = center(x, y);
+        translate(c.x, c.y);
+        rotate([0, PI / 2, PI, PI * 3 / 2][dir - 1]);
+
+        noStroke();
+        fill(250, 210, 1);
+        var edge = 0.05 * ts;
+        var end = 0.25 * ts;
+        quad(-end, -edge, -end, edge, -edge, end, edge, end);
+
+        pop();
+    },
+    rCorner: function(x, y, dir) {
+        if (dir === 0) return;
+        push();
+        var c = center(x, y);
+        translate(c.x, c.y);
+        rotate([PI / 2, PI, PI * 3 / 2, 0][dir - 1]);
+    
+        noStroke();
+        fill(250, 210, 1);
+        var edge = 0.05 * ts;
+        var end = 0.25 * ts;
+        quad(-end, -edge, -end, edge, -edge, end, edge, end);
+    
+        pop();
+    },
     road: function(x, y, dir) {
         if (dir === 0) return;
         push();
