@@ -11,7 +11,7 @@ var tower = {};
 
 tower.gun = {
     // Display
-    color: [232, 126, 4],
+    color: [249, 191, 59],
     length: 0.65,
     radius: 0.9,
     secondary: [149, 165, 166],
@@ -27,7 +27,7 @@ tower.gun = {
     upgrades: [
         {
             // Display
-            color: [211, 84, 0],
+            color: [249, 105, 14],
             // Misc
             title: 'Machine Gun',
             // Stats
