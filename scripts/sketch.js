@@ -889,10 +889,6 @@ function keyPressed() {
             // 5
             setPlace('bomb');
             break;
-        case 54:
-            // 6
-            setPlace('poison');
-            break;
         case 67:
             // C
             showTile = !showTile;

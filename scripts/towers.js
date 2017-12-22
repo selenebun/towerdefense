@@ -121,8 +121,6 @@ tower.slow = {
         rect(back, -side, this.length * ts, this.width * ts);
     },
     onAim: function(e) {
-        if (!this.canFire()) return;
-        this.resetCooldown();
         this.attack(e);
     },
     onHit: function(e) {
@@ -132,9 +130,12 @@ tower.slow = {
     target: function(entities) {
         entities = this.visible(entities);
         if (entities.length === 0) return;
+        if (!this.canFire()) return;
+        this.resetCooldown();
         noStroke();
-        fill(75, 119, 190, 127);
-        ellipse(this.pos.x, this.pos.y, 3 * ts, 3 * ts);
+        fill(this.color[0], this.color[1], this.color[2], 127);
+        var r = this.range * 2 + 1;
+        ellipse(this.pos.x, this.pos.y, r * ts, r * ts);
         for (var i = 0; i < entities.length; i++) {
             this.onAim(entities[i]);
         }
@@ -148,56 +149,19 @@ tower.slow = {
         {
             // Display
             color: [102, 204, 26],
-            drawLine: true,
-            hasBase: false,
             radius: 0.9,
             // Misc
             name: 'poison',
             title: 'Poison Tower',
             // Stats
-            cooldownMax: 30,
-            cooldownMin: 30,
-            cost: 50,
+            cooldownMax: 60,
+            cooldownMin: 60,
+            cost: 150,
             range: 2,
+            type: 'poison',
             // Methods
-            drawBarrel: function() {
-                stroke(0);
-                fill(this.color);
-                var height = this.radius * ts * sqrt(3) / 2;
-                var back = -height / 3;
-                var front = height * 2 / 3;
-                var side = this.radius * ts / 2;
-                triangle(back, -side, back, side, front, 0);
-            },
-            onAim: function(e) {
-                if (this.canFire() || this.follow) this.aim(e.pos.x, e.pos.y);
-                if (!this.canFire()) return;
-                this.resetCooldown();
-                this.attack(e);
-                // Draw line to target
-                if (!this.drawLine) return;
-                stroke(this.color);
-                strokeWeight(this.weight);
-                line(this.pos.x, this.pos.y, e.pos.x, e.pos.y);
-                strokeWeight(1);
-            },
             onHit: function(e) {
-                e.applyEffect('poison', 40);
-            },
-            target: function(entities) {
-                entities = this.visible(entities);
-                if (entities.length === 0) return;
-                entities = getNoEffect(entities, 'poison');
-                console.log(entities);
-                if (entities.length === 0) return;
-                var t = getTaunting(entities);
-                if (t.length > 0) entities = t;
-                var e = getFirst(entities);
-                if (typeof e === 'undefined') return;
-                this.onAim(e);
-            },
-            update: function() {
-                if (this.cd > 0) this.cd--;
+                e.applyEffect('poison', 60);
             }
         }
     ]
@@ -205,14 +169,12 @@ tower.slow = {
 
 tower.sniper = {
     // Display
-    baseOnTop: false,
     color: [207, 0, 15],
     follow: false,
-    length: 0.5,
-    radius: 0.6,
+    hasBase: false,
+    radius: 0.9,
     secondary: [103, 128, 159],
     weight: 3,
-    width: 1.1,
     // Misc
     name: 'sniper',
     title: 'Sniper Tower',
@@ -225,17 +187,13 @@ tower.sniper = {
     range: 9,
     // Methods
     drawBarrel: function() {
-        stroke(this.border);
+        stroke(0);
         fill(this.color);
-        var back = -this.length * ts / 3;
-        var front = back + this.length * ts;
-        var side = this.width * ts / 2;
+        var height = this.radius * ts * sqrt(3) / 2;
+        var back = -height / 3;
+        var front = height * 2 / 3;
+        var side = this.radius * ts / 2;
         triangle(back, -side, back, side, front, 0);
-    },
-    drawBase: function() {
-        stroke(this.border);
-        fill(this.secondary);
-        ellipse(this.pos.x, this.pos.y, this.radius * ts, this.radius * ts);
     }
 };
 
