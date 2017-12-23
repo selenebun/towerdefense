@@ -77,7 +77,7 @@ tower.laser = {
             // Methods
             attack: function(e) {
                 if (this.lastTarget === e) {
-                    if ((Math.floor(Math.random() * 3) == 0){
+                    if ((Math.floor(Math.random()) * 3) == 0){
                         this.duration++;
                     }
                 } else {
