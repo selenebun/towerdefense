@@ -123,6 +123,20 @@ function getInRange(cx, cy, radius, entities) {
     return results;
 }
 
+// Get enemy with the most health
+function getStrongest(entities) {
+    var mostHealth = 0;
+    var chosen = entities[0];
+    for (var i = 0; i < entities.length; i++) {
+        var e = entities[i];
+        if (e.health > mostHealth) {
+            mostHealth = e.health;
+            chosen = e;
+        }
+    }
+    return chosen;
+}
+
 // Get entities without a certain status effect
 function getNoEffect(entities, effect) {
     var results = [];

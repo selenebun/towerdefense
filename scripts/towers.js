@@ -53,7 +53,7 @@ tower.laser = {
     // Stats
     cooldownMax: 1,
     cost: 75,
-    damageMax: 2,
+    damageMax: 3,
     range: 2,
     type: 'energy',
     // Upgrades
@@ -179,8 +179,8 @@ tower.sniper = {
     name: 'sniper',
     title: 'Sniper Tower',
     // Stats
-    cooldownMax: 140,
-    cooldownMin: 100,
+    cooldownMax: 100,
+    cooldownMin: 60,
     cost: 200,
     damageMax: 100,
     damageMin: 100,
@@ -194,6 +194,15 @@ tower.sniper = {
         var front = height * 2 / 3;
         var side = this.radius * ts / 2;
         triangle(back, -side, back, side, front, 0);
+    },
+    target(entities) {
+        entities = this.visible(entities);
+        if (entities.length === 0) return;
+        var t = getTaunting(entities);
+        if (t.length > 0) entities = t;
+        var e = getStrongest(entities);
+        if (typeof e === 'undefined') return;
+        this.onAim(e);
     }
 };
 
