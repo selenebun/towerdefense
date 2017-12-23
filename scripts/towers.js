@@ -179,8 +179,8 @@ tower.sniper = {
     name: 'sniper',
     title: 'Sniper Tower',
     // Stats
-    cooldownMax: 140,
-    cooldownMin: 100,
+    cooldownMax: 70,
+    cooldownMin: 50,
     cost: 200,
     damageMax: 100,
     damageMin: 100,
