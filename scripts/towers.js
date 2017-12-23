@@ -21,7 +21,7 @@ tower.gun = {
     // Stats
     cooldownMax: 18,
     cooldownMin: 8,
-    cost: 25,
+    cost: 30,
     range: 3,
     // Upgrades
     upgrades: [
@@ -36,6 +36,20 @@ tower.gun = {
             cost: 75,
             damageMax: 10,
             damageMin: 0
+                upgrades: [
+                    {
+                        // Display
+                        color: [249, 105, 14],
+                        // Misc
+                        title: 'Machine Gun',
+                        // Stats
+                        cooldownMax: 2,
+                        cooldownMin: 0,
+                        cost: 120,
+                        damageMax: 80,
+                        damageMin: 0
+                    }
+    ]
         }
     ]
 };
