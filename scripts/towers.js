@@ -71,7 +71,7 @@ tower.laser = {
             // Stats
             cooldownMax: 0,
             cost: 275,
-            damageMax: 0.01,
+            damageMax: 0.001,
             damageMin: 0.0001,
             range: 3,
             // Methods
