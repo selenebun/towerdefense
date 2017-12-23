@@ -196,6 +196,15 @@ tower.sniper = {
         var front = height * 2 / 3;
         var side = this.radius * ts / 2;
         triangle(back, -side, back, side, front, 0);
+    },
+    target(entities) {
+        entities = this.visible(entities);
+        if (entities.length === 0) return;
+        var t = getTaunting(entities);
+        if (t.length > 0) entities = t;
+        var e = getStrongest(entities);
+        if (typeof e === 'undefined') return;
+        this.onAim(e);
     }
 };
 
