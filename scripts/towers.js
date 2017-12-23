@@ -255,7 +255,7 @@ tower.missile = {
     // Stats
     cooldownMax: 80,
     cooldownMin: 60,
-    cost: 600,
+    cost: 300,
     range: 7,
     damageMax: 60,
     damageMin: 40,
