@@ -52,8 +52,10 @@ tower.laser = {
     title: 'Laser Tower',
     // Stats
     cooldownMax: 1,
+
     cost: 47,
     damageMax: 2,
+
     range: 2,
     type: 'energy',
     // Upgrades
@@ -181,9 +183,11 @@ tower.sniper = {
     name: 'sniper',
     title: 'Sniper Tower',
     // Stats
+
     cooldownMax: 140,
     cooldownMin: 100,
     cost: 54,
+
     damageMax: 100,
     damageMin: 100,
     range: 9,
