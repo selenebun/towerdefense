@@ -71,13 +71,15 @@ tower.laser = {
             // Stats
             cooldownMax: 0,
             cost: 275,
-            damageMax: 0.001,
+            damageMax: 0.01,
             damageMin: 0.0001,
             range: 3,
             // Methods
             attack: function(e) {
                 if (this.lastTarget === e) {
-                    this.duration++;
+                    if ((Math.floor(Math.random() * 3) == 0){
+                        this.duration++;
+                    }
                 } else {
                     this.lastTarget = e;
                     this.duration = 0;
