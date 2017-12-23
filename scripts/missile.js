@@ -19,7 +19,7 @@ class Missile {
         var blastRadius = 1;
         var inRadius = getInRange(t.x, t.y, blastRadius, enemies);
         noStroke();
-        fill(102, 51, 153, 127);
+        fill(207, 0, 15, 127);
         ellipse(t.x, t.y, ts * 2.5, ts * 2.5);
         for (var i = 0; i < inRadius.length; i++) {
             var e = inRadius[i];
