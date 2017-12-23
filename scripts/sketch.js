@@ -104,10 +104,15 @@ function calcFPS() {
     var fps = frameRate();
     avgFPS += (fps - avgFPS) / ++numFPS;
 
+    // Draw black rect under
+    noStroke();
+    fill(255, 0, 0);
+    rect(0, height - 40, 60, 40);
+
     // Update FPS meter
     fill(255);
     var fpsText = 'FPS: ' + fps.toFixed(2) + '\nAvg: ' + avgFPS.toFixed(2);
-    text(fpsText, 10, height - 30);
+    text(fpsText, 5, height - 25);
 }
 
 // Check if all conditions for placing a tower are true
@@ -781,6 +786,24 @@ function draw() {
         t.draw();
     }
 
+    // Update and draw projectiles
+    for (var i = 0; i < projectiles.length; i++) {
+        var p = projectiles[i];
+
+        if (!paused) {
+            p.steer();
+            p.update();
+        }
+
+        // Attack target
+        if (p.reachedTarget()) p.attack()
+
+        // Kill if outside map
+        if (outsideMap(p)) p.kill();
+
+        p.draw();
+    }
+
     // Draw range of tower being placed
     if (doRange()) {
         var p = gridPos(mouseX, mouseY);
@@ -888,6 +911,10 @@ function keyPressed() {
         case 53:
             // 5
             setPlace('bomb');
+            break;
+        case 54:
+            // 6
+            setPlace('missile');
             break;
         case 67:
             // C

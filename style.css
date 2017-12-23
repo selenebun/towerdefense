@@ -65,7 +65,7 @@ a:link, a:visited {
 
 #right-asides {
     margin-right: 2px;
-    min-width: 190px;
+    min-width: 195px;
 }
 
 aside {
@@ -209,4 +209,8 @@ footer #copyright {
 
 .bomb {
     background-color: rgb(102, 51, 153);
+}
+
+.missile {
+    background-color: rgb(30, 130, 76);
 }

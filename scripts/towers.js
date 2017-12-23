@@ -209,8 +209,8 @@ tower.bomb = {
     name: 'bomb',
     title: 'Bomb Tower',
     // Stats
-    cooldownMin: 40,
     cooldownMax: 60,
+    cooldownMin: 40,
     cost: 300,
     damageMax: 60,
     damageMin: 20,
@@ -235,5 +235,61 @@ tower.bomb = {
             var amt = round(random(this.damageMin, this.damageMax));
             h.dealDamage(amt, this.type);
         }
+    }
+};
+
+tower.missile = {
+    // Display
+    baseOnTop: false,
+    color: [30, 130, 76],
+    drawLine: false,
+    length: 0.6,
+    radius: 0.75,
+    secondary: [189, 195, 199],
+    width: 0.2,
+    // Misc
+    name: 'missile',
+    title: 'Missile Tower',
+    // Stats
+    cooldownMax: 80,
+    cooldownMin: 60,
+    cost: 175,
+    range: 7,
+    damageMax: 60,
+    damageMin: 40,
+    type: 'explosion',
+    // Methods
+    drawBarrel: function() {
+        stroke(this.border);
+        fill(this.secondary);
+        rect(0, -this.width * ts, this.length * ts, this.width * ts);
+        rect(0, 0, this.length * ts, this.width * ts);
+        fill(207, 0, 15);
+        var mid = this.width * ts / 2;
+        var base = this.length * ts;
+        var tip = this.length * ts + this.width * ts * 2;
+        var side = this.width * ts;
+        triangle(base, -side, tip, -mid, base, 0);
+        triangle(base, side, tip, mid, base, 0);
+        fill(this.color);
+        var edge = this.width * ts * 4;
+        var fEdge = this.width * ts * 1.5;
+        var back = -this.width * ts * 0.75;
+        var front = this.width * ts * 1.25;
+        quad(back, -edge, back, edge, front, fEdge, front, -fEdge);
+    },
+    drawBase: function() {
+        stroke(this.border);
+        fill(this.secondary);
+        ellipse(this.pos.x, this.pos.y, this.radius * ts, this.radius * ts);
+    },
+    onAim(e) {
+        if (this.canFire() || this.follow) this.aim(e.pos.x, e.pos.y);
+        if (!this.canFire()) return;
+        this.resetCooldown();
+        var angle = atan2(e.pos.y - this.pos.y, e.pos.x - this.pos.x);
+        var vx = cos(angle) * 3;
+        var vy = sin(angle) * 3;
+        projectiles.push(new Missile(this.pos.x, this.pos.y, vx, vy, e));
     }
 };
