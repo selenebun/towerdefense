@@ -106,8 +106,8 @@ function calcFPS() {
 
     // Draw black rect under
     noStroke();
-    fill(255, 0, 0);
-    rect(0, height - 40, 60, 40);
+    fill(0);
+    rect(0, height - 40, 70, 40);
 
     // Update FPS meter
     fill(255);
