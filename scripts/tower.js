@@ -123,7 +123,7 @@ class Tower {
 
     // Sell price
     sellPrice() {
-        return this.totalCost * sellConst;
+        return parseInt(this.totalCost * sellConst, 10);
     }
 
     // Target correct enemy
