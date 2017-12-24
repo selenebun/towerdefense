@@ -262,8 +262,12 @@ function isWave(min, max) {
 
 // Load map from template
 // Always have an exit and spawnpoints if you do not have a premade grid
+// TODO health and money by map
 function loadMap() {
     var name = document.getElementById('map').value;
+
+    health = 40;
+    cash = 55;
     
     if (name === 'custom' && custom) {
         // Grids
@@ -315,7 +319,14 @@ function loadMap() {
         resizeFit();
     } else {
         resizeMax();
-        randomMap(name === 'random3' ? 3 : 2);
+        var numSpawns;
+        if (name === 'random3') {
+            cash = 65;
+            numSpawns = 3;
+        } else {
+            numSpawns = 2;
+        }
+        randomMap(numSpawns);
         display = replaceArray(
             grid, [0, 1, 2, 3, 4], ['empty', 'wall', 'empty', 'tower', 'empty']
         );
@@ -558,7 +569,7 @@ function removeDead(entities) {
     }
 }
 
-// TODO vary health based on difficulty
+// TODO vary health based on map
 function resetGame() {
     loadMap();
     // Clear all entities
@@ -571,7 +582,6 @@ function resetGame() {
     // Reset all stats
     health = 40;
     maxHealth = health;
-    cash = 55;
     wave = 0;
     // Reset all flags
     paused = true;
