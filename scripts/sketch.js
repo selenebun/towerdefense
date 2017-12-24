@@ -917,10 +917,6 @@ function keyPressed() {
             // 6
             setPlace('rocket');
             break;
-        case 67:
-            // C
-            showTile = !showTile;
-            break;
         case 70:
             // F
             showFPS = !showFPS;
@@ -944,6 +940,10 @@ function keyPressed() {
         case 83:
             // S
             if (selected) sell(selected);
+            break;
+        case 84:
+            // T
+            showTile = !showTile;
             break;
         case 85:
             // U
