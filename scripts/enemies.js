@@ -134,7 +134,7 @@ enemy.tank = {
     health: 750,
     immune: ['poison', 'slow'],
     resistant: ['energy', 'physical'],
-    weak: ['explosion'],
+    weak: ['explosion', 'piercing'],
     draw: function() {
         push();
         translate(this.pos.x, this.pos.y);

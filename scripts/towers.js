@@ -211,7 +211,6 @@ tower.sniper = {
             // Display
             baseOnTop: false,
             color: [103, 65, 114],
-            follow: true,
             hasBase: true,
             length: 0.7,
             radius: 1,
@@ -228,6 +227,7 @@ tower.sniper = {
             damageMax: 200,
             damageMin: 200,
             range: 11,
+            type: 'piercing',
             // Methods
             drawBarrel: function() {
                 stroke(this.border);
