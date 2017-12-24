@@ -254,47 +254,6 @@ tower.sniper = {
     ]
 };
 
-tower.bomb = {
-    // Display
-    baseOnTop: false,
-    color: [102, 51, 153],
-    drawLine: false,
-    length: 0.6,
-    width: 0.35,
-    secondary: [103, 128, 159],
-    // Misc
-    name: 'bomb',
-    title: 'Bomb Tower',
-    // Stats
-    cooldownMax: 60,
-    cooldownMin: 40,
-    cost: 300,
-    damageMax: 60,
-    damageMin: 20,
-    range: 2,
-    type: 'explosion',
-    // Methods
-    drawBarrel: function() {
-        stroke(this.border);
-        fill(this.secondary);
-        rect(0, -this.width * ts / 2, this.length * ts, this.width * ts);
-        fill(191, 85, 236);
-        ellipse(0, 0, this.radius * ts * 2 / 3, this.radius * ts * 2 / 3);
-    },
-    onHit: function(e) {
-        var blastRadius = 1;
-        var inRadius = getInRange(e.pos.x, e.pos.y, blastRadius, enemies);
-        noStroke();
-        fill(102, 51, 153, 127);
-        ellipse(e.pos.x, e.pos.y, ts * 2.5, ts * 2.5);
-        for (var i = 0; i < inRadius.length; i++) {
-            var h = inRadius[i];
-            var amt = round(random(this.damageMin, this.damageMax));
-            h.dealDamage(amt, this.type);
-        }
-    }
-};
-
 tower.rocket = {
     // Display
     baseOnTop: false,
@@ -310,7 +269,7 @@ tower.rocket = {
     // Stats
     cooldownMax: 80,
     cooldownMin: 60,
-    cost: 175,
+    cost: 250,
     range: 7,
     damageMax: 60,
     damageMin: 40,
@@ -356,7 +315,7 @@ tower.rocket = {
             name: 'missileSilo',
             title: 'Missile Silo',
             // Stats
-            cost: 200,
+            cost: 150,
             damageMax: 120,
             damageMin: 100,
             range: 9,
@@ -395,4 +354,45 @@ tower.rocket = {
             },
         }
     ]
+};
+
+tower.bomb = {
+    // Display
+    baseOnTop: false,
+    color: [102, 51, 153],
+    drawLine: false,
+    length: 0.6,
+    width: 0.35,
+    secondary: [103, 128, 159],
+    // Misc
+    name: 'bomb',
+    title: 'Bomb Tower',
+    // Stats
+    cooldownMax: 60,
+    cooldownMin: 40,
+    cost: 300,
+    damageMax: 60,
+    damageMin: 20,
+    range: 2,
+    type: 'explosion',
+    // Methods
+    drawBarrel: function() {
+        stroke(this.border);
+        fill(this.secondary);
+        rect(0, -this.width * ts / 2, this.length * ts, this.width * ts);
+        fill(191, 85, 236);
+        ellipse(0, 0, this.radius * ts * 2 / 3, this.radius * ts * 2 / 3);
+    },
+    onHit: function(e) {
+        var blastRadius = 1;
+        var inRadius = getInRange(e.pos.x, e.pos.y, blastRadius, enemies);
+        noStroke();
+        fill(102, 51, 153, 127);
+        ellipse(e.pos.x, e.pos.y, ts * 2.5, ts * 2.5);
+        for (var i = 0; i < inRadius.length; i++) {
+            var h = inRadius[i];
+            var amt = round(random(this.damageMin, this.damageMax));
+            h.dealDamage(amt, this.type);
+        }
+    }
 };

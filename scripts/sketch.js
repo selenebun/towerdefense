@@ -911,11 +911,11 @@ function keyPressed() {
             break;
         case 53:
             // 5
-            setPlace('bomb');
+            setPlace('rocket');
             break;
         case 54:
             // 6
-            setPlace('rocket');
+            setPlace('bomb');
             break;
         case 70:
             // F
