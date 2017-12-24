@@ -315,7 +315,7 @@ function loadMap() {
         resizeFit();
     } else {
         resizeMax();
-        randomMap();
+        randomMap(name === 'random3' ? 3 : 2);
         display = replaceArray(
             grid, [0, 1, 2, 3, 4], ['empty', 'wall', 'empty', 'tower', 'empty']
         );
@@ -374,7 +374,7 @@ function placeable(col, row) {
 }
 
 // Generate random map
-function randomMap() {
+function randomMap(numSpawns) {
     // Generate empty tiles and walls
     grid = [];
     for (var x = 0; x < cols; x++) {
@@ -396,7 +396,6 @@ function randomMap() {
     // Generate enemy spawnpoints and ensure exit is possible
     spawnpoints = [];
     visitMap = getVisitMap(walkMap);
-    var numSpawns = parseInt(document.getElementById('difficulty').value) + 1;
     for (var i = 0; i < numSpawns; i++) {
         var s;
         // Try to place spawnpoint
@@ -569,12 +568,10 @@ function resetGame() {
     newEnemies = [];
     newProjectiles = [];
     newTowers = [];
-    // Get difficulty
-    var d = parseInt(document.getElementById('difficulty').value);
     // Reset all stats
-    health = [40, 40, 40, 40][d];
+    health = 40;
     maxHealth = health;
-    cash = [40, 55, 65, 65][d];
+    cash = 55;
     wave = 0;
     // Reset all flags
     paused = true;
@@ -1002,5 +999,4 @@ function mousePressed() {
 
 // Events
 
-document.getElementById('difficulty').addEventListener('change', resetGame);
 document.getElementById('map').addEventListener('change', resetGame);
