@@ -945,6 +945,7 @@ function keyPressed() {
         case 80:
             // P
             showEffects = !showEffects;
+            if (!showEffects) systems = [];
             break;
         case 82:
             // R
