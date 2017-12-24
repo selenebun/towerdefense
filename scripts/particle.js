@@ -68,3 +68,14 @@ class Bomb extends Particle {
         this.radius = randint(2, 6);
     }
 }
+
+
+class Shrapnel extends Fire {
+    constructor(pos, speed) {
+        super(pos, speed);
+        this.decay = random(8, 10);
+        var r = 63 + random(127);
+        this.color = [r, r, r];
+        this.radius = randint(2, 6);
+    }
+}

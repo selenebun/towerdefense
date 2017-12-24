@@ -41,3 +41,13 @@ class BombExplosion extends ParticleSystem {
         this.particles.push(new Bomb(this.origin, 2));
     }
 }
+
+class ShrapnelExplosion extends ParticleSystem {
+    constructor(x, y) {
+        super(x, y);
+    }
+
+    addParticle() {
+        this.particles.push(new Shrapnel(this.origin, 5));
+    }
+}
