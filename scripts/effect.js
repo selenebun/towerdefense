@@ -9,6 +9,10 @@ class Effect {
         this.name = 'status';
     }
 
+    isDead() {
+        return !this.alive;
+    }
+
     kill() {
         this.alive = false;
     }

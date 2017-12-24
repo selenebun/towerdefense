@@ -1,5 +1,6 @@
 var enemies = [];
 var projectiles = [];
+var systems = [];
 var towers = [];
 var newEnemies = [];
 var newProjectiles = [];
@@ -559,16 +560,6 @@ function recalculate() {
     paths = newPaths;
 }
 
-// Remove dead entities
-// TODO onDeath()
-function removeDead(entities) {
-    for (var i = entities.length - 1; i >= 0; i--) {
-        var e = entities[i];
-        if (e.alive) continue;
-        entities.splice(i, 1);
-    }
-}
-
 // TODO vary health based on map
 function resetGame() {
     loadMap();
@@ -794,6 +785,12 @@ function draw() {
         t.draw();
     }
 
+    // Update and draw particle systems
+    for (var i = 0; i < systems.length; i++) {
+        var ps = systems[i];
+        ps.run();
+    }
+
     // Update and draw projectiles
     for (var i = 0; i < projectiles.length; i++) {
         var p = projectiles[i];
@@ -804,7 +801,7 @@ function draw() {
         }
 
         // Attack target
-        if (p.reachedTarget()) p.attack()
+        if (p.reachedTarget()) p.explode()
 
         // Kill if outside map
         if (outsideMap(p)) p.kill();
@@ -850,6 +847,7 @@ function draw() {
 
     removeDead(enemies);
     removeDead(projectiles);
+    removeDead(systems);
     removeDead(towers);
 
     projectiles = projectiles.concat(newProjectiles);

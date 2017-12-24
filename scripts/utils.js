@@ -221,6 +221,14 @@ function rangeText(min, max) {
     }
 }
 
+// Remove dead entities
+// TODO onDeath()
+function removeDead(entities) {
+    for (var i = entities.length - 1; i >= 0; i--) {
+        if (entities[i].isDead()) entities.splice(i, 1);
+    }
+}
+
 // Replace values in copy of 2d array
 function replaceArray(arr, vals, subs) {
     var newArr = [];

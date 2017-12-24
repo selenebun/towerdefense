@@ -387,8 +387,13 @@ tower.bomb = {
         var blastRadius = 1;
         var inRadius = getInRange(e.pos.x, e.pos.y, blastRadius, enemies);
         noStroke();
-        fill(102, 51, 153, 127);
+        fill(191, 85, 236, 127);
         ellipse(e.pos.x, e.pos.y, ts * 2.5, ts * 2.5);
+        var s = new BombExplosion(e.pos.x, e.pos.y);
+        for (var i = 0; i < 32; i++) {
+            s.addParticle();
+        }
+        systems.push(s);
         for (var i = 0; i < inRadius.length; i++) {
             var h = inRadius[i];
             var amt = round(random(this.damageMin, this.damageMax));

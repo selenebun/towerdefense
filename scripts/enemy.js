@@ -82,6 +82,10 @@ class Enemy {
         return this.color;
     }
 
+    isDead() {
+        return !this.alive;
+    }
+
     kill() {
         this.alive = false;
     }

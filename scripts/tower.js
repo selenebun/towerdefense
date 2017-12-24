@@ -96,6 +96,10 @@ class Tower {
         this.alive = false;
     }
 
+    isDead() {
+        return !this.alive;
+    }
+
     // Functionality once entity has been targeted
     onAim(e) {
         if (this.canFire() || this.follow) this.aim(e.pos.x, e.pos.y);

@@ -22,22 +22,6 @@ class Missile {
         this.topSpeed = 96 / ts;
     }
 
-    // Deal damage to enemy
-    attack() {
-        var t = this.pos;
-        var inRadius = getInRange(t.x, t.y, this.blastRadius, enemies);
-        noStroke();
-        fill(this.color[0], this.color[1], this.color[2], 127);
-        var r = (this.blastRadius + 0.5) * ts * 2;
-        ellipse(t.x, t.y, r, r);
-        for (var i = 0; i < inRadius.length; i++) {
-            var e = inRadius[i];
-            var damage = round(random(this.damageMax, this.damageMin));
-            e.dealDamage(damage, 'explosion');
-        }
-        this.kill();
-    }
-
     draw() {
         push();
         translate(this.pos.x, this.pos.y);
@@ -59,6 +43,27 @@ class Missile {
         pop();
     }
 
+    explode() {
+        this.kill();
+        var t = this.pos;
+        var inRadius = getInRange(t.x, t.y, this.blastRadius, enemies);
+        noStroke();
+        fill(this.color[0], this.color[1], this.color[2], 127);
+        var r = (this.blastRadius + 0.5) * ts * 2;
+        var s = new RocketExplosion(this.pos.x, this.pos.y);
+        for (var i = 0; i < 32; i++) {
+            s.addParticle();
+        }
+        systems.push(s);
+        ellipse(t.x, t.y, r, r);
+        for (var i = 0; i < inRadius.length; i++) {
+            var e = inRadius[i];
+            var damage = round(random(this.damageMax, this.damageMin));
+            e.dealDamage(damage, 'explosion');
+        }
+        this.kill();
+    }
+
     findTarget() {
         var entities = this.visible(enemies);
         if (entities.length === 0) {
@@ -73,6 +78,10 @@ class Missile {
             return;
         }
         this.target = e;
+    }
+
+    isDead() {
+        return !this.alive;
     }
 
     kill() {
@@ -101,8 +110,7 @@ class Missile {
         if (this.lifetime > 0) {
             this.lifetime--;
         } else {
-            this.attack();
-            this.kill;
+            this.explode();
         }
     }
 
