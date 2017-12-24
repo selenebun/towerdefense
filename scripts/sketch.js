@@ -567,6 +567,7 @@ function resetGame() {
     // Clear all entities
     enemies = [];
     projectiles = [];
+    systems = [];
     towers = [];
     newEnemies = [];
     newProjectiles = [];
