@@ -4,18 +4,21 @@ class Missile {
         this.pos = createVector(x, y);
         this.vel = createVector(vx, vy);
         this.acc = createVector(0, 0);
+        this.accAmt = 0.6;
         // Display
         this.color = [207, 0, 15];
         this.length = 0.6 * ts;
         this.width = 0.2 * ts;
         // Misc
         this.alive = true;
+        this.lifetime = 40;
+        this.range = 4;
         this.target = e;
     }
 
     // Deal damage to enemy
     attack() {
-        var t = this.target.pos;
+        var t = this.pos;
         var blastRadius = 1;
         var inRadius = getInRange(t.x, t.y, blastRadius, enemies);
         noStroke();
@@ -50,6 +53,22 @@ class Missile {
         pop();
     }
 
+    findTarget() {
+        var entities = this.visible(enemies);
+        if (entities.length === 0) {
+            this.kill();
+            return;
+        }
+        var t = getTaunting(entities);
+        if (t.length > 0) entities = t;
+        var e = getNearest(entities, this.pos);
+        if (typeof e === 'undefined') {
+            this.kill();
+            return;
+        }
+        this.target = e;
+    }
+
     kill() {
         this.alive = false;
     }
@@ -62,17 +81,27 @@ class Missile {
 
     steer() {
         if (!this.target.alive) return;
-        var x = this.target.pos.x;
-        var y = this.target.pos.y;
-        var angle = atan2(y - this.pos.y, x - this.pos.x);
-        this.vel = createVector(cos(angle) * 3, sin(angle) * 3);
+        var dist = this.pos.dist(this.target.pos);
+        var unit = p5.Vector.sub(this.target.pos, this.pos).normalize();
+        this.acc.add(unit.mult(this.accAmt));
     }
 
     update() {
         this.vel.add(this.acc);
         this.vel.limit(96 / ts);
-        if (!this.target.alive) this.kill();
         this.pos.add(this.vel);
         this.acc.mult(0);
+        if (!this.target.alive) this.findTarget();
+        if (this.lifetime > 0) {
+            this.lifetime--;
+        } else {
+            this.attack();
+            this.kill;
+        }
+    }
+
+    // Returns array of visible entities out of passed array
+    visible(entities) {
+        return getInRange(this.pos.x, this.pos.y, this.range, entities);
     }
 }

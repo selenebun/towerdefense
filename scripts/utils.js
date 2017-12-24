@@ -123,14 +123,15 @@ function getInRange(cx, cy, radius, entities) {
     return results;
 }
 
-// Get enemy with the most health
-function getStrongest(entities) {
-    var mostHealth = 0;
+// Nearest to entity
+function getNearest(entities, pos) {
+    var lowestDist = 10000;
     var chosen = entities[0];
     for (var i = 0; i < entities.length; i++) {
         var e = entities[i];
-        if (e.health > mostHealth) {
-            mostHealth = e.health;
+        var dist = pos.dist(e.pos);
+        if (dist < lowestDist) {
+            lowestDist = dist;
             chosen = e;
         }
     }
@@ -145,6 +146,20 @@ function getNoEffect(entities, effect) {
         if (getByName(e.effects, effect).length === 0) results.push(e);
     }
     return results;
+}
+
+// Get enemy with the most health
+function getStrongest(entities) {
+    var mostHealth = 0;
+    var chosen = entities[0];
+    for (var i = 0; i < entities.length; i++) {
+        var e = entities[i];
+        if (e.health > mostHealth) {
+            mostHealth = e.health;
+            chosen = e;
+        }
+    }
+    return chosen;
 }
 
 // Get all taunting enemies
