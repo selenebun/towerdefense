@@ -295,7 +295,7 @@ tower.bomb = {
     }
 };
 
-tower.missile = {
+tower.rocket = {
     // Display
     baseOnTop: false,
     color: [30, 130, 76],
@@ -305,8 +305,8 @@ tower.missile = {
     secondary: [189, 195, 199],
     width: 0.2,
     // Misc
-    name: 'missile',
-    title: 'Missile Tower',
+    name: 'rocket',
+    title: 'Rocket Tower',
     // Stats
     cooldownMax: 80,
     cooldownMin: 60,
@@ -344,9 +344,55 @@ tower.missile = {
         if (this.canFire() || this.follow) this.aim(e.pos.x, e.pos.y);
         if (!this.canFire()) return;
         this.resetCooldown();
-        var angle = atan2(e.pos.y - this.pos.y, e.pos.x - this.pos.x);
-        var vx = cos(angle) * 3;
-        var vy = sin(angle) * 3;
-        projectiles.push(new Missile(this.pos.x, this.pos.y, vx, vy, e));
-    }
+        projectiles.push(new Missile(this.pos.x, this.pos.y, e));
+    },
+    // Upgrades
+    upgrades: [
+        {
+            // Display
+            color: [65, 131, 215],
+            secondary: [108, 122, 137],
+            // Misc
+            name: 'missileSilo',
+            title: 'Missile Silo',
+            // Stats
+            cost: 200,
+            damageMax: 120,
+            damageMin: 100,
+            range: 9,
+            // Methods
+            drawBarrel: function() {
+                stroke(this.border);
+                fill(this.secondary);
+                rect(0, -this.width * ts, this.length * ts, this.width * ts);
+                rect(0, 0, this.length * ts, this.width * ts);
+                fill(this.color);
+                var mid = this.width * ts / 2;
+                var base = this.length * ts;
+                var tip = this.length * ts + this.width * ts * 2;
+                var side = this.width * ts;
+                triangle(base, -side, tip, -mid, base, 0);
+                triangle(base, side, tip, mid, base, 0);
+                fill(31, 58, 147);
+                var edge = this.width * ts * 4;
+                var fEdge = this.width * ts * 1.5;
+                var back = -this.width * ts * 0.75;
+                var front = this.width * ts * 1.25;
+                quad(back, -edge, back, edge, front, fEdge, front, -fEdge);
+            },
+            onAim(e) {
+                if (this.canFire() || this.follow) this.aim(e.pos.x, e.pos.y);
+                if (!this.canFire()) return;
+                this.resetCooldown();
+                var m = new Missile(this.pos.x, this.pos.y, e);
+                m.color = [65, 131, 215];
+                m.secondary = this.secondary;
+                m.blastRadius = 1.5;
+                m.damageMax = this.damageMax;
+                m.damageMin = this.damageMin;
+                m.topSpeed = 120 / ts;
+                projectiles.push(m);
+            },
+        }
+    ]
 };

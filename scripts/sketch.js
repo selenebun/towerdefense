@@ -623,7 +623,8 @@ function setPlace(t) {
 function showRange(t, cx, cy) {
     stroke(255);
     fill(t.color[0], t.color[1], t.color[2], 63);
-    ellipse(cx, cy, (t.range + 0.5) * ts * 2, (t.range + 0.5) * ts * 2);
+    var r = (t.range + 0.5) * ts * 2;
+    ellipse(cx, cy, r, r);
 }
 
 // Display tower information
@@ -914,7 +915,7 @@ function keyPressed() {
             break;
         case 54:
             // 6
-            setPlace('missile');
+            setPlace('rocket');
             break;
         case 67:
             // C

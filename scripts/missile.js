@@ -1,33 +1,38 @@
 class Missile {
-    constructor(x, y, vx, vy, e) {
+    constructor(x, y, e) {
         // Physics
         this.pos = createVector(x, y);
-        this.vel = createVector(vx, vy);
+        this.vel = createVector(0, 0);
         this.acc = createVector(0, 0);
-        this.accAmt = 0.6;
-        this.topSpeed = 96 / ts;
         // Display
         this.color = [207, 0, 15];
+        this.secondary = [189, 195, 199];
         this.length = 0.6 * ts;
         this.width = 0.2 * ts;
         // Misc
         this.alive = true;
+        this.target = e;
+        // Stats
+        this.accAmt = 0.6;
+        this.blastRadius = 1;
+        this.damageMax = 60;
+        this.damageMin = 40;
         this.lifetime = 40;
         this.range = 4;
-        this.target = e;
+        this.topSpeed = 96 / ts;
     }
 
     // Deal damage to enemy
     attack() {
         var t = this.pos;
-        var blastRadius = 1;
-        var inRadius = getInRange(t.x, t.y, blastRadius, enemies);
+        var inRadius = getInRange(t.x, t.y, this.blastRadius, enemies);
         noStroke();
-        fill(207, 0, 15, 127);
-        ellipse(t.x, t.y, ts * 2.5, ts * 2.5);
+        fill(this.color[0], this.color[1], this.color[2], 127);
+        var r = (this.blastRadius + 0.5) * ts * 2;
+        ellipse(t.x, t.y, r, r);
         for (var i = 0; i < inRadius.length; i++) {
             var e = inRadius[i];
-            var damage = round(random(40, 60));
+            var damage = round(random(this.damageMax, this.damageMin));
             e.dealDamage(damage, 'explosion');
         }
         this.kill();
@@ -39,7 +44,7 @@ class Missile {
         rotate(this.vel.heading());
 
         stroke(0);
-        fill(189, 195, 199);
+        fill(this.secondary);
         var base = this.length / 2;
         var side = this.width / 2;
         var tip = base + this.width * 2;
