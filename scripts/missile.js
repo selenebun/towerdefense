@@ -39,9 +39,13 @@ class Missile {
         var base = this.length / 2;
         var side = this.width / 2;
         var tip = base + this.width * 2;
+        var back = -base - base * 2 / 3;
+        var fin = side * 4;
         rect(-base, -side, base * 2, side * 2);
         fill(207, 0, 15);
         triangle(base, -side, tip, 0, base, side);
+        triangle(-base, side, back, fin, 0, side);
+        triangle(-base, -side, back, -fin, 0, -side);
 
         pop();
     }
