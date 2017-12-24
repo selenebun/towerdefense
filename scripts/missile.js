@@ -18,7 +18,7 @@ class Missile {
         this.damageMax = 60;
         this.damageMin = 40;
         this.lifetime = 60;
-        this.range = 4;
+        this.range = 7;
         this.topSpeed = 96 / ts;
     }
 
