@@ -29,6 +29,7 @@ tower.gun = {
             // Display
             color: [249, 105, 14],
             // Misc
+            name: 'machineGun',
             title: 'Machine Gun',
             // Stats
             cooldownMax: 5,
@@ -67,6 +68,7 @@ tower.laser = {
             weight: 3,
             width: 0.35,
             // Misc
+            name: 'beamEmitter',
             title: 'Beam Emitter',
             // Stats
             cooldownMax: 0,
@@ -173,7 +175,6 @@ tower.sniper = {
     follow: false,
     hasBase: false,
     radius: 0.9,
-    secondary: [103, 128, 159],
     weight: 3,
     // Misc
     name: 'sniper',
@@ -203,7 +204,54 @@ tower.sniper = {
         var e = getStrongest(entities);
         if (typeof e === 'undefined') return;
         this.onAim(e);
-    }
+    },
+    // Upgrades
+    upgrades: [
+        {
+            // Display
+            baseOnTop: false,
+            color: [103, 65, 114],
+            follow: true,
+            hasBase: true,
+            length: 0.7,
+            radius: 1,
+            secondary: [103, 128, 159],
+            weight: 4,
+            width: 0.4,
+            // Misc
+            name: 'railgun',
+            title: 'Railgun',
+            // Stats
+            cooldownMax: 120,
+            cooldownMin: 100,
+            cost: 300,
+            damageMax: 200,
+            damageMin: 200,
+            range: 11,
+            // Methods
+            drawBarrel: function() {
+                stroke(this.border);
+                fill(this.secondary);
+                var base = -this.length * ts;
+                var side = -this.width * ts / 2;
+                rect(base, side, this.length * ts * 2, this.width * ts);
+                fill(207, 0, 15);
+                ellipse(0, 0, this.radius * ts * 2 / 3, this.radius * ts * 2 / 3);
+            },
+            onHit: function(e) {
+                var blastRadius = 1;
+                var inRadius = getInRange(e.pos.x, e.pos.y, blastRadius, enemies);
+                noStroke();
+                fill(this.color[0], this.color[1], this.color[2], 127);
+                ellipse(e.pos.x, e.pos.y, ts * 2.5, ts * 2.5);
+                for (var i = 0; i < inRadius.length; i++) {
+                    var h = inRadius[i];
+                    var amt = round(random(this.damageMin, this.damageMax));
+                    h.dealDamage(amt, this.type);
+                }
+            }
+        }
+    ]
 };
 
 tower.bomb = {
