@@ -246,7 +246,7 @@ tower.sniper = {
                 ellipse(e.pos.x, e.pos.y, ts * 2.5, ts * 2.5);
                 if (showEffects) {
                     var s = new ShrapnelExplosion(e.pos.x, e.pos.y);
-                    for (var i = 0; i < 32; i++) {
+                    for (var i = 0; i < particleAmt; i++) {
                         s.addParticle();
                     }
                     systems.push(s);
@@ -398,7 +398,7 @@ tower.bomb = {
         ellipse(e.pos.x, e.pos.y, ts * 2.5, ts * 2.5);
         if (showEffects) {
             var s = new BombExplosion(e.pos.x, e.pos.y);
-            for (var i = 0; i < 32; i++) {
+            for (var i = 0; i < particleAmt; i++) {
                 s.addParticle();
             }
             systems.push(s);

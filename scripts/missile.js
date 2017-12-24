@@ -52,7 +52,7 @@ class Missile {
         var r = (this.blastRadius + 0.5) * ts * 2;
         if (showEffects) {
             var s = new RocketExplosion(this.pos.x, this.pos.y);
-            for (var i = 0; i < 32; i++) {
+            for (var i = 0; i < particleAmt; i++) {
                 s.addParticle();
             }
             systems.push(s);

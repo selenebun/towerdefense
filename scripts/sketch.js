@@ -12,6 +12,8 @@ var tileZoom = 2;
 var ts = 24;            // tile size
 var zoomDefault = ts;
 
+var particleAmt = 16;   // number of particles to draw per explosion
+
 var custom;             // custom map JSON
 var display;            // graphical display tiles
 var displayDir;         // direction display tiles are facing
