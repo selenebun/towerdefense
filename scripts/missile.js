@@ -69,14 +69,14 @@ class Missile {
     findTarget() {
         var entities = this.visible(enemies);
         if (entities.length === 0) {
-            this.explode();
+            this.kill();
             return;
         }
         var t = getTaunting(entities);
         if (t.length > 0) entities = t;
         var e = getNearest(entities, this.pos);
         if (typeof e === 'undefined') {
-            this.explode();
+            this.kill();
             return;
         }
         this.target = e;
