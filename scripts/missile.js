@@ -50,11 +50,13 @@ class Missile {
         noStroke();
         fill(this.color[0], this.color[1], this.color[2], 127);
         var r = (this.blastRadius + 0.5) * ts * 2;
-        var s = new RocketExplosion(this.pos.x, this.pos.y);
-        for (var i = 0; i < 32; i++) {
-            s.addParticle();
+        if (showEffects) {
+            var s = new RocketExplosion(this.pos.x, this.pos.y);
+            for (var i = 0; i < 32; i++) {
+                s.addParticle();
+            }
+            systems.push(s);
         }
-        systems.push(s);
         ellipse(t.x, t.y, r, r);
         for (var i = 0; i < inRadius.length; i++) {
             var e = inRadius[i];

@@ -48,6 +48,7 @@ var healthBar = true;   // display enemy health bar
 var paused;             // whether to update or not
 var randomWaves = true; // whether to do random or custom waves
 var scd;                // number of ticks until next spawn cycle
+var showEffects = true; // whether or not to display particle effects
 var showFPS = false;    // whether or not to display FPS
 var showTile = false;   // whether or not to display mouse tile
 var skipToNext = false; // whether or not to immediately start next wave
@@ -937,6 +938,10 @@ function keyPressed() {
         case 77:
             // M
             importMap(prompt('Input map string:'));
+            break;
+        case 80:
+            // P
+            showEffects = !showEffects;
             break;
         case 82:
             // R
