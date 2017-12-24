@@ -5,6 +5,7 @@ class Missile {
         this.vel = createVector(vx, vy);
         this.acc = createVector(0, 0);
         this.accAmt = 0.6;
+        this.topSpeed = 96 / ts;
         // Display
         this.color = [207, 0, 15];
         this.length = 0.6 * ts;
@@ -45,7 +46,7 @@ class Missile {
         var back = -base - base * 2 / 3;
         var fin = side * 4;
         rect(-base, -side, base * 2, side * 2);
-        fill(207, 0, 15);
+        fill(this.color);
         triangle(base, -side, tip, 0, base, side);
         triangle(-base, side, back, fin, 0, side);
         triangle(-base, -side, back, -fin, 0, -side);
@@ -88,7 +89,7 @@ class Missile {
 
     update() {
         this.vel.add(this.acc);
-        this.vel.limit(96 / ts);
+        this.vel.limit(this.topSpeed);
         this.pos.add(this.vel);
         this.acc.mult(0);
         if (!this.target.alive) this.findTarget();
