@@ -124,11 +124,12 @@ function getInRange(cx, cy, radius, entities) {
 }
 
 // Nearest to entity
-function getNearest(entities, pos) {
+function getNearest(entities, pos, ignore) {
     var lowestDist = 10000;
     var chosen = entities[0];
     for (var i = 0; i < entities.length; i++) {
         var e = entities[i];
+        if (typeof ignore !== 'undefined' && ignore.includes(e)) continue;
         var dist = pos.dist(e.pos);
         if (dist < lowestDist) {
             lowestDist = dist;
@@ -205,6 +206,17 @@ function neighbors(grid, col, row, val) {
 
 function outsideRect(x, y, cx, cy, w, h) {
     return x < cx || y < cy || x > cx + w || y > cy + h;
+}
+
+function polygon(x, y, radius, npoints) {
+    var angle = TWO_PI / npoints;
+    beginShape();
+    for (var a = 0; a < TWO_PI; a += angle) {
+        var sx = x + cos(a) * radius;
+        var sy = y + sin(a) * radius;
+        vertex(sx, sy);
+    }
+    endShape(CLOSE);
 }
 
 // Returns a random integer, using the same arguments as p5js random()

@@ -926,6 +926,10 @@ function keyPressed() {
             // 6
             setPlace('bomb');
             break;
+        case 55:
+            // 7
+            setPlace('tesla');
+            break;
         case 70:
             // F
             showFPS = !showFPS;
