@@ -417,7 +417,7 @@ tower.tesla = {
     hasBase: false,
     radius: 0.8,
     secondary: [30, 139, 195],
-    weight: 9,
+    weight: 10,
     // Misc
     name: 'tesla',
     title: 'Tesla Coil',
@@ -425,8 +425,8 @@ tower.tesla = {
     cooldownMax: 80,
     cooldownMin: 60,
     cost: 350,
-    damageMax: 256,
-    damageMin: 64,
+    damageMax: 512,
+    damageMin: 256,
     range: 4,
     type: 'energy',
     // Methods
