@@ -447,21 +447,29 @@ function randomWave() {
         waves.push([20, ['strong', 50], ['fast', 25]]);
         waves.push([10, ['fast', 50]]);
     }
+    if (isWave(7)) {
+        waves.push([20, ['medic', 'strong', 'strong', 25]]);
+    }
     if (isWave(10, 13)) {
+        waves.push([20, ['medic', 'strong', 'strong', 50]]);
         waves.push([5, ['fast', 50]]);
     }
     if (isWave(12, 17)) {
         waves.push([10, ['strong', 50], ['strongFast', 50]]);
         waves.push([10, ['strong', 25], ['stronger', 25], ['strongFast', 50]]);
         waves.push([5, ['strongFast', 100]]);
+        waves.push([20, ['stronger', 50]]);
     }
     if (isWave(15, 20)) {
         waves.push([
             40, ['tank', 'stronger', 'stronger', 'stronger', 10]
         ]);
+        waves.push([20, ['medic', 'stronger', 'stronger', 50]]);
         waves.push([40, ['tank', 25]]);
     }
     if (isWave(17)) {
+        waves.push([20, ['tank', 'medic', 'stronger', 50]]);
+        waves.push([20, ['tank', 'medic', 50], ['strongFast', 25]]);
         waves.push([10, ['tank', 50], ['strongFast', 25]]);
         waves.push([10, ['faster', 50]]);
         waves.push([20, ['tank', 50], ['faster', 25]]);
@@ -470,6 +478,7 @@ function randomWave() {
         waves.push([20, ['taunt', 'stronger', 'stronger', 'stronger', 25]]);
     }
     if (isWave(23)) {
+        waves.push([20, ['taunt', 'medic', 'tank', 25]]);
         waves.push([40, ['taunt', 'tank', 'tank', 'tank', 25]]);
         waves.push([5, ['faster', 100]]);
         waves.push([
@@ -482,6 +491,7 @@ function randomWave() {
         ]);
     }
     if (isWave(25)) {
+        waves.push([5, ['taunt', 'medic', 'tank', 50], ['faster', 50]]);
         waves.push([5, ['taunt', 'faster', 'faster', 'faster', 50]]);
         waves.push([
             10, ['taunt', 'tank', 'tank', 'tank', 50],
@@ -491,6 +501,7 @@ function randomWave() {
     if (isWave(30)) {
         waves.push([5, ['taunt', 'faster', 'faster', 'faster', 50]]);
         waves.push([5, ['taunt', 'tank', 'tank', 'tank', 50]]);
+        waves.push([5, ['taunt', 'medic', 'tank', 'tank', 50]]);
         waves.push([1, ['faster', 200]]);
     }
     if (isWave(35)) {
@@ -753,6 +764,7 @@ function draw() {
         if (!paused) {
             e.steer();
             e.update();
+            e.onTick();
         }
 
         // Kill if outside map

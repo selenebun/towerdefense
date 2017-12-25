@@ -86,6 +86,24 @@ enemy.strongFast = {
     }
 };
 
+enemy.medic = {
+    // Display
+    color: [192, 57, 43],
+    radius: 0.7,
+    // Misc
+    name: 'medic',
+    // Stats
+    cash: 6,
+    health: 375,
+    immune: ['regen'],
+    onTick: function() {
+        var affected = getInRange(this.pos.x, this.pos.y, 2, enemies);
+        for (var i = 0; i < affected.length; i++) {
+            affected[i].applyEffect('regen', 1);
+        }
+    }
+};
+
 enemy.stronger = {
     // Display
     color: [52, 73, 94],

@@ -106,6 +106,8 @@ class Enemy {
         }
     }
 
+    onTick() {}
+
     // Return speed in pixels per tick
     // Adjusted to not be affected by zoom level
     pxSpeed() {

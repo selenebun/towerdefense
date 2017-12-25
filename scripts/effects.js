@@ -40,3 +40,14 @@ effects.poison = {
         e.dealDamage(1, 'poison');
     }
 };
+
+effects.regen = {
+    // Display
+    color: [210, 82, 127],
+    // Misc
+    name: 'regen',
+    // Methods
+    onTick: function(e) {
+        if (e.health < e.maxHealth && random() < 0.2) e.health++;
+    }
+};
