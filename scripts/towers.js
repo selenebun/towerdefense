@@ -427,7 +427,7 @@ tower.tesla = {
     cost: 350,
     damageMax: 256,
     damageMin: 64,
-    range: 3,
+    range: 4,
     type: 'energy',
     // Methods
     drawBarrel: function() {
@@ -457,7 +457,10 @@ tower.tesla = {
             var next = getNearest(enemies, last.pos, targets);
             if (typeof next === 'undefined') break;
             strokeWeight(weight);
-            line(last.pos.x, last.pos.y, next.pos.x, next.pos.y);
+            var x = random(last.pos.x, next.pos.x);
+            var y = random(last.pos.y, next.pos.y);
+            line(last.pos.x, last.pos.y, x, y);
+            line(x, y, next.pos.x, next.pos.y);
             last = next;
             dmg /= 2;
         }
