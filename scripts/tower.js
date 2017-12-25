@@ -127,7 +127,7 @@ class Tower {
 
     // Sell price
     sellPrice() {
-        return this.totalCost * sellConst;
+        return floor(this.totalCost * sellConst);
     }
 
     // Target correct enemy
