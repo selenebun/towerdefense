@@ -440,23 +440,34 @@ function randomWave() {
     }
     if (isWave(2, 7)) {
         waves.push([30, ['weak', 25], ['strong', 25]]);
-        waves.push([40, ['fast', 25]]);
         waves.push([20, ['strong', 25]]);
     }
-    if (isWave(4, 14)) {
-        waves.push([20, ['strong', 50], ['fast', 25]]);
-        waves.push([10, ['fast', 50]]);
+    if (isWave(3, 7)) {
+        waves.push([40, ['fast', 25]]);
     }
-    if (isWave(7)) {
+    if (isWave(4, 14)) {
+        waves.push([20, ['fast', 50]]);
+    }
+    if (isWave(5, 6)) {
+        waves.push([20, ['strong', 50], ['fast', 25]]);
+    }
+    if (isWave(8, 12)) {
         waves.push([20, ['medic', 'strong', 'strong', 25]]);
     }
     if (isWave(10, 13)) {
         waves.push([20, ['medic', 'strong', 'strong', 50]]);
+        waves.push([30, ['medic', 'strong', 'strong', 50], ['fast', 50]]);
         waves.push([5, ['fast', 50]]);
     }
     if (isWave(12, 17)) {
+        waves.push([20, ['medic', 'strong', 'strong', 50], ['strongFast', 50]]);
         waves.push([10, ['strong', 50], ['strongFast', 50]]);
+        waves.push([10, ['medic', 'strongFast', 50]]);
         waves.push([10, ['strong', 25], ['stronger', 25], ['strongFast', 50]]);
+        waves.push([10, ['strong', 25], ['medic', 25], ['strongFast', 50]]);
+        waves.push([20, ['medic', 'stronger', 'stronger', 50]]);
+        waves.push([10, ['medic', 'stronger', 'strong', 50]]);
+        waves.push([10, ['medic', 'strong', 50], ['medic', 'strongFast', 50]]);
         waves.push([5, ['strongFast', 100]]);
         waves.push([20, ['stronger', 50]]);
     }
@@ -464,11 +475,12 @@ function randomWave() {
         waves.push([
             40, ['tank', 'stronger', 'stronger', 'stronger', 10]
         ]);
-        waves.push([20, ['medic', 'stronger', 'stronger', 50]]);
+        waves.push([10, ['medic', 'stronger', 'stronger', 50]]);
         waves.push([40, ['tank', 25]]);
     }
     if (isWave(17)) {
-        waves.push([20, ['tank', 'medic', 'stronger', 50]]);
+        waves.push([20, ['tank', 'stronger', 'stronger', 50]]);
+        waves.push([20, ['tank', 'medic', 'medic', 50]]);
         waves.push([20, ['tank', 'medic', 50], ['strongFast', 25]]);
         waves.push([10, ['tank', 50], ['strongFast', 25]]);
         waves.push([10, ['faster', 50]]);

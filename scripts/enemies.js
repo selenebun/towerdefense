@@ -93,7 +93,7 @@ enemy.medic = {
     // Misc
     name: 'medic',
     // Stats
-    cash: 6,
+    cash: 4,
     health: 375,
     immune: ['regen'],
     onTick: function() {
