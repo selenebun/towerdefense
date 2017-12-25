@@ -324,11 +324,24 @@ function loadMap() {
     } else {
         resizeMax();
         var numSpawns;
-        if (name === 'random3') {
+        wallCover = 0.1;
+        if (name[name.length - 1] === '3') {
             cash = 65;
             numSpawns = 3;
         } else {
             numSpawns = 2;
+        }
+        if (name === 'empty2' || name === 'empty3') {
+            wallCover = 0;
+        }
+        if (name === 'sparse2' || name === 'sparse3') {
+            wallCover = 0.1;
+        }
+        if (name === 'dense2' || name === 'dense3') {
+            wallCover = 0.2;
+        }
+        if (name === 'solid2' || name === 'solid3') {
+            wallCover = 0.3;
         }
         randomMap(numSpawns);
         display = replaceArray(
