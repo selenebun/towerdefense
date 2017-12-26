@@ -94,9 +94,11 @@ function addWave(pattern) {
 // Buy and place a tower if player has enough money
 function buy(t) {
     if (godMode || cash >= t.cost) {
-        if (!godMode) cash -= t.cost;
+        if (!godMode) {
+            cash -= t.cost;
+            toPlace = false;
+        }
         selected = t;
-        toPlace = false;
         if (grid[t.gridPos.x][t.gridPos.y] === 0) toPathfind = true;
         updateInfo(t);
         newTowers.push(t);
@@ -1055,7 +1057,6 @@ function mousePressed() {
     if (t) {
         // Clicked on tower
         selected = t;
-        toPlace = false;
         updateInfo(selected);
     } else if (canPlace(p.x, p.y)) {
         buy(createTower(p.x, p.y, tower[towerType]));
