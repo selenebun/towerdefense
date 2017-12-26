@@ -1057,6 +1057,7 @@ function mousePressed() {
     if (t) {
         // Clicked on tower
         selected = t;
+        toPlace = false;
         updateInfo(selected);
     } else if (canPlace(p.x, p.y)) {
         buy(createTower(p.x, p.y, tower[towerType]));
