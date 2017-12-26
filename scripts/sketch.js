@@ -674,6 +674,8 @@ function updateInfo(t) {
     document.getElementById('cost').innerHTML = 'Cost: $' + t.cost;
     document.getElementById('sellPrice').innerHTML = 'Sell price: $' +
     t.sellPrice();
+    document.getElementById('upPrice').innerHTML = 'Upgrade price: ' +
+    (t.upgrades.length > 0 ? '$' + t.upgrades[0].cost : 'N/A');
     document.getElementById('damage').innerHTML = 'Damage: ' + t.getDamage();
     document.getElementById('type').innerHTML = 'Type: ' +
     t.type.toUpperCase();
