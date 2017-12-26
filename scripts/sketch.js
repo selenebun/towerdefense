@@ -888,6 +888,12 @@ function draw() {
         text('(' + t.x + ', ' + t.y + ')', width - 60, height - 10);
     }
 
+    // Show if god mode active
+    if (godMode) {
+        fill(255);
+        text('God Mode Active', 5, 15);
+    }
+
     removeDead(enemies);
     removeDead(projectiles);
     removeDead(systems);
