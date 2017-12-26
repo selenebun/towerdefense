@@ -173,10 +173,6 @@ footer #copyright {
     text-align: right;
 }
 
-.light {
-    color: #FFF !important;
-}
-
 
 /* Misc. buttons */
 
@@ -211,12 +207,12 @@ footer #copyright {
     background-color: rgb(207, 0, 15);
 }
 
-.bomb {
-    background-color: rgb(102, 51, 153);
-}
-
 .rocket {
     background-color: rgb(30, 130, 76);
+}
+
+.bomb {
+    background-color: rgb(102, 51, 153);
 }
 
 .tesla {
