@@ -173,6 +173,10 @@ footer #copyright {
     text-align: right;
 }
 
+.light {
+    color: #FFF !important;
+}
+
 
 /* Misc. buttons */
 
