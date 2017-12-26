@@ -377,7 +377,7 @@ tower.bomb = {
     // Stats
     cooldownMax: 60,
     cooldownMin: 40,
-    cost: 300,
+    cost: 250,
     damageMax: 60,
     damageMin: 20,
     range: 2,
