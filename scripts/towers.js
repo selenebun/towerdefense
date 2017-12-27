@@ -358,7 +358,7 @@ tower.rocket = {
                 m.blastRadius = 2;
                 m.damageMax = this.damageMax;
                 m.damageMin = this.damageMin;
-                m.accAmt = 0.6;
+                m.accAmt = 0.7;
                 m.topSpeed = (6 * 24) / ts;
                 projectiles.push(m);
             },
