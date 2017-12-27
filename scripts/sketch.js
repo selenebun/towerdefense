@@ -673,7 +673,7 @@ function updateInfo(t) {
     var name = document.getElementById('name');
     name.innerHTML = '<span style="color:rgb(' + t.color + ')">' + t.title +
     '</span>';
-    document.getElementById('cost').innerHTML = 'Cost: $' + t.cost;
+    document.getElementById('cost').innerHTML = 'Cost: $' + t.totalCost;
     document.getElementById('sellPrice').innerHTML = 'Sell price: $' +
     t.sellPrice();
     document.getElementById('upPrice').innerHTML = 'Upgrade price: ' +
