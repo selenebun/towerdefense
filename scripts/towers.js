@@ -418,7 +418,7 @@ tower.tesla = {
     // Display
     color: [255, 255, 0],
     hasBase: false,
-    radius: 0.8,
+    radius: 1,
     secondary: [30, 139, 195],
     weight: 10,
     // Misc
@@ -468,5 +468,60 @@ tower.tesla = {
             dmg /= 2;
         }
         strokeWeight(1);
-    }
+    },
+    // Upgrades
+    upgrades: [
+        {
+            // Display
+            color: [25, 181, 254],
+            radius: 1.1,
+            secondary: [51, 110, 123],
+            // Misc
+            name: 'plasma',
+            title: 'Plasma Tower',
+            // Stats
+            cooldownMax: 60,
+            cooldownMin: 40,
+            cost: 250,
+            damageMax: 2048,
+            damageMin: 1024,
+            // Methods
+            drawBarrel: function() {
+                stroke(this.border);
+                fill(this.secondary);
+                polygon(0, 0, this.radius * ts / 2, 6);
+                fill(this.color);
+                var r = 0.6 * ts;
+                ellipse(0, 0, r, r);
+            },
+            onAim(e) {
+                if (this.canFire() || this.follow) this.aim(e.pos.x, e.pos.y);
+                if (!this.canFire()) return;
+                this.resetCooldown();
+        
+                var last = e;
+                var targets = [];
+                var dmg = round(random(this.damageMin, this.damageMax));
+                var weight = this.weight;
+                stroke(this.color);
+                strokeWeight(weight);
+                line(this.pos.x, this.pos.y, e.pos.x, e.pos.y);
+                while (dmg > 1) {
+                    weight -= 1;
+                    last.dealDamage(dmg, this.type);
+                    targets.push(last);
+                    var next = getNearest(enemies, last.pos, targets);
+                    if (typeof next === 'undefined') break;
+                    strokeWeight(weight);
+                    var x = random(last.pos.x, next.pos.x);
+                    var y = random(last.pos.y, next.pos.y);
+                    line(last.pos.x, last.pos.y, x, y);
+                    line(x, y, next.pos.x, next.pos.y);
+                    last = next;
+                    dmg /= 2;
+                }
+                strokeWeight(1);
+            },
+        }
+    ]
 };
