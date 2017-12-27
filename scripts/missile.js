@@ -19,7 +19,7 @@ class Missile {
         this.damageMin = 40;
         this.lifetime = 60;
         this.range = 7;
-        this.topSpeed = 96 / ts;
+        this.topSpeed = (4 * 24) / ts;
     }
 
     draw() {

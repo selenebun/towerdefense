@@ -322,7 +322,9 @@ tower.rocket = {
             name: 'missileSilo',
             title: 'Missile Silo',
             // Stats
-            cost: 150,
+            cooldownMax: 80,
+            cooldownMin: 40,
+            cost: 250,
             damageMax: 120,
             damageMin: 100,
             range: 9,
@@ -353,10 +355,11 @@ tower.rocket = {
                 var m = new Missile(this.pos.x, this.pos.y, e);
                 m.color = [65, 131, 215];
                 m.secondary = this.secondary;
-                m.blastRadius = 1.5;
+                m.blastRadius = 2;
                 m.damageMax = this.damageMax;
                 m.damageMin = this.damageMin;
-                m.topSpeed = 120 / ts;
+                m.accAmt = 0.6;
+                m.topSpeed = (6 * 24) / ts;
                 projectiles.push(m);
             },
         }
