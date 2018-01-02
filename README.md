@@ -16,7 +16,7 @@ located on the Github [repo](https://github.com/xithiox/td-editor/).
 * G to toggle god mode
 * H to toggle displaying enemy health bars
 * M to import and load map string (will reset game!)
-* P to toggle display particle effects
+* P to toggle display particle effects (turning them off helps with lag)
 * R to reset game
 * S to sell selected tower
 * T to toggle tile coordinate display
