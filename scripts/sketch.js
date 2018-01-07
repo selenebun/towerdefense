@@ -110,7 +110,7 @@ function calcFPS() {
     var fps = frameRate();
     avgFPS += (fps - avgFPS) / ++numFPS;
 
-    // Draw black rect under
+    // Draw black rect under text
     noStroke();
     fill(0);
     rect(0, height - 40, 70, 40);
@@ -892,6 +892,11 @@ function draw() {
 
     // Show if god mode active
     if (godMode) {
+        // Draw black rect under text
+        noStroke();
+        fill(0);
+        rect(0, 0, 102, 22);
+
         fill(255);
         text('God Mode Active', 5, 15);
     }
