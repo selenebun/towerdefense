@@ -27,7 +27,7 @@ class RocketExplosion extends ParticleSystem {
     }
 
     addParticle() {
-        this.particles.push(new Fire(this.origin, 3));
+        this.particles.push(new Fire(this.origin, 5));
     }
 }
 
