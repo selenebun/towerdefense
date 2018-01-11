@@ -1,7 +1,7 @@
 class Particle {
     constructor(pos, speed) {
         this.pos = pos.copy();
-        this.vel = p5.Vector.random2D().mult(random(-1, 1) * speed);
+        this.vel = p5.Vector.random2D().mult(random(-1, 1) * speed * ts / 24);
         this.lifespan = 255;
         this.decay = 2;
         this.color = [0, 0, 0];
@@ -11,7 +11,8 @@ class Particle {
     draw() {
         stroke(0, this.lifespan);
         fill(this.color[0], this.color[1], this.color[2], this.lifespan);
-        ellipse(this.pos.x, this.pos.y, this.radius*2, this.radius*2);
+        var r = this.radius * ts / 24 * 2;
+        ellipse(this.pos.x, this.pos.y, r, r);
     }
 
     isDead() {
@@ -47,7 +48,8 @@ class Fire extends Particle {
         push();
         translate(this.pos.x, this.pos.y);
         rotate(this.angle);
-        rect(0, 0, this.radius*2, this.radius*2);
+        var r = this.radius * ts / 24 * 2;
+        rect(0, 0, r, r);
         pop();
         rectMode(CORNER);
     }
