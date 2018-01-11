@@ -72,7 +72,7 @@ tower.laser = {
             title: 'Beam Emitter',
             // Stats
             cooldownMax: 0,
-            cost: 275,
+            cost: 200,
             damageMax: 0.1,
             damageMin: 0.001,
             range: 3,
@@ -182,7 +182,7 @@ tower.sniper = {
     // Stats
     cooldownMax: 100,
     cooldownMin: 60,
-    cost: 200,
+    cost: 150,
     damageMax: 100,
     damageMin: 100,
     range: 9,
