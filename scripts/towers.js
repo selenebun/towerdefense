@@ -411,7 +411,65 @@ tower.bomb = {
             var amt = round(random(this.damageMin, this.damageMax));
             h.dealDamage(amt, this.type);
         }
-    }
+    },
+    upgrades: [
+        {
+            // Display
+            radius: 1.1,
+            // Misc
+            name: 'clusterBomb',
+            title: 'Cluster Bomb',
+            // Stats
+            cooldownMax: 80,
+            cooldownMin: 40,
+            cost: 250,
+            damageMax: 140,
+            damageMin: 100,
+            // Methods
+            drawBarrel: function() {
+                stroke(this.border);
+                fill(this.secondary);
+                rect(0, -this.width * ts / 2, this.length * ts, this.width * ts);
+                fill(249, 105, 14);
+                ellipse(0, 0, this.radius * ts * 2 / 3, this.radius * ts * 2 / 3);
+            },
+            onHit: function(e) {
+                var blastRadius = 1;
+                var inRadius = getInRange(e.pos.x, e.pos.y, blastRadius, enemies);
+                noStroke();
+                fill(191, 85, 236, 127);
+                ellipse(e.pos.x, e.pos.y, ts * 2.5, ts * 2.5);
+                if (showEffects) {
+                    var s = new BombExplosion(e.pos.x, e.pos.y);
+                    for (var i = 0; i < particleAmt; i++) {
+                        s.addParticle();
+                    }
+                    systems.push(s);
+                }
+                var segs = 3;
+                var a0 = random(0, TWO_PI);
+                for (var i = 0; i < segs; i++) {
+                    var a = TWO_PI / segs * i + a0;
+                    var d = 2 * ts;
+                    var x = e.pos.x + cos(a) * d;
+                    var y = e.pos.y + sin(a) * d;
+                    var inRadius = getInRange(x, y, blastRadius, enemies);
+                    if (showEffects) {
+                        var s = new BombExplosion(x, y);
+                        for (var j = 0; j < particleAmt / 2; j++) {
+                            s.addParticle();
+                        }
+                        systems.push(s);
+                    }
+                    for (var j = 0; j < inRadius.length; j++) {
+                        var h = inRadius[j];
+                        var amt = round(random(this.damageMin, this.damageMax));
+                        h.dealDamage(amt, this.type);
+                    }
+                }
+            }
+        }
+    ]
 };
 
 tower.tesla = {
