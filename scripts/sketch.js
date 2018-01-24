@@ -14,6 +14,8 @@ var zoomDefault = ts;
 
 var particleAmt = 32;   // number of particles to draw per explosion
 
+var tempSpawnCount = 40;
+
 var custom;             // custom map JSON
 var display;            // graphical display tiles
 var displayDir;         // direction display tiles are facing
@@ -29,6 +31,7 @@ var walkMap;            // walkability map
 
 var exit;
 var spawnpoints = [];
+var tempSpawns = [];
 
 var cash;
 var health;
@@ -358,6 +361,8 @@ function loadMap() {
         metadata = buildArray(cols, rows, null);
     }
 
+    tempSpawns = [];
+
     recalculate();
 }
 
@@ -474,7 +479,7 @@ function randomWave() {
         waves.push([30, ['medic', 'strong', 'strong', 50], ['fast', 50]]);
         waves.push([5, ['fast', 50]]);
     }
-    if (isWave(12, 17)) {
+    if (isWave(12, 16)) {
         waves.push([20, ['medic', 'strong', 'strong', 50], ['strongFast', 50]]);
         waves.push([10, ['strong', 50], ['strongFast', 50]]);
         waves.push([10, ['medic', 'strongFast', 50]]);
@@ -486,14 +491,14 @@ function randomWave() {
         waves.push([5, ['strongFast', 100]]);
         waves.push([20, ['stronger', 50]]);
     }
-    if (isWave(15, 20)) {
-        waves.push([
-            40, ['tank', 'stronger', 'stronger', 'stronger', 10]
-        ]);
+    if (isWave(13, 20)) {
+        waves.push([40, ['tank', 'stronger', 'stronger', 'stronger', 10]]);
         waves.push([10, ['medic', 'stronger', 'stronger', 50]]);
         waves.push([40, ['tank', 25]]);
+        waves.push([20, ['tank', 'stronger', 'stronger', 50]]);
+        waves.push([20, ['tank', 'medic', 50], ['strongFast', 25]]);
     }
-    if (isWave(17)) {
+    if (isWave(14, 20)) {
         waves.push([20, ['tank', 'stronger', 'stronger', 50]]);
         waves.push([20, ['tank', 'medic', 'medic', 50]]);
         waves.push([20, ['tank', 'medic', 50], ['strongFast', 25]]);
@@ -501,12 +506,20 @@ function randomWave() {
         waves.push([10, ['faster', 50]]);
         waves.push([20, ['tank', 50], ['faster', 25]]);
     }
-    if (isWave(20)) {
+    if (isWave(17, 25)) {
         waves.push([20, ['taunt', 'stronger', 'stronger', 'stronger', 25]]);
+        waves.push([20, ['spawner', 'stronger', 'stronger', 'stronger', 25]]);
+        waves.push([20, ['taunt', 'tank', 'tank', 'tank', 25]]);
+        waves.push([40, ['taunt', 'tank', 'tank', 'tank', 25]]);
+    }
+    if (isWave(19)) {
+        waves.push([20, ['spawner', 1], ['tank', 20], ['stronger', 25]]);
+        waves.push([20, ['spawner', 1], ['faster', 25]]);
     }
     if (isWave(23)) {
         waves.push([20, ['taunt', 'medic', 'tank', 25]]);
-        waves.push([40, ['taunt', 'tank', 'tank', 'tank', 25]]);
+        waves.push([20, ['spawner', 2], ['taunt', 'medic', 'tank', 25]]);
+        waves.push([10, ['spawner', 1], ['faster', 100]]);
         waves.push([5, ['faster', 100]]);
         waves.push([
             20, ['tank', 100], ['faster', 50],
@@ -772,6 +785,14 @@ function draw() {
     fill(207, 0, 15);
     rect(exit.x * ts, exit.y * ts, ts, ts);
 
+    // Draw temporary spawnpoints
+    for (var i = 0; i < tempSpawns.length; i++) {
+        stroke(255);
+        fill(155, 32, 141);
+        var s = tempSpawns[i][0];
+        rect(s.x * ts, s.y * ts, ts, ts);
+    }
+
     // Spawn enemies
     if (canSpawn() && !paused) {
         // Spawn same enemy for each spawnpoint
@@ -781,6 +802,16 @@ function draw() {
             var c = center(s.x, s.y);
             enemies.push(createEnemy(c.x, c.y, enemy[name]));
         }
+
+        // Temporary spawnpoints
+        for (var i = 0; i < tempSpawns.length; i++) {
+            var s = tempSpawns[i];
+            if (s[1] === 0) continue;
+            s[1]--;
+            var c = center(s[0].x, s[0].y);
+            enemies.push(createEnemy(c.x, c.y, enemy[name]));
+        }
+
         // Reset cooldown
         toCooldown = true;
     }
@@ -905,6 +936,8 @@ function draw() {
     removeDead(projectiles);
     removeDead(systems);
     removeDead(towers);
+
+    removeTempSpawns();
 
     projectiles = projectiles.concat(newProjectiles);
     towers = towers.concat(newTowers);

@@ -45,6 +45,7 @@ enemy.fast = {
     cash: 2,
     health: 75,
     speed: 2,
+    // Methods
     draw: function() {
         push();
         translate(this.pos.x, this.pos.y);
@@ -70,6 +71,7 @@ enemy.strongFast = {
     cash: 2,
     health: 135,
     speed: 2,
+    // Methods
     draw: function() {
         push();
         translate(this.pos.x, this.pos.y);
@@ -96,6 +98,7 @@ enemy.medic = {
     cash: 4,
     health: 375,
     immune: ['regen'],
+    // Methods
     onTick: function() {
         var affected = getInRange(this.pos.x, this.pos.y, 2, enemies);
         for (var i = 0; i < affected.length; i++) {
@@ -125,6 +128,7 @@ enemy.faster = {
     health: 375,
     resistant: ['explosion'],
     speed: 3,
+    // Methods
     draw: function() {
         push();
         translate(this.pos.x, this.pos.y);
@@ -153,6 +157,7 @@ enemy.tank = {
     immune: ['poison', 'slow'],
     resistant: ['energy', 'physical'],
     weak: ['explosion', 'piercing'],
+    // Methods
     draw: function() {
         push();
         translate(this.pos.x, this.pos.y);
@@ -186,6 +191,7 @@ enemy.taunt = {
     immune: ['poison', 'slow'],
     resistant: ['energy', 'physical'],
     taunt: true,
+    // Methods
     draw: function() {
         push();
         translate(this.pos.x, this.pos.y);
@@ -201,5 +207,31 @@ enemy.taunt = {
         rect(-0.2 * ts, -0.2 * ts, 0.4 * ts, 0.4 * ts);
 
         pop();
+    }
+};
+
+enemy.spawner = {
+    // Display
+    color: [244, 232, 66],
+    radius: 0.7,
+    // Misc
+    name: 'spawner',
+    // Stats
+    cash: 10,
+    health: 1150,
+    // Methods
+    onKilled: function() {
+        if (this.alive) {
+            cash += this.cash;
+            this.kill();
+            
+            // Add new temporary spawnpoint
+            var c = gridPos(this.pos.x, this.pos.y);
+            if (c.equals(exit)) return;
+            for (var i = 0; i < tempSpawns.length; i++) {
+                if (c.equals(tempSpawns[i][0])) return;
+            }
+            tempSpawns.push([createVector(c.x, c.y), tempSpawnCount]);
+        }
     }
 };

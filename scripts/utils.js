@@ -241,6 +241,13 @@ function removeDead(entities) {
     }
 }
 
+// Remove empty temporary spawnpoints
+function removeTempSpawns() {
+    for (var i = tempSpawns.length - 1; i >= 0; i--) {
+        if (tempSpawns[i][1] === 0) tempSpawns.splice(i, 1);
+    }
+}
+
 // Replace values in copy of 2d array
 function replaceArray(arr, vals, subs) {
     var newArr = [];
