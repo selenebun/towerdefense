@@ -47,6 +47,8 @@ var borderAlpha;        // alpha of tile borders
 var selected;
 var towerType;
 
+var boomSound;          // explosion sound effect
+
 // TODO add more functionality to god mode
 var godMode = false;    // make player immortal for test purposes
 var healthBar = true;   // display enemy health bar
@@ -736,6 +738,11 @@ function walkable(col, row) {
 
 
 // Main p5 functions
+
+function preload() {
+    boomSound = loadSound('sounds/boom.wav');
+    boomSound.setVolume(0.3);
+}
 
 function setup() {
     var div = document.getElementById('sketch-holder');
