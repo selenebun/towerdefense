@@ -44,7 +44,7 @@ class Missile {
     }
 
     explode() {
-        boomSound.play();
+        if (!muteSounds) sounds.boom.play();
         this.kill();
         var t = this.pos;
         var inRadius = getInRange(t.x, t.y, this.blastRadius, enemies);

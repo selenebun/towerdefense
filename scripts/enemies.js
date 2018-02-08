@@ -224,6 +224,7 @@ enemy.spawner = {
         if (this.alive) {
             cash += this.cash;
             this.kill();
+            sounds.pop.play();
             
             // Add new temporary spawnpoint
             var c = gridPos(this.pos.x, this.pos.y);

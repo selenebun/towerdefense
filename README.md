@@ -21,6 +21,7 @@ located on the Github [repo](https://github.com/xithiox/td-editor/).
 * R to reset game
 * S to sell selected tower
 * U to upgrade selected tower
+* V to mute sound volume
 * W to toggle delay between waves
 * X to export map string (copies to clipboard)
 * Z to return to default zoom level (will reset game!)

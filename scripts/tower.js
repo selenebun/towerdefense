@@ -17,6 +17,7 @@ class Tower {
         // Misc
         this.alive = true;
         this.name = 'tower';
+        this.sound = null;          // sound to play on fire
         this.title = 'Tower';
 
         // Position
@@ -45,6 +46,9 @@ class Tower {
     attack(e) {
         var damage = round(random(this.damageMin, this.damageMax));
         e.dealDamage(damage, this.type);
+        if (!muteSounds && sounds.hasOwnProperty(this.sound)) {
+            sounds[this.sound].play();
+        }
         this.onHit(e);
     }
 

@@ -179,6 +179,7 @@ tower.sniper = {
     weight: 3,
     // Misc
     name: 'sniper',
+    sound: 'sniper',
     title: 'Sniper Tower',
     // Stats
     cooldownMax: 100,

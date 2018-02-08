@@ -47,11 +47,13 @@ var borderAlpha;        // alpha of tile borders
 var selected;
 var towerType;
 
+var sounds;             // dict of all sounds
 var boomSound;          // explosion sound effect
 
 // TODO add more functionality to god mode
 var godMode = false;    // make player immortal for test purposes
 var healthBar = true;   // display enemy health bar
+var muteSounds = false; // whether to mute sounds
 var paused;             // whether to update or not
 var randomWaves = true; // whether to do random or custom waves
 var scd;                // number of ticks until next spawn cycle
@@ -366,6 +368,23 @@ function loadMap() {
     tempSpawns = [];
 
     recalculate();
+}
+
+// Load all sounds
+function loadSounds() {
+    sounds = {};
+    
+    // Missile explosion
+    sounds.boom = loadSound('sounds/boom.wav');
+    sounds.boom.setVolume(0.3);
+
+    // Enemy death
+    sounds.pop = loadSound('sounds/pop.wav');
+    sounds.pop.setVolume(0.4);
+
+    // Sniper rifle shot
+    sounds.sniper = loadSound('sounds/sniper.wav');
+    sounds.sniper.setVolume(0.2);
 }
 
 // Increment wave counter and prepare wave
@@ -740,8 +759,7 @@ function walkable(col, row) {
 // Main p5 functions
 
 function preload() {
-    boomSound = loadSound('sounds/boom.wav');
-    boomSound.setVolume(0.3);
+    loadSounds();
 }
 
 function setup() {
@@ -1064,6 +1082,10 @@ function keyPressed() {
             if (selected && selected.upgrades.length > 0) {
                 upgrade(selected.upgrades[0]);
             }
+            break;
+        case 86:
+            // V
+            muteSounds = !muteSounds;
             break;
         case 87:
             // W

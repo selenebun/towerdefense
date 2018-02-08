@@ -103,6 +103,7 @@ class Enemy {
         if (this.alive) {
             cash += this.cash;
             this.kill();
+            if (!muteSounds) sounds.pop.play();
         }
     }
 
