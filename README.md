@@ -17,6 +17,7 @@ located on the Github [repo](https://github.com/xithiox/td-editor/).
 * H to toggle displaying enemy health bars
 * M to import and load map string (will reset game!)
 * P to toggle display particle effects (turning them off helps with lag)
+* Q to toggle towers firing
 * R to reset game
 * S to sell selected tower
 * T to toggle tile coordinate display

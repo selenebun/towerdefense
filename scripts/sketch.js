@@ -57,6 +57,7 @@ var showEffects = true; // whether or not to display particle effects
 var showFPS = false;    // whether or not to display FPS
 var showTile = false;   // whether or not to display mouse tile
 var skipToNext = false; // whether or not to immediately start next wave
+var stopFiring = false; // whether or not to pause towers firing
 var toCooldown;         // flag to reset spawning cooldown
 var toPathfind;         // flag to update enemy pathfinding
 var toPlace;            // flag to place a tower
@@ -932,6 +933,17 @@ function draw() {
         text('God Mode Active', 5, 15);
     }
 
+    // Show if towers are disabled
+    if (stopFiring) {
+        // Draw black rect under text
+        noStroke();
+        fill(0);
+        rect(width - 60, 0, 60, 22);
+        
+        fill(255);
+        text('Firing off', width - 55, 15);
+    }
+
     removeDead(enemies);
     removeDead(projectiles);
     removeDead(systems);
@@ -1035,6 +1047,10 @@ function keyPressed() {
             // P
             showEffects = !showEffects;
             if (!showEffects) systems = [];
+            break;
+        case 81:
+            // Q
+            stopFiring = !stopFiring;
             break;
         case 82:
             // R

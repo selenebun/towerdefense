@@ -130,6 +130,7 @@ tower.slow = {
     },
     // Target correct enemy
     target: function(entities) {
+        if (stopFiring) return;
         entities = this.visible(entities);
         if (entities.length === 0) return;
         if (!this.canFire()) return;
@@ -197,6 +198,7 @@ tower.sniper = {
         triangle(back, -side, back, side, front, 0);
     },
     target(entities) {
+        if (stopFiring) return;
         entities = this.visible(entities);
         if (entities.length === 0) return;
         var t = getTaunting(entities);
@@ -308,6 +310,7 @@ tower.rocket = {
     },
     onAim(e) {
         if (this.canFire() || this.follow) this.aim(e.pos.x, e.pos.y);
+        if (stopFiring) return;
         if (!this.canFire()) return;
         this.resetCooldown();
         projectiles.push(new Missile(this.pos.x, this.pos.y, e));
@@ -350,6 +353,7 @@ tower.rocket = {
             },
             onAim(e) {
                 if (this.canFire() || this.follow) this.aim(e.pos.x, e.pos.y);
+                if (stopFiring) return;
                 if (!this.canFire()) return;
                 this.resetCooldown();
                 var m = new Missile(this.pos.x, this.pos.y, e);
@@ -501,6 +505,7 @@ tower.tesla = {
     },
     onAim(e) {
         if (this.canFire() || this.follow) this.aim(e.pos.x, e.pos.y);
+        if (stopFiring) return;
         if (!this.canFire()) return;
         this.resetCooldown();
 
@@ -554,6 +559,7 @@ tower.tesla = {
             },
             onAim(e) {
                 if (this.canFire() || this.follow) this.aim(e.pos.x, e.pos.y);
+                if (stopFiring) return;
                 if (!this.canFire()) return;
                 this.resetCooldown();
         

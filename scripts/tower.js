@@ -103,6 +103,7 @@ class Tower {
     // Functionality once entity has been targeted
     onAim(e) {
         if (this.canFire() || this.follow) this.aim(e.pos.x, e.pos.y);
+        if (stopFiring) return;
         if (!this.canFire()) return;
         this.resetCooldown();
         this.attack(e);
