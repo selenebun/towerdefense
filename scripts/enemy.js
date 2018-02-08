@@ -6,8 +6,9 @@ class Enemy {
 
         // Misc
         this.alive = true;
-        this.effects = [];           // status effects
+        this.effects = [];          // status effects
         this.name = 'enemy';
+        this.sound = 'pop';         // death sound
 
         // Position
         this.pos = createVector(x, y);
@@ -103,7 +104,9 @@ class Enemy {
         if (this.alive) {
             cash += this.cash;
             this.kill();
-            if (!muteSounds) sounds.pop.play();
+            if (!muteSounds && sounds.hasOwnProperty(this.sound)) {
+                sounds[this.sound].play();
+            }
         }
     }
 

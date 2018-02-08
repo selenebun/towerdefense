@@ -2,4 +2,6 @@
 
 `pop.wav` by Mark DiAngelo under Attribution 3.0 license, found [here](http://soundbible.com/2067-Blop.html).
 
+`railgun.wav` found [here](https://www.freesoundeffects.com/free-track/bazooka-1-466474/).
+
 `sniper.wav` by Kibblesbob in public domain, found [here](http://soundbible.com/1788-Sniper-Rifle.html).

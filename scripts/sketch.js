@@ -382,6 +382,10 @@ function loadSounds() {
     sounds.pop = loadSound('sounds/pop.wav');
     sounds.pop.setVolume(0.4);
 
+    // Railgun
+    sounds.railgun = loadSound('sounds/railgun.wav');
+    sounds.railgun.setVolume(0.3);
+
     // Sniper rifle shot
     sounds.sniper = loadSound('sounds/sniper.wav');
     sounds.sniper.setVolume(0.2);

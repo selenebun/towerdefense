@@ -222,6 +222,7 @@ tower.sniper = {
             width: 0.4,
             // Misc
             name: 'railgun',
+            sound: 'railgun',
             title: 'Railgun',
             // Stats
             cooldownMax: 120,
