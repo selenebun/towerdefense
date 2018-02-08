@@ -185,6 +185,7 @@ enemy.taunt = {
     radius: 0.8,
     // Misc
     name: 'taunt',
+    sound: 'taunt',
     // Stats
     cash: 8,
     health: 1500,

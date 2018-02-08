@@ -487,6 +487,7 @@ tower.tesla = {
     weight: 10,
     // Misc
     name: 'tesla',
+    sound: 'spark',
     title: 'Tesla Coil',
     // Stats
     cooldownMax: 80,
@@ -518,6 +519,9 @@ tower.tesla = {
         stroke(this.color);
         strokeWeight(weight);
         line(this.pos.x, this.pos.y, e.pos.x, e.pos.y);
+        if (!muteSounds && sounds.hasOwnProperty(this.sound)) {
+            sounds[this.sound].play();
+        }
         while (dmg > 1) {
             weight -= 1;
             last.dealDamage(dmg, this.type);

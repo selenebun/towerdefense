@@ -4,4 +4,8 @@
 
 `railgun.wav` found [here](https://www.freesoundeffects.com/free-track/bazooka-1-466474/).
 
+`spark.wav` found [here](https://www.freesoundeffects.com/free-track/espark1-426772/).
+
 `sniper.wav` by Kibblesbob in public domain, found [here](http://soundbible.com/1788-Sniper-Rifle.html).
+
+`taunt.wav` by snottyboy under Attribution 3.0 license, found [here](http://soundbible.com/1327-Mortar-Round.html).

@@ -389,6 +389,14 @@ function loadSounds() {
     // Sniper rifle shot
     sounds.sniper = loadSound('sounds/sniper.wav');
     sounds.sniper.setVolume(0.2);
+
+    // Tesla coil
+    sounds.spark = loadSound('sounds/spark.wav');
+    sounds.spark.setVolume(0.3);
+
+    // Taunt enemy death
+    sounds.taunt = loadSound('sounds/taunt.wav');
+    sounds.taunt.setVolume(0.3);
 }
 
 // Increment wave counter and prepare wave
