@@ -276,6 +276,7 @@ tower.rocket = {
     width: 0.2,
     // Misc
     name: 'rocket',
+    sound: 'missile',
     title: 'Rocket Tower',
     // Stats
     cooldownMax: 80,
@@ -316,6 +317,9 @@ tower.rocket = {
         if (!this.canFire()) return;
         this.resetCooldown();
         projectiles.push(new Missile(this.pos.x, this.pos.y, e));
+        if (!muteSounds && sounds.hasOwnProperty(this.sound)) {
+            sounds[this.sound].play();
+        }
     },
     // Upgrades
     upgrades: [
@@ -325,6 +329,7 @@ tower.rocket = {
             secondary: [108, 122, 137],
             // Misc
             name: 'missileSilo',
+            sound: 'missile',
             title: 'Missile Silo',
             // Stats
             cooldownMax: 80,
@@ -367,6 +372,9 @@ tower.rocket = {
                 m.accAmt = 0.7;
                 m.topSpeed = (6 * 24) / ts;
                 projectiles.push(m);
+                if (!muteSounds && sounds.hasOwnProperty(this.sound)) {
+                    sounds[this.sound].play();
+                }
             },
         }
     ]
@@ -576,6 +584,9 @@ tower.tesla = {
                 stroke(this.color);
                 strokeWeight(weight);
                 line(this.pos.x, this.pos.y, e.pos.x, e.pos.y);
+                if (!muteSounds && sounds.hasOwnProperty(this.sound)) {
+                    sounds[this.sound].play();
+                }
                 while (dmg > 1) {
                     weight -= 1;
                     last.dealDamage(dmg, this.type);

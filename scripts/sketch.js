@@ -378,6 +378,10 @@ function loadSounds() {
     sounds.boom = loadSound('sounds/boom.wav');
     sounds.boom.setVolume(0.3);
 
+    // Missile launch
+    sounds.missile = loadSound('sounds/missile.wav');
+    sounds.missile.setVolume(0.3);
+
     // Enemy death
     sounds.pop = loadSound('sounds/pop.wav');
     sounds.pop.setVolume(0.4);
