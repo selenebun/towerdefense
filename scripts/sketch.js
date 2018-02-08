@@ -55,7 +55,6 @@ var randomWaves = true; // whether to do random or custom waves
 var scd;                // number of ticks until next spawn cycle
 var showEffects = true; // whether or not to display particle effects
 var showFPS = false;    // whether or not to display FPS
-var showTile = false;   // whether or not to display mouse tile
 var skipToNext = false; // whether or not to immediately start next wave
 var stopFiring = false; // whether or not to pause towers firing
 var toCooldown;         // flag to reset spawning cooldown
@@ -915,13 +914,6 @@ function draw() {
     // Update FPS meter
     if (showFPS) calcFPS();
 
-    // Update mouse tile
-    if (showTile && mouseInMap()) {
-        var t = gridPos(mouseX, mouseY);
-        fill(255);
-        text('(' + t.x + ', ' + t.y + ')', width - 60, height - 10);
-    }
-
     // Show if god mode active
     if (godMode) {
         // Draw black rect under text
@@ -1059,10 +1051,6 @@ function keyPressed() {
         case 83:
             // S
             if (selected) sell(selected);
-            break;
-        case 84:
-            // T
-            showTile = !showTile;
             break;
         case 85:
             // U

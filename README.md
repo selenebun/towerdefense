@@ -20,7 +20,6 @@ located on the Github [repo](https://github.com/xithiox/td-editor/).
 * Q to toggle towers firing
 * R to reset game
 * S to sell selected tower
-* T to toggle tile coordinate display
 * U to upgrade selected tower
 * W to toggle delay between waves
 * X to export map string (copies to clipboard)
