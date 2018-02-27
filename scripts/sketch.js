@@ -858,9 +858,9 @@ function draw() {
     }
 
     // Update and draw enemies
-    for (var i = 0; i < enemies.length; i++) {
-        var e = enemies[i];
-        
+    for (let i = enemies.length - 1; i >= 0; i--) {
+        let e = enemies[i];
+
         // Update direction and position
         if (!paused) {
             e.steer();
@@ -876,6 +876,8 @@ function draw() {
 
         // Draw
         e.draw();
+
+        if (e.isDead()) enemies.splice(i, 1);
     }
 
     // Draw health bars
@@ -886,8 +888,8 @@ function draw() {
     }
 
     // Update and draw towers
-    for (var i = 0; i < towers.length; i++) {
-        var t = towers[i];
+    for (let i = towers.length - 1; i >= 0; i--) {
+        let t = towers[i];
 
         // Target enemies and update cooldowns
         if (!paused) {
@@ -900,17 +902,20 @@ function draw() {
 
         // Draw
         t.draw();
+
+        if (t.isDead()) towers.splice(i, 1);
     }
 
     // Update and draw particle systems
-    for (var i = 0; i < systems.length; i++) {
-        var ps = systems[i];
+    for (let i = systems.length - 1; i >= 0; i--) {
+        let ps = systems[i];
         ps.run();
+        if (ps.isDead()) systems.splice(i, 1);
     }
 
     // Update and draw projectiles
-    for (var i = 0; i < projectiles.length; i++) {
-        var p = projectiles[i];
+    for (let i = projectiles.length - 1; i >= 0; i--) {
+        let p = projectiles[i];
 
         if (!paused) {
             p.steer();
@@ -924,6 +929,8 @@ function draw() {
         if (outsideMap(p)) p.kill();
 
         p.draw();
+
+        if (p.isDead()) projectiles.splice(i, 1);
     }
 
     // Draw range of tower being placed
@@ -976,11 +983,6 @@ function draw() {
         fill(255);
         text('Firing off', width - 55, 15);
     }
-
-    removeDead(enemies);
-    removeDead(projectiles);
-    removeDead(systems);
-    removeDead(towers);
 
     removeTempSpawns();
 

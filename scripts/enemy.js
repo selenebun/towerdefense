@@ -136,12 +136,12 @@ class Enemy {
 
     update() {
         // Apply status effects
-        for (var i = 0; i < this.effects.length; i++) {
-            this.effects[i].update(this);
-        }
+        for (let i = this.effects.length - 1; i >= 0; i--) {
+            let e = this.effects[i];
+            e.update(this);
 
-        // Remove expired status effects
-        removeDead(this.effects);
+            if (e.isDead()) this.effects.splice(i, 1);
+        }
         
         // Movement
         this.vel.limit(96 / ts);
