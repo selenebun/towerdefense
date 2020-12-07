@@ -21,13 +21,13 @@ body {
 
 /* Green borders, margins, and navy blue background */
 
-header, aside, #sketch-holder, footer {
+header, aside, #sketch-holder {
     border: 1px solid #00E640;
     border-radius: 10px;
     margin: 2px;
 }
 
-header, aside, footer {
+header, aside {
     background-color: #013243;
 }
 
@@ -162,15 +162,6 @@ button {
     color: #000;
     font-size: 0.8em;
     text-shadow: none;
-}
-
-footer {
-    padding: 14px;
-}
-
-footer #copyright {
-    margin: 0;
-    text-align: right;
 }
 
 
